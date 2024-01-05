@@ -23,6 +23,28 @@
       "packages/": true,
       "**/dist": true,
       "**/.angular": true
-    }
+    },
+    // The following solves a disagreement with what prettier wants and what eslint wants
+    "typescript.format.insertSpaceAfterOpeningAndBeforeClosingEmptyBraces": false,
+    "workbench.colorCustomizations": {
+      "activityBar.activeBackground": "#3a00b8",
+      "activityBar.background": "#3a00b8",
+      "activityBar.foreground": "#e7e7e7",
+      "activityBar.inactiveForeground": "#e7e7e799",
+      "activityBarBadge.background": "#bf3c00",
+      "activityBarBadge.foreground": "#e7e7e7",
+      "commandCenter.border": "#e7e7e799",
+      "sash.hoverBorder": "#3a00b8",
+      "statusBar.background": "#2a0085",
+      "statusBar.foreground": "#e7e7e7",
+      "statusBarItem.hoverBackground": "#3a00b8",
+      "statusBarItem.remoteBackground": "#2a0085",
+      "statusBarItem.remoteForeground": "#e7e7e7",
+      "titleBar.activeBackground": "#2a0085",
+      "titleBar.activeForeground": "#e7e7e7",
+      "titleBar.inactiveBackground": "#2a008599",
+      "titleBar.inactiveForeground": "#e7e7e799"
+    },
+    "peacock.color": "#2A0085"
   }
 }

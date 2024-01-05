@@ -37,5 +37,6 @@ export function getTimetableDayFromDate(d: Date): number {
     case 4: return THURSDAY;
     case 5: return FRIDAY;
     case 6: return SATURDAY;
+    default: throw new Error('Invalid day');
   }
 }

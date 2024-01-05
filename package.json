@@ -1,7 +1,6 @@
 {
   "name": "blenheim",
   "workspaces": [
-    "packages/blenheim-client",
-    "packages/blenheim-server"
+    "packages/*"
   ]
 }
