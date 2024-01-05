@@ -37,6 +37,13 @@
           }
         }
       }
-    }
+    },
+    {
+      "label": "end serve",
+      "type": "process",
+      "command":[
+         "${command:workbench.action.tasks.terminate}"
+      ],
+   },
   ]
 }

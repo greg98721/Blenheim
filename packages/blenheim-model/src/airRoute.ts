@@ -19,7 +19,7 @@ export function cityName(a: Airport): string {
     case 'NZTG': return 'Tauranga';
     case 'NZWB': return 'Blenheim';
     case 'NZWN': return 'Wellington';
-    case 'NZCI': return 'Chatham Islands'
+    case 'NZCI': return 'Chatham Islands';
   }
 }
 

@@ -187,35 +187,13 @@ See [Typescript project references](https://www.typescriptlang.org/docs/handbook
 ## Things To Note
 The automatic insertion of imports uses an absolute path - starting at `src/`. This falls over in Jest testing - better to use relative paths.
 
-
 ## Angular Configs
 
+Before running the next step run `npm install` in the root folder to install the dependencies for the root package.json. Otherwise there will be more than one node-modules folder for the workspace.
 
 Run `ng add @angular/material` to add the material library
 
-# Angular Standalone Components
-
-## Routing without a routing module
-
-* See the [Angular docs](https://angular.io/guide/standalone-components#routing-and-lazy-loading)
-
-Add app.routes.ts file to contain the base routes. These will be used in the bootstrap code in main.ts
-
-```typescript
-import { AppComponent } from './app/app.component';
-import { ROUTES } from './app/app.routes';
-import { FlightService } from './app/services/flight.service';
-
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideRouter(ROUTES),
-    { provide: FlightService, useClass: FlightService}
-  ]
-})
-  .catch(err => console.error(err));
-  ```
-
-## Naming Convention
+# Naming Convention
 
 Use the common practice to match what would be expected in Angular code
 * '_' prefix for private variables and members
@@ -243,36 +221,3 @@ export class DestinationsPageComponent {
     );
 }
 ```
-
-## NgRx
-
-Having looked at this for a while - I think it is more trouble than it is worth. It is a good idea, for example too awkward to integrate with resolvers.
-
-The underlying client data model is a simple class. The NgRx store is a simple class that holds the state of the application and accessed via the store service.
-
-### Store
-
-#### Timetable
-List of destinations in the schedule. This is a simple array of airport codes.
-And the list of scheduled flights for a single destination.
-#### Flight Selection
-A series of choices to select a  outbound flight for a booking and the return flight if required.
-#### Booking
-The details of a booking including the specific outbound and return flights.
-
-### Actions
-#### Timetable
-- Get list of destinations
-- Get list of flights for a destination
-#### Flight Selection
-- Select an origin airport
-- Select a destination airport
-- Select a date
-- Select an outbound flight
-- Select a return date
-- Select a return flight
-#### Booking
-- Create a booking
-- Select a return option for the booking
-- Edit a booking
-- Delete a booking
