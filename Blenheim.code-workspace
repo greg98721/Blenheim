@@ -1,0 +1,28 @@
+{
+  "folders": [
+    {
+      "name": "ROOT",
+      "path": "./"
+    },
+    {
+      "name": "BLENHEIM CLIENT",
+      "path": "packages/blenheim-client"
+    },
+    {
+      "name": "BLENHEIM SERVER",
+      "path": "packages/blenheim-server"
+    },
+    {
+      "name": "BLENHEIM MODEL",
+      "path": "packages/blenheim-model"
+    }
+  ],
+  "settings": {
+    "files.exclude": {
+      "node_modules/": true,
+      "packages/": true,
+      "**/dist": true,
+      "**/.angular": true
+    }
+  }
+}

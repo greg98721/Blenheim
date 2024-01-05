@@ -1,0 +1,21 @@
+{
+  "name": "@blenheim/model",
+  "version": "0.0.1",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "prebuild": "rimraf dist",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@types/seedrandom": "^3.0.8",
+    "date-fns": "3.0.6",
+    "date-fns-tz": "^2.0.0",
+    "seedrandom": "^3.0.5"
+  },
+  "devDependencies": {
+    "typescript": "~5.2.2",
+    "rimraf": "^5.0.5"
+  }
+}
