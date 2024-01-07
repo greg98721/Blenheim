@@ -221,3 +221,17 @@ export class DestinationsPageComponent {
     );
 }
 ```
+
+# Nest
+
+Delete the default app.controller.ts and app.service.ts files. Remove the references in app.module.ts.
+
+Use the CLI to create the controllers and services. For example `nest g controller flight` and `nest g service flight`
+
+In the root create a `settings.env` file containg
+```
+CLIENT_DIST=../../blenheim-client/dist/blenheim-client
+JWT_SECRET=THIS IS A HIGHLY SECRET KEY THAT SHOULD BE CHANGED
+```
+
+ We need this so in dev mode we point at the client project dist folder and in production mode we will copy this folder to folder within the server dist folder. The `settings.env` file will be overwritten as part of the production build process. Add settings.env to a local .gitignore file so it is not added to source control
