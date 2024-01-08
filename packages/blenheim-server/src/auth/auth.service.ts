@@ -18,17 +18,11 @@ export class AuthService {
     if (user?.password !== password) {
       throw new UnauthorizedException();
     } else {
-      if (user !== undefined && user.password === user.password) {
-        return {
-          access_token: this._jwtService.sign({ username: user.username }),
-        };
-      } else {
-        return {
-          access_token: await this._jwtService.signAsync({
-            username: user.username,
-          }),
-        };
-      }
+      return {
+        access_token: await this._jwtService.signAsync({
+          username: user.username,
+        }),
+      };
     }
   }
 }
