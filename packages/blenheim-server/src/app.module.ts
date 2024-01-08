@@ -9,8 +9,9 @@ import { AirRoutesController } from './air-routes/air-routes.controller';
 import { FlightsController } from './flights/flights.controller';
 import { AuthController } from './auth/auth.controller';
 import { ScheduleService } from './schedule/schedule.service';
-import { UserService } from './user/user.service';
+import { UsersService } from './users/users.service';
 import { AuthService } from './auth/auth.service';
+import { UsersController } from './users/users.controller';
 
 @Module({
   imports: [
@@ -40,9 +41,12 @@ import { AuthService } from './auth/auth.service';
       }),
     }),
   ],
-  controllers: [AirRoutesController, FlightsController, AuthController],
-  providers: [ScheduleService, UserService, AuthService],
+  controllers: [
+    AirRoutesController,
+    FlightsController,
+    AuthController,
+    UsersController,
+  ],
+  providers: [ScheduleService, UsersService, AuthService],
 })
-export class AppModule {
-  constructor(private configService: ConfigService) {}
-}
+export class AppModule {}
