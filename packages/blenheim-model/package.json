@@ -10,12 +10,12 @@
   },
   "dependencies": {
     "@types/seedrandom": "^3.0.8",
-    "date-fns": "3.0.6",
+    "date-fns": "^2.30.0",
     "date-fns-tz": "^2.0.0",
     "seedrandom": "^3.0.5"
   },
   "devDependencies": {
-    "typescript": "~5.2.2",
-    "rimraf": "^5.0.5"
+    "rimraf": "^5.0.5",
+    "typescript": "~5.2.2"
   }
 }

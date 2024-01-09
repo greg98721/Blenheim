@@ -1,4 +1,4 @@
-import { TimetableFlight } from '@marlborough/model';
+import { TimetableFlight } from '@blenheim/model';
 
 import {
   createSchedule,
@@ -25,7 +25,7 @@ describe('Schedule', () => {
     const airports = getOrigins(schedule);
     expect(airports).toContain('NZDN');
     expect(airports).toContain('NZWB');
-    expect(airports.length).toBe(13);
+    expect(airports.length).toEqual(13);
   });
 
   it('Dunedin has a set of routes starting there', () => {
@@ -43,9 +43,9 @@ describe('Schedule', () => {
     const christchurch = timetable.filter(
       (t) => t.route.destination === 'NZCH',
     );
-    expect(wellington.length).toBe(6);
-    expect(nelson.length).toBe(3);
-    expect(christchurch.length).toBe(8);
+    expect(wellington.length).toEqual(5);
+    expect(nelson.length).toEqual(2);
+    expect(christchurch.length).toEqual(8);
   };
 
   it('can get full timetable for Dunedin', () => {
@@ -71,7 +71,7 @@ describe('Schedule', () => {
     const day = timetableFlights[0].flights[0].date;
     const flight = getTimetableFlight(schedule, flightNumber, day);
     expect(flight).toBeDefined();
-    expect(flight?.timetableFlight.flightNumber).toBe(flightNumber);
-    expect(flight?.flight.date).toBe(day);
+    expect(flight?.timetableFlight.flightNumber).toEqual(flightNumber);
+    expect(flight?.flight.date).toEqual(day);
   });
 });

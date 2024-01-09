@@ -24,7 +24,7 @@ import {
   WEDNESDAY,
   WEEKDAYS,
   WEEKEND,
-} from '@marlborough/model';
+} from '@blenheim/model';
 import { PsuedoRandom } from './psuedoRandom';
 
 export interface Schedule {
@@ -71,7 +71,7 @@ function asFlight(s: ServerFlight): Flight {
 }
 
 export function createSchedule(): Schedule {
-  const seed = 'marlborough';
+  const seed = 'blenheim';
   const rnd = new PsuedoRandom(seed);
   const schedule = { routes: createRoutes(rnd), randomSeed: seed };
   return schedule;
