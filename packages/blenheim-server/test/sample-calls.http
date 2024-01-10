@@ -1,4 +1,4 @@
-POST http://localhost:3000/api/auth/login HTTP/1.1
+POST http://localhost:3000/api/auth/login
 content-type: application/json
 
 {
@@ -7,7 +7,21 @@ content-type: application/json
 }
 
 ###
+GET http://localhost:3000/api/users/bob
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImJvYiIsImlhdCI6MTcwNDg3NzU5MSwiZXhwIjoxNzA0ODgxMTkxfQ.08d7zFhrfsKGiwwruPrbvtxLNofYMxTPFzHqmRJC-rg
 
-GET http://localhost:3000/api/users/bob  HTTP/1.1
-content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImJvYiIsImlhdCI6MTcwNDg2NDc2NCwiZXhwIjoxNzA0ODY4MzY0fQ.2j11wolUaRSGRPRCOyu2PP3xDA4yIGX5w1XXzfxX_gw
+###
+GET http://localhost:3000/api/routes
+
+###
+GET http://localhost:3000/api/routes/NZWN
+
+###
+GET http://localhost:3000/api/routes/timetable/NZDN
+
+###
+GET http://localhost:3000/api/flights?origin=NZHK&dest=NZCH
+
+###
+GET http://localhost:3000/api/flights/toBook/MA110/2024-02-14
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImJvYiIsImlhdCI6MTcwNDg3NzU5MSwiZXhwIjoxNzA0ODgxMTkxfQ.08d7zFhrfsKGiwwruPrbvtxLNofYMxTPFzHqmRJC-rg
