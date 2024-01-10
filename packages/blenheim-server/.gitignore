@@ -1,2 +1,2 @@
 #we don't want the secrets going into source control
-settings.env
+.env

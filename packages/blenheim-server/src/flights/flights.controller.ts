@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { ScheduleService } from '../schedule/schedule.service';
 import { Airport, Flight, TimetableFlight, isAirport } from '@blenheim/model';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard } from '../auth/auth.guard';
 
 @Controller('api/flights')
 export class FlightsController {
