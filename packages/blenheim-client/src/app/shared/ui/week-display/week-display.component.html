@@ -1,0 +1,30 @@
+<div class="day-list">
+  <div [ngClass]="{'show-day': sunday, 'dont-show-day': !sunday}">
+    <span class="narrow">S</span>
+    <span class="otherwise">Sun</span>
+  </div>
+  <div [ngClass]="{'show-day': monday, 'dont-show-day': !monday}">
+    <span class="narrow">M</span>
+    <span class="otherwise">Mon</span>
+  </div>
+  <div [ngClass]="{'show-day': tuesday, 'dont-show-day': !tuesday}">
+    <span class="narrow">T</span>
+    <span class="otherwise">Tue</span>
+  </div>
+  <div [ngClass]="{'show-day': wednesday, 'dont-show-day': !wednesday}">
+    <span class="narrow">W</span>
+    <span class="otherwise">Wed</span>
+  </div>
+  <div [ngClass]="{'show-day': thursday, 'dont-show-day': !thursday}">
+    <span class="narrow">T</span>
+    <span class="otherwise">Thu</span>
+  </div>
+  <div [ngClass]="{'show-day': friday, 'dont-show-day': !friday}">
+    <span class="narrow">F</span>
+    <span class="otherwise">Fri</span>
+  </div>
+  <div [ngClass]="{'show-day': saturday, 'dont-show-day': !saturday}">
+    <span class="narrow">S</span>
+    <span class="otherwise">Sat</span>
+  </div>
+</div>

@@ -1,0 +1,30 @@
+@use '../../../../styles.scss' as *;
+
+.day-list {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: max-content;
+}
+
+.show-day {
+  color: $accent-color;
+}
+
+.dont-show-day {
+  color: $dull-primary-color;
+}
+
+.narrow {
+  display: none;
+  font-size: 0.8rem;
+  @media (max-width: $narrow-breakpoint) {
+    display: block;
+  }
+}
+
+.otherwise {
+  display: block;
+  @media (max-width: $narrow-breakpoint) {
+    display: none;
+  }
+}
