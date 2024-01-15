@@ -1,0 +1,9 @@
+@for(origin of destinations; track origin.code) {
+  <div class="layout">
+    <img ngSrc="assets/destinations/{{origin.code}}.jpg" alt="Advertising picture of {{origin.code | cityName}}" class="pretty-picture" fill />
+    <div class="city-name">{{origin.code | cityName}}</div>
+    <div class="fluff">{{origin.fluff}}</div>
+    <a [routerLink]="['/timetable', origin.code]" class="goto-timetable">See the timetable</a>
+    <a [routerLink]="['/booking']" [queryParams]="{origin: origin.code}" class="book-now">Book Now</a>
+  </div>
+}

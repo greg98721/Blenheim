@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Airport, cityName, isAirport, TimetableFlight } from '@marlborough/model';
+import { Airport, cityName, isAirport, TimetableFlight } from '@blenheim/model';
 
 @Pipe({
   name: 'cityName',
