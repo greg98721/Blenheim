@@ -1,0 +1,86 @@
+@use "../../../styles.scss" as *;
+
+.layout {
+  display: grid;
+  height: 100%;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr max-content 0.5fr max-content 1fr;
+  grid-template-areas:
+    ". ."
+    "main-area main-area"
+    ". ."
+    "action_1-area action_2-area"
+    ". .";
+
+  @media (max-width: $narrow-breakpoint) {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr max-content 0.25fr max-content 0.25fr max-content 1fr;
+    grid-template-areas:
+      "."
+      "main-area"
+      "."
+      "action_1-area"
+      "."
+      "action_2-area"
+      ".";
+  }
+  @media (min-width: $wide-breakpoint) {
+    grid-template-columns: 1fr $half-wide $half-wide 1fr;
+    grid-template-rows: 1fr max-content 0.5fr max-content 1fr;
+    grid-template-areas:
+      ". . . ."
+      ". main-area main-area ."
+      ". . . ."
+      ". action_1-area action_2-area ."
+      ". . . .";
+  }
+}
+
+.headline {
+  grid-area: main-area;
+  text-align: center;
+  font-size: 12vw;
+  line-height: 14vw;
+  font-weight: 200;
+  font-stretch: 125%;
+
+  @media (max-width: $narrow-breakpoint) {
+    font-size: 3rem;
+    font-weight: 400;
+    font-stretch: 100%;
+    line-height: 4rem;
+  }
+
+  @media (min-width: $wide-breakpoint) {
+    font-size: 12rem;
+    line-height: 14rem;
+  }
+}
+
+.timetable-link {
+  grid-area: action_1-area;
+  text-align: left;
+}
+
+.booking-link {
+  grid-area: action_2-area;
+  text-align: right;
+}
+
+.timetable-link,
+.booking-link {
+  font-size: 6vw;
+  line-height: 7vw;
+  margin: 0 1rem;
+
+  @media (max-width: $narrow-breakpoint) {
+    font-size: 1.5rem;
+    line-height: 2rem;
+    text-align: center;
+  }
+
+  @media (min-width: $wide-breakpoint) {
+    font-size: 6rem;
+    line-height: 7rem;
+  }
+}
