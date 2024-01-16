@@ -1,0 +1,11 @@
+@use "../../../../styles.scss" as *;
+
+.form-block {
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+}
+
+.form-item {
+  flex: 1 1 auto;
+}

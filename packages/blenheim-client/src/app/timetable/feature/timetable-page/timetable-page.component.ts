@@ -28,7 +28,7 @@ export class TimetablePageComponent implements OnInit {
 
   ngOnInit(): void {
     this.originCode.set(this.origin);
-    this._loadingService.setLoadingWhile$(this._flightService.getTimetable$(origin as Airport).pipe(
+    this._loadingService.setLoadingWhile$(this._flightService.getTimetable$(this.origin as Airport).pipe(
       map(r => {
         // get the unique destinations
         const allDestinations = r.timetable.map(t => t.route.destination);

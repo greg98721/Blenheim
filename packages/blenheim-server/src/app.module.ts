@@ -1,4 +1,9 @@
-import { Module } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { JwtModule } from '@nestjs/jwt';
@@ -12,6 +17,7 @@ import { ScheduleService } from './schedule/schedule.service';
 import { UsersService } from './users/users.service';
 import { AuthService } from './auth/auth.service';
 import { UsersController } from './users/users.controller';
+import { FrontendMiddleware } from './FrontendMiddleware';
 
 @Module({
   imports: [
@@ -49,4 +55,12 @@ import { UsersController } from './users/users.controller';
   ],
   providers: [ScheduleService, UsersService, AuthService],
 })
-export class AppModule {}
+// To enable the server to host the client files
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer): void {
+    consumer.apply(FrontendMiddleware).forRoutes({
+      path: '/**', // For all routes
+      method: RequestMethod.ALL, // For all methods
+    });
+  }
+}
