@@ -1,0 +1,32 @@
+@if(originCode() !== undefined) {
+  <div class="timetable-list">
+    <div><!--Empty space for margins --></div>
+    <div class="page-header">Flights from {{ originCode() | cityName }}</div>
+    <div><!--Empty space for margins --></div>
+    <div><!--Empty space for margins --></div>
+    <div class="header">Flight Number</div>
+    <div class="header">Departs</div>
+    <div class="header">Arrives</div>
+    <div class="header">Aircraft Type</div>
+    <div class="header">Days</div>
+    <div><!--Empty space for margins --></div>
+    @for(dest of timetables(); track dest.destination) {
+      <ng-container>
+        <div><!--Empty space for margins --></div>
+        <a [routerLink]="['/timetable', dest.destination]" class="destination">{{ dest.destination | cityName}}</a>
+        <div><!--Empty space for margins --></div>
+        @for(timetable of dest.destinationTimetables; track timetable.flightNumber) {
+          <ng-container>
+            <div><!--Empty space for margins --></div>
+            <div class="table-content">{{ timetable.flightNumber }}</div>
+            <div class="table-content">{{ timetable.departs | minute }}</div>
+            <div class="table-content">{{ timetable.arrives | minute }}</div>
+            <div class="table-content">{{ timetable.aircraft }}</div>
+            <app-week-display [days]="timetable.days" />
+            <div><!--Empty space for margins --></div>
+          </ng-container>
+        }
+      </ng-container>
+    }
+  </div>
+}

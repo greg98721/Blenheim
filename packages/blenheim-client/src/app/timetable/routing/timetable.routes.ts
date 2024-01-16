@@ -1,6 +1,8 @@
 import { Routes } from '@angular/router';
 import { DestinationsPageComponent } from '../feature/destinations-page/destinations-page.component';
+import { TimetablePageComponent } from '../feature/timetable-page/timetable-page.component';
 
 export const TIMETABLE_ROUTES: Routes = [
   { path: 'destinations', component: DestinationsPageComponent },
+  { path: 'timetable/:origin', component: TimetablePageComponent },
 ];
