@@ -10,7 +10,7 @@
     <div class="header">Aircraft Type</div>
     <div class="header">Days</div>
     <div><!--Empty space for margins --></div>
-    @for(dest of timetables(); track dest.destination) {
+    @for(dest of timetableList(); track dest.destination) {
       <ng-container>
         <div><!--Empty space for margins --></div>
         <a [routerLink]="['/timetable', dest.destination]" class="destination">{{ dest.destination | cityName}}</a>
