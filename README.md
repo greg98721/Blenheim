@@ -235,3 +235,38 @@ JWT_SECRET=THIS IS A HIGHLY SECRET KEY THAT SHOULD BE CHANGED
 ```
 
  We need this so in dev mode we point at the client project dist folder and in production mode we will copy the client dist folder to folder within the server dist folder. The `.env` file will be overwritten as part of the production build process. Add .env to .gitignore file so it is not added to source control
+
+
+# Angular 17
+## Prerendering (Static Site Generation)
+To speed up the initial load of the application on the browser, we can prerender the application on the server. This will generate a static html file for each route. The server will then serve the static html file instead of the Angular application. The Angular application will then bootstrap on the client and take over the page. This is called static site generation.
+### Problem With CLI Generated Code
+The CLI creates two sets of bootstrap files `main.ts` and `main.server.ts`. The `main.ts` is the entry point for the client and the `main.server.ts` is the entry point for the server. They are mostly just wrappers for `app.config.ts` and `app.config.server.ts` respectively. The problem is tthe CLI generated `app.config.server.ts` is wrong.
+
+```typescript
+const serverConfig: ApplicationConfig = {
+  providers: [
+    provideServerRendering()
+  ]
+};
+
+export const config = mergeApplicationConfig(appConfig, serverConfig);
+```
+
+The last line merges the client and server config together but we do not want the client config in the server build - it causes a build error. The server config should be the only config used on the server. The client config should be the only config used on the client. The `mergeApplicationConfig` function is not needed. The `app.config.server.ts` should be
+
+```typescript
+export const serverConfig: ApplicationConfig = {
+  providers: [
+    provideServerRendering()
+  ]
+};
+```
+
+And then in `main.server.ts` we need to import the server config and use it instead of the merged config.
+
+```typescript
+import { serverConfig } from './app/app.config.server';
+
+const bootstrap = () => bootstrapApplication(AppComponent, serverConfig);
+```
