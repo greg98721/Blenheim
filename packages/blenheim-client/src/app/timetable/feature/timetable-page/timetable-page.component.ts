@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit, inject, signal } from '@angular/core';
+import { Component, Input, OnInit, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { Airport, TimetableFlight, cityName } from '@blenheim/model';
+import { Airport, TimetableFlight } from '@blenheim/model';
 import { WeekDisplayComponent } from '../../../shared/ui/week-display/week-display.component';
 import { MinutePipe } from '../../../shared/pipes/minute.pipe';
 import { CityNamePipe } from '../../../shared/pipes/city-name.pipe';
