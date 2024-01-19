@@ -1,13 +1,14 @@
 @use "../../../../styles.scss" as *;
 
-$twenty-wide: calc($wide-breakpoint * 0.2);
+$small-wide: calc($wide-breakpoint * 0.18);
+$big-wide: calc($wide-breakpoint * 0.28);
 
 .timetable-list {
   display: grid;
-  grid-template-columns: 0 repeat(5, 0.2fr) 0;
+  grid-template-columns: 0 0.18fr 0.18fr 0.18fr 0.28fr 0.18fr 0;
 
   @media (min-width: $wide-breakpoint) {
-    grid-template-columns: 0.5fr repeat(5, $twenty-wide) 0.5fr;
+    grid-template-columns: 0.5fr $small-wide $small-wide $small-wide $big-wide $small-wide 0.5fr;
   }
 }
 
@@ -24,17 +25,23 @@ $twenty-wide: calc($wide-breakpoint * 0.2);
 
   @media (min-width: $wide-breakpoint) {
     font-size: 4rem;
-    line-height: 5rem;
+    line-height: 7rem;
   }
 }
 
 .header {
   font-weight: 600;
-  font-size: 1.1rem;
+  font-size: 1.3vw;
+  line-height: 2vw;
 
   @media (max-width: $narrow-breakpoint) {
-    font-weight: 500;
-    font-size: 1rem;
+    font-size: 0.8rem;
+    line-height: 1.4rem;
+  }
+
+  @media (min-width: $wide-breakpoint) {
+    font-size: 1.3rem;
+    line-height: 2rem;
   }
 }
 

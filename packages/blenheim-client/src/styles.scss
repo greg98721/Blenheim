@@ -19,15 +19,15 @@ $primary-palette: map.get($color-config, "primary");
 $accent-palette: map.get($color-config, "accent");
 $warn-palette: map.get($color-config, "warn");
 
-$bright-primary-color: mat.get-color-from-palette($primary-palette, A200);
-$primary-color: mat.get-color-from-palette($primary-palette, 300);
-$dull-primary-color: mat.get-color-from-palette($primary-palette, 500);
+$bright-primary-color: mat.get-color-from-palette($primary-palette, A400);
+$primary-color: mat.get-color-from-palette($primary-palette, 700);
+$dull-primary-color: mat.get-color-from-palette($primary-palette, 100);
 
-$bright-accent-color: mat.get-color-from-palette($accent-palette, A200);
-$accent-color: mat.get-color-from-palette($accent-palette, 300);
-$dull-accent-color: mat.get-color-from-palette($accent-palette, 500);
+$bright-accent-color: mat.get-color-from-palette($accent-palette, A400);
+$accent-color: mat.get-color-from-palette($accent-palette, A700);
+$dull-accent-color: mat.get-color-from-palette($accent-palette, 100);
 
-$opposite-text-color: black;
+$opposite-text-color: white;
 
 $narrow-breakpoint: 50rem;
 $wide-breakpoint: 100rem;
