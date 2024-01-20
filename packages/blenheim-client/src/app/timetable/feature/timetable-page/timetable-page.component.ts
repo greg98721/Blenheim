@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit, signal } from '@angular/core';
+import { Component, Input, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { Airport, TimetableFlight } from '@blenheim/model';
 import { WeekDisplayComponent } from '../../../shared/ui/week-display/week-display.component';
 import { MinutePipe } from '../../../shared/pipes/minute.pipe';
 import { CityNamePipe } from '../../../shared/pipes/city-name.pipe';
+import { AirportWithTimetables } from '../../model/airport-with-timetables';
 
 @Component({
   selector: 'app-timetable-page',
@@ -17,7 +18,7 @@ import { CityNamePipe } from '../../../shared/pipes/city-name.pipe';
 export class TimetablePageComponent {
 
   originCode = signal<Airport | undefined>(undefined);
-  timetableList = signal<{ destination: Airport, destinationTimetables: TimetableFlight[] }[] | undefined>([]);
+  timetableList = signal<AirportWithTimetables[] | undefined>([]);
 
   // Note when we change this page from one origin to another, the page instance does not change but the inputs will be updated which is why we use a setter to update the signals
 
@@ -27,7 +28,7 @@ export class TimetablePageComponent {
   }
 
   // The route to this page includes a resolver that gets the timetable data from the server. We use @Input() to pull in that data
-  @Input() set timetables(t: { destination: Airport, destinationTimetables: TimetableFlight[] }[]) {
+  @Input() set timetables(t: AirportWithTimetables[]) {
     this.timetableList.set(t);
   }
 }

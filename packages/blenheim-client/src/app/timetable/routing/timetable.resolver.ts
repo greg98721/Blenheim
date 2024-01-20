@@ -1,11 +1,12 @@
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, ResolveFn, RouterStateSnapshot } from "@angular/router";
 import { Airport, cityName, isAirport, TimetableFlight } from "@blenheim/model";
-import { Observable, map } from "rxjs";
+import { map } from "rxjs";
 import { FlightService } from "../data-access/flight.service";
 import { LoadingService } from '../../shared/services/loading.service';
+import { AirportWithTimetables } from "../model/airport-with-timetables";
 
-export const resolveTimetables: ResolveFn<{ destination: Airport; destinationTimetables: TimetableFlight[] }[]> =
+export const resolveTimetables: ResolveFn<AirportWithTimetables[]> =
   (
     route: ActivatedRouteSnapshot,
     _: RouterStateSnapshot,
