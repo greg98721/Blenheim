@@ -1,1 +1,9 @@
-<p>choose-date works!</p>
+@if(route() !== undefined) {
+  <div class="layout">
+    <div class="origin-summary">Taking off from {{route()?.origin | cityName}}</div>
+    <div class="destination-summary">Flying to {{route()?.destination | cityName}}</div>
+    <div class="date-question">Date of flight?</div>
+    <mat-calendar [minDate]="earliest()" [maxDate]="latest()" (selectedChange)="selectDate($event)" color="accent"
+      class="date-picker"></mat-calendar>
+  </div>
+}

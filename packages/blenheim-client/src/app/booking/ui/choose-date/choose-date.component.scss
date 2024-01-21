@@ -1,0 +1,64 @@
+@use "../../../../styles.scss" as *;
+
+.layout {
+  display: grid;
+  height: 100%;
+  grid-template-columns: 0.5fr 20rem 30rem 0.5fr;
+  grid-template-rows: 0.5fr max-content max-content max-content 0.5fr;
+  grid-template-areas:
+    ". . . ."
+    ". . origin-summary-area ."
+    ". . destination-summary-area ."
+    ". date-question-area date-picker-area ."
+    ". . . .";
+
+  @media (max-width: $narrow-breakpoint) {
+    margin: 1rem;
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.5fr max-content max-content max-content max-content 0.5fr;
+    grid-template-areas:
+      "."
+      "origin-summary-area"
+      "destination-summary-area"
+      "date-question-area"
+      "date-picker-area"
+      ".";
+  }
+}
+
+.origin-summary {
+  grid-area: origin-summary-area;
+}
+
+.destination-summary {
+  grid-area: destination-summary-area;
+}
+
+.origin-summary,
+.destination-summary {
+  font-size: 2.5rem;
+  line-height: 3rem;
+  margin-bottom: 1.5rem;
+  color: $primary-color;
+  @media (max-width: $narrow-breakpoint) {
+    font-size: 2rem;
+    line-height: 2.5rem;
+    margin-bottom: 1rem;
+  }
+}
+
+.date-question {
+  grid-area: date-question-area;
+  font-size: 2.5rem;
+  line-height: 3rem;
+  @media (max-width: $narrow-breakpoint) {
+    font-size: 2rem;
+    line-height: 2.5rem;
+  }
+}
+
+.date-picker {
+  grid-area: date-picker-area;
+  border: 1px solid rgba($accent-color, 0.5);
+  background-color: rgba($opposite-text-color, 0.15);
+}

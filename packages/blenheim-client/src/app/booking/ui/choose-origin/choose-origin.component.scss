@@ -1,0 +1,48 @@
+@use "../../../../styles.scss" as *;
+
+.layout {
+  display: grid;
+  height: 100%;
+  grid-template-columns: 0.5fr 20rem 30rem 0.5fr;
+  grid-template-rows: 0.5fr max-content 0.5fr;
+  grid-template-areas:
+    ". . . ."
+    ". origin-question-area origin-list-area ."
+    ". . . .";
+
+  @media (max-width: $narrow-breakpoint) {
+    margin: 1rem;
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.5fr max-content max-content 0.5fr;
+    grid-template-areas:
+      "."
+      "origin-question-area"
+      "origin-list-area"
+      ".";
+  }
+}
+
+
+.origin-question {
+  grid-area: origin-question-area;
+  font-size: 2.5rem;
+  line-height: 3rem;
+  @media (max-width: $narrow-breakpoint) {
+    font-size: 2rem;
+    line-height: 2.5rem;
+  }
+}
+
+.origin-list {
+  grid-area: origin-list-area;
+  display: grid;
+  grid-template-columns: 1fr;
+  a {
+    font-size: 2.5rem;
+    line-height: 3rem;
+    @media (max-width: $narrow-breakpoint) {
+      font-size: 2rem;
+      line-height: 2.5rem;
+    }
+  }
+}

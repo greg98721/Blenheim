@@ -1,0 +1,62 @@
+@use "../../../../styles.scss" as *;
+
+.layout {
+  display: grid;
+  height: 100%;
+  grid-template-columns: 0.5fr 20rem 30rem 0.5fr;
+  grid-template-rows: 0.5fr max-content max-content 0.5fr;
+  grid-template-areas:
+    ". . . ."
+    ". . origin-summary-area ."
+    ". destination-question-area destination-list-area ."
+    ". . . .";
+
+  @media (max-width: $narrow-breakpoint) {
+    margin: 1rem;
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.5fr max-content max-content max-content 0.5fr;
+    grid-template-areas:
+      "."
+      "origin-summary-area"
+      "destination-question-area"
+      "destination-list-area"
+      ".";
+  }
+}
+
+.origin-summary {
+  grid-area: origin-summary-area;
+  font-size: 2.5rem;
+  line-height: 3rem;
+  margin-bottom: 1.5rem;
+  color: $primary-color;
+  @media (max-width: $narrow-breakpoint) {
+    font-size: 2rem;
+    line-height: 2.5rem;
+    margin-bottom: 1rem;
+  }
+}
+
+.question {
+  grid-area: destination-question-area;
+  font-size: 2.5rem;
+  line-height: 3rem;
+  @media (max-width: $narrow-breakpoint) {
+    font-size: 2rem;
+    line-height: 2.5rem;
+  }
+}
+
+.destination-list {
+  grid-area: destination-list-area;
+  display: grid;
+  grid-template-columns: 1fr;
+  a {
+    font-size: 2.5rem;
+    line-height: 3rem;
+    @media (max-width: $narrow-breakpoint) {
+      font-size: 2rem;
+      line-height: 2.5rem;
+    }
+  }
+}

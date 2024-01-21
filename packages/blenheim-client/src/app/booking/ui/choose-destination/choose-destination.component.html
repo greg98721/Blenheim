@@ -1,1 +1,11 @@
-<p>choose-destination works!</p>
+@if(origin() !== undefined) {
+  <div class="layout">
+    <div class="origin-summary">Taking off from {{origin() | cityName}}</div>
+    <div class="question">Flying to?</div>
+    <div class="destination-list">
+      @for(route of destinationRoutes(); track route.destination) {
+        <a (click)="chooseDestination(route)">{{ route.destination | cityName }}</a>
+      }
+    </div>
+  </div>
+}

@@ -1,0 +1,47 @@
+@use "../../../../styles.scss" as *;
+
+.layout {
+  display: grid;
+  height: 100%;
+  grid-template-columns: 0.5fr max-content 0.5fr;
+  grid-template-rows: 0.5fr max-content max-content 0.5fr;
+  grid-template-areas:
+    ". . ."
+    ". oneway-area ."
+    ". return-area ."
+    ". . .";
+
+  @media (max-width: $narrow-breakpoint) {
+    margin: 1rem;
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.5fr max-content max-content 0.5fr;
+    grid-template-areas:
+      "."
+      "oneway-area"
+      "return-area"
+      ".";
+  }
+}
+
+.oneway-option, .return-option {
+  font-size: 2.5vw;
+  line-height: 2.7vw;
+
+  @media (max-width: $narrow-breakpoint) {
+    font-size: 1.25rem;
+    line-height: 1.35rem;
+  }
+
+  @media (min-width: $wide-breakpoint) {
+    font-size: 2.5rem;
+    line-height: 2.7rem;
+  }
+}
+
+.oneway-option {
+  grid-area: oneway-area;
+}
+
+.return-option {
+  grid-area: return-area;
+}

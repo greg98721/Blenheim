@@ -1,1 +1,8 @@
-<p>choose-origin works!</p>
+<div class="layout">
+  <div class="origin-question">Taking off from?</div>
+  <div class="origin-list">
+    @for(origin of origins(); track origin) {
+      <a (click)="selectOrigin(origin)">{{ origin | cityName }}</a>
+    }
+  </div>
+</div>

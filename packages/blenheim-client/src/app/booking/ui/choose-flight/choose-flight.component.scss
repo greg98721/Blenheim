@@ -1,0 +1,174 @@
+@use "../../../../styles.scss" as *;
+
+.layout {
+  display: grid;
+  grid-template-columns: 0.25fr repeat(5, 0.15fr);
+  column-gap: 1px;
+  row-gap: 1px;
+  @media (max-width: $narrow-breakpoint) {
+    grid-template-columns: 0.4fr 0.6fr;
+  }
+  @media (min-width: $wide-breakpoint) {
+    width: $wide-breakpoint;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+.headline {
+  grid-column: span 5;
+  font-size: 3vw;
+  line-height: 4vw;
+  padding-left: 1rem;
+  @media (max-width: $narrow-breakpoint) {
+    font-size: 1.5rem;
+    line-height: 1.6rem;
+    grid-column: span 2;
+    text-align: center;
+  }
+  @media (min-width: $wide-breakpoint) {
+    font-size: 3rem;
+    line-height: 4rem;
+  }
+}
+
+.date-block {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto;
+  justify-items: center;
+  padding: 0.2rem;
+}
+
+.timetable-block {
+  display: grid;
+  grid-template-columns: 0.5fr 0.5fr;
+  grid-template-rows: auto auto;
+  grid-template-areas:
+    "flight-number-area flight-number-area"
+    "departs-area arrives-area";
+  align-items: stretch;
+  padding: 0.2rem;
+  @media (max-width: $narrow-breakpoint) {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    grid-template-areas:
+      "flight-number-area"
+      "departs-area"
+      "arrives-area";
+    justify-items: center;
+  }
+}
+
+.flight-block {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto;
+  justify-items: center;
+  align-items: center;
+  padding: 0.2rem;
+}
+
+.date-block,
+.timetable-block,
+.flight-block {
+  border: 1px solid $dull-primary-color;
+}
+
+.date-block,
+.timetable-block {
+  background-color: rgba($dull-primary-color, 0.3);
+}
+
+@media (min-width: $narrow-breakpoint) {
+  .selected {
+    border-color: $dull-accent-color;
+  }
+  .date-block.selected {
+    background-color: rgba($dull-accent-color, 0.3);
+  }
+}
+
+@media (max-width: $narrow-breakpoint) {
+  .top-left,
+  .date-block:not(.selected),
+  .flight-block:not(.selected) {
+    display: none;
+  }
+}
+
+.price {
+  font-size: 2vw;
+  line-height: 2.2vw;
+  @media (max-width: $narrow-breakpoint) {
+    font-size: 1.5rem;
+    line-height: 1.6rem;
+  }
+  @media (min-width: $wide-breakpoint) {
+    font-size: 2rem;
+    line-height: 2.2rem;
+  }
+}
+
+.seats-available,
+.flight-number {
+  font-size: 1.2vw;
+  line-height: 1.3vw;
+  @media (max-width: $narrow-breakpoint) {
+    font-size: 1rem;
+    line-height: 1.2rem;
+  }
+  @media (min-width: $wide-breakpoint) {
+    font-size: 1.2rem;
+    line-height: 1.3rem;
+  }
+}
+
+.departs,
+.arrives {
+  font-size: 1.5vw;
+  line-height: 1.6vw;
+  .mat-icon {
+    padding-right: 0.8rem;
+  }
+  @media (max-width: $narrow-breakpoint) {
+    font-size: 1.2rem;
+    line-height: 1.3rem;
+  }
+  @media (min-width: $wide-breakpoint) {
+    font-size: 1.5rem;
+    line-height: 1.6rem;
+  }
+}
+
+
+.flight-number {
+  grid-area: flight-number-area;
+  text-align: center;
+}
+
+.departs {
+  grid-area: departs-area;
+}
+
+.arrives {
+  grid-area: arrives-area;
+}
+
+.fully-booked,
+.date-block {
+  font-size: 1.5vw;
+  line-height: 1.5vw;
+  @media (max-width: $narrow-breakpoint) {
+    font-size: 1.2rem;
+    line-height: 1.2rem;
+  }
+  @media (min-width: $wide-breakpoint) {
+    font-size: 1.5rem;
+    line-height: 1.5rem;
+  }
+}
+
+.fully-booked {
+  color: $primary-color;
+}
