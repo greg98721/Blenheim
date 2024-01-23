@@ -1,12 +1,175 @@
-import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, Input, inject, signal } from '@angular/core';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { formatISOWithOptions } from 'date-fns/fp';
+
+import { AirRoute, Airport, Flight } from '@blenheim/model';
+import { ChooseOriginComponent } from '../../ui/choose-origin/choose-origin.component';
+import { ChooseDestinationComponent } from '../../ui/choose-destination/choose-destination.component';
+import { ChooseDateComponent } from '../../ui/choose-date/choose-date.component';
+import { ChooseReturnComponent } from '../../ui/choose-return/choose-return.component';
+import { FinaliseOnewayComponent } from '../../ui/finalise-oneway/finalise-oneway.component';
+import { FinaliseReturnComponent } from '../../ui/finalise-return/finalise-return.component';
+import { ChooseFlightComponent } from '../../ui/choose-flight/choose-flight.component';
+import { BookingState, addDate, addDestination, addOrigin, addReturnDate, oneWayOnly, requestReturnFlight, selectOutboundFlight, selectReturnFlight, startBooking } from '../../model/booking-state';
+import { FlightService } from '../../../timetable/data-access/flight.service';
+import { LoadingService } from '../../../shared/services/loading.service';
 
 @Component({
   selector: 'app-make-booking',
   standalone: true,
-  imports: [],
+  imports: [
+    CommonModule,
+    RouterModule,
+    ChooseOriginComponent,
+    ChooseDestinationComponent,
+    ChooseDateComponent,
+    ChooseFlightComponent,
+    ChooseReturnComponent,
+    FinaliseOnewayComponent,
+    FinaliseReturnComponent
+  ],
   templateUrl: './make-booking.component.html',
   styleUrl: './make-booking.component.scss'
 })
 export class MakeBookingComponent {
 
+  private _bookingStateStack: BookingState[] = [];
+  private _currentStackIndex = 0;
+
+  private _flightService = inject(FlightService);
+  private _loadingService = inject(LoadingService);
+  private _router = inject(Router);
+  private _route = inject(ActivatedRoute);
+
+  bookingState = signal<BookingState>({ kind: 'undefined' });
+
+  /** So we can use routing to provide a way of going forwards and backwards through the booking process, include an index in the route into the _bookingStateStack */
+  @Input() set stateIndex(i: number) {
+    if (i === 0 && this._bookingStateStack.length === 0) {
+      // We're starting from scratch
+      this._loadingService.setLoadingWhile$(this._flightService.getOrigins$()).subscribe(origins => {
+        this._bookingStateStack.push(startBooking(origins));
+        this._currentStackIndex = 0;
+        this.bookingState.set(this._bookingStateStack[0]);
+      });
+    } else if (i >= 0 && i < this._bookingStateStack.length) {
+      // we are moving to a state that already exists
+      this._currentStackIndex = i;
+      this.bookingState.set(this._bookingStateStack[i]);
+    } else {
+      throw new Error(`Invalid state index ${i}`);
+    }
+  }
+
+  /** Optional query param so we can start with the origin chosen */
+  @Input() set origin(o: Airport) {
+    // we can jump straight to the second step by choosing the origin in the link, but this will only happen for an empty stack so we ignore if navigating backwards
+    if (this._bookingStateStack.length === 0) {
+      this._loadingService.setLoadingWhile$(this._flightService.getDestinations$(o)).subscribe(destinationRoutes => {
+      // note we are not using the _updateStateStack method here as we want to start from scratch and not navigate again
+      const newState: BookingState = addOrigin((this._currentState()), o, destinationRoutes);
+      this._bookingStateStack.push(newState);
+      this._currentStackIndex = this._bookingStateStack.length - 1;
+      this.bookingState.set(this._bookingStateStack[this._currentStackIndex]);
+  });
+  }
+}
+
+  selectOrigin(origin: Airport) {
+    this._loadingService.setLoadingWhile$(this._flightService.getDestinations$(origin)).subscribe(destinationRoutes => {
+      const newState: BookingState = addOrigin((this._currentState()), origin, destinationRoutes);
+      this._updateStateStack(newState);
+    });
+  }
+
+  selectDestination(destination: AirRoute) {
+    const newState: BookingState = addDestination((this._currentState()), destination);
+    this._updateStateStack(newState);
+  }
+
+  selectDate(date: Date) {
+    const datestring = formatISOWithOptions({ representation: 'date' }, date);
+    const state = (this._currentState());
+    if (state.kind === 'destination') {
+      this._loadingService.setLoadingWhile$(this._flightService.getFlights$(state.route.origin, state.route.destination)).subscribe(flights => {
+        const newState = addDate(state, datestring, flights);
+        this._updateStateStack(newState);
+      });
+    } else {
+      throw new Error(`Cannot set the nominal_date state from ${state.kind}`);
+    }
+  }
+
+  selectFlight(flight: Flight) {
+    const state = (this._currentState());
+    if (state.kind === 'nominal_date') {
+      const timetableFlight = state.timetableFlights.find(t => t.timetableFlight.flightNumber === flight.flightNumber)?.timetableFlight;
+      if (timetableFlight) {
+        const newState = selectOutboundFlight(state, timetableFlight, flight);
+        this._updateStateStack(newState);
+      } else {
+        throw new Error(`Cannot find timetable flight for flight ${flight.flightNumber}`);
+      }
+    } else {
+      throw new Error(`Cannot set the outbound_flight state from ${state.kind}`);
+    }
+  }
+
+  selectOneWay() {
+    this._updateStateStack(oneWayOnly(this._currentState()));
+  }
+
+  selectReturn() {
+    this._updateStateStack(requestReturnFlight(this._currentState()));
+  }
+
+  selectReturnDate(date: Date) {
+    const datestring = formatISOWithOptions({ representation: 'date' }, date);
+    const state = (this._currentState());
+    if (state.kind === 'return_flight_requested') {
+      this._loadingService.setLoadingWhile$(this._flightService.getFlights$(state.returnRoute.origin, state.returnRoute.destination)).subscribe(flights => {
+        const newState = addReturnDate(state, datestring, flights);
+        this._updateStateStack(newState);
+      });
+    } else {
+      throw new Error(`Cannot set the return_date state from ${state.kind}`);
+    }
+  }
+
+  selectReturnFlight(flight: Flight) {
+    const state = (this._currentState());
+    if (state.kind === 'nominal_return_date') {
+      const returnTimetableFlight = state.timetableReturnFlights.find(t => t.timetableFlight.flightNumber === flight.flightNumber)?.timetableFlight;
+      if (returnTimetableFlight) {
+        const newState = selectReturnFlight(state, returnTimetableFlight, flight);
+        this._updateStateStack(newState);
+      } else {
+        throw new Error(`Cannot find timetable flight for flight ${flight.flightNumber}`);
+      }
+    } else {
+      throw new Error(`Cannot set the return_flight state from ${state.kind}`);
+    }
+  }
+
+  private _updateStateStack(newState: BookingState) {
+    // first we will update the stack with the new state
+
+    if (this._currentStackIndex < this._bookingStateStack.length - 1) {
+      // remove the states after the insert point as the update will have invalidated them
+      const newStack = this._bookingStateStack.slice(0, this._currentStackIndex);
+      // push the new state on the top of the stack
+      newStack.push(newState);
+      this._bookingStateStack = newStack;
+    } else {
+      // just push the new state on the top of the stack
+      this._bookingStateStack.push(newState);
+    }
+    // now the stack is set we want to navigate to the new state, so we get to use the browser history to go forwards and backwards
+    this._router.navigate([`../${this._bookingStateStack.length - 1}`], { relativeTo: this._route });
+  }
+
+  private _currentState(): BookingState {
+    return this._bookingStateStack[this._currentStackIndex];
+  };
 }

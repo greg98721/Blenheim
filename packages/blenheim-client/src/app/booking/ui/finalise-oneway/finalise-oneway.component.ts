@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { BookingState } from '../../model/booking-state';
 
 @Component({
   selector: 'app-finalise-oneway',
@@ -9,4 +10,6 @@ import { Component } from '@angular/core';
 })
 export class FinaliseOnewayComponent {
 
+  @Input() set bookingState(state: BookingState) {
+  }
 }

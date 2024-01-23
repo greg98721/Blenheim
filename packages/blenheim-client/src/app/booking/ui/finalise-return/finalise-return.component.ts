@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { BookingState } from '../../model/booking-state';
 
 @Component({
   selector: 'app-finalise-return',
@@ -8,5 +9,8 @@ import { Component } from '@angular/core';
   styleUrl: './finalise-return.component.scss'
 })
 export class FinaliseReturnComponent {
+
+  @Input() set bookingState(state: BookingState) {
+  }
 
 }

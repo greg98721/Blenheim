@@ -4,5 +4,5 @@ import { MakeBookingComponent } from '../feature/make-booking/make-booking.compo
 
 
 export const BOOKING_ROUTES: Routes = [
-  { path: 'booking/:state', component: MakeBookingComponent, canActivate: [isAuthenticated$]},
+  { path: 'booking/:stateIndex', component: MakeBookingComponent, canActivate: [isAuthenticated$]},
 ];

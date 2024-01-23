@@ -1,1 +1,29 @@
-<p>make-booking works!</p>
+@switch(bookingState().kind) {
+  @case('start') {
+    <app-choose-origin [bookingState]="bookingState()" (originSelected)="selectOrigin($event)"></app-choose-origin>
+  }
+  @case('origin') {
+    <app-choose-destination [bookingState]="bookingState()" (destinationSelected)="selectDestination($event)"></app-choose-destination>
+  }
+  @case('destination') {
+    <app-choose-date [bookingState]="bookingState()" (dateSelected)="selectDate($event)"></app-choose-date>
+  }
+  @case('nominal_date') {
+    <app-choose-flight [bookingState]="bookingState()" (flightSelected)="selectFlight($event)"></app-choose-flight>
+  }
+  @case('outbound_flight') {
+    <app-choose-return [bookingState]="bookingState()" (oneWaySelected)="selectOneWay()" (returnSelected)="selectReturn()"></app-choose-return>
+  }
+  @case('one_way_booking') {
+    <app-finalise-oneway [bookingState]="bookingState()"></app-finalise-oneway>
+  }
+  @case('return_flight_requested') {
+    <app-choose-date [bookingState]="bookingState()" (dateSelected)="selectReturnDate($event)"></app-choose-date>
+  }
+  @case('nominal_return_date') {
+    <app-choose-flight [bookingState]="bookingState()" (flightSelected)="selectReturnFlight($event)"></app-choose-flight>
+  }
+  @case('return_booking') {
+    <app-finalise-return [bookingState]="bookingState()"></app-finalise-return>
+  }
+}
