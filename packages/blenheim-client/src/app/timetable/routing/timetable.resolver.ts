@@ -16,7 +16,7 @@ export const resolveTimetables: ResolveFn<AirportWithTimetables[]> =
     const origin = route.paramMap.get('origin');
 
     if (origin && isAirport(origin)) {
-      return loadingService.setLoadingWhile$(flightService.getTimetable$(origin as Airport).pipe(
+      return flightService.getTimetable$(origin as Airport).pipe(
         map(r => {
           // get the unique destinations
           const allDestinations = r.timetable.map(t => t.route.destination);
@@ -28,7 +28,7 @@ export const resolveTimetables: ResolveFn<AirportWithTimetables[]> =
             return { destination: dest, destinationTimetables: s };
           }).sort((a, b) => cityName(a.destination).localeCompare(cityName(b.destination)));
         }
-        )));
+        ));
     } else {
       throw new Error('No origin when navigating to timetables');
     }

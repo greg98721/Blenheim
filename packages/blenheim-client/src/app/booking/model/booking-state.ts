@@ -78,8 +78,9 @@ export function startBooking(origins: Airport[]): BookingState {
   return { kind: 'start', origins };
 }
 
-export function addOrigin(state: BookingState, origin: Airport, destinationRoutes: AirRoute[]): BookingState {
-  if (state.kind === 'start') {
+export function addOrigin(state: BookingState | undefined, origin: Airport, destinationRoutes: AirRoute[]): BookingState {
+  // we can start from this state so there could be no previous state
+  if (state === undefined || state.kind === 'start') {
     return { kind: 'origin', origin, destinationRoutes };
   } else {
     throw new Error(`Cannot create origin state from ${state.kind}`);

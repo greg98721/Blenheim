@@ -44,7 +44,7 @@ export class UserService {
               this._accessToken = response.access_token;
             }),
             switchMap((loginResponse: any) => {
-              const userUrl = this._config.apiUrl(`api/auth/user/${loginDetails.username}`);
+              const userUrl = this._config.apiUrl(`api/users/${loginDetails.username}`);
               return this._http.get(userUrl).pipe(
                 map((userResponse: any) => {
                   return userResponse as User;

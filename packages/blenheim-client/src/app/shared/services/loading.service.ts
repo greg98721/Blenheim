@@ -1,12 +1,12 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of, tap, switchMap, delay } from 'rxjs';
+import { Injectable, WritableSignal, signal } from '@angular/core';
+import { Observable, of, tap, switchMap, delay, finalize } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoadingService {
 
-  private _isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private _isLoading = signal(false);
   private _count = 0;
 
   setLoadingWhile$<T>(action$: Observable<T>): Observable<T> {
@@ -14,25 +14,22 @@ export class LoadingService {
       delay(0), // this gives Angular a chance to get itself in order and avoids the "Expression has changed after it was checked" error
       tap(() => this.startLoading()),
       switchMap(() => action$),
-      tap({
-        next: () => this.endLoading(),
-        error: () => this.endLoading()
-      })
+      finalize(() => this.endLoading())
     )
   }
 
-  get isLoading$(): Observable<boolean> {
-    return this._isLoading$;
+  get isLoading(): WritableSignal<boolean> {
+    return this._isLoading;
   }
 
-  private startLoading() {
-    this._isLoading$.next(true);
+  startLoading() {
+    this._isLoading.set(true);
     this._count++;
   }
 
-  private endLoading() {
+  endLoading() {
     if (--this._count <= 0) {
-      this._isLoading$.next(false);
+      this._isLoading.set(false);
     }
   }
 }

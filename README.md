@@ -270,3 +270,14 @@ import { serverConfig } from './app/app.config.server';
 
 const bootstrap = () => bootstrapApplication(AppComponent, serverConfig);
 ```
+
+## HTTP Interceptors
+
+Unlike older versions of Angular the interceptors are function based. We can use the `ng g` command to generate the interceptors. For example:
+
+```
+  ng g interceptor user/utility/auth  --functional
+  ng g interceptor shared/utility/global-error  --functional
+```
+
+Also the loading overlay in now also implemented as a HTTP interceptor rather than explicitly calling a service.

@@ -44,15 +44,29 @@ export class MakeBookingComponent {
 
   bookingState = signal<BookingState>({ kind: 'undefined' });
 
-  /** So we can use routing to provide a way of going forwards and backwards through the booking process, include an index in the route into the _bookingStateStack */
+  /** We can use routing to provide a way of going forwards and backwards through the booking process, include an index in the route into the _bookingStateStack */
   @Input() set stateIndex(i: number) {
     if (i === 0 && this._bookingStateStack.length === 0) {
       // We're starting from scratch
-      this._loadingService.setLoadingWhile$(this._flightService.getOrigins$()).subscribe(origins => {
-        this._bookingStateStack.push(startBooking(origins));
-        this._currentStackIndex = 0;
-        this.bookingState.set(this._bookingStateStack[0]);
-      });
+      // if the origin is set in the query params we start from the second step
+      const o = this._route.snapshot.queryParams['origin'];
+      if (o !== undefined) {
+        const origin = o as Airport;
+        this._flightService.getDestinations$(origin).subscribe(destinationRoutes => {
+          const newState = addOrigin(undefined, origin, destinationRoutes);
+          this._bookingStateStack.push(newState);
+          this._currentStackIndex = 0;
+          this.bookingState.set(this._bookingStateStack[0]);
+        });
+      } else {
+        // otherwise we need to show the first step
+        this._flightService.getOrigins$().subscribe(origins => {
+          const newState = startBooking(origins);
+          this._bookingStateStack.push(newState);
+          this._currentStackIndex = 0;
+          this.bookingState.set(this._bookingStateStack[0]);
+        });
+      }
     } else if (i >= 0 && i < this._bookingStateStack.length) {
       // we are moving to a state that already exists
       this._currentStackIndex = i;
@@ -62,22 +76,8 @@ export class MakeBookingComponent {
     }
   }
 
-  /** Optional query param so we can start with the origin chosen */
-  @Input() set origin(o: Airport) {
-    // we can jump straight to the second step by choosing the origin in the link, but this will only happen for an empty stack so we ignore if navigating backwards
-    if (this._bookingStateStack.length === 0) {
-      this._loadingService.setLoadingWhile$(this._flightService.getDestinations$(o)).subscribe(destinationRoutes => {
-      // note we are not using the _updateStateStack method here as we want to start from scratch and not navigate again
-      const newState: BookingState = addOrigin((this._currentState()), o, destinationRoutes);
-      this._bookingStateStack.push(newState);
-      this._currentStackIndex = this._bookingStateStack.length - 1;
-      this.bookingState.set(this._bookingStateStack[this._currentStackIndex]);
-  });
-  }
-}
-
   selectOrigin(origin: Airport) {
-    this._loadingService.setLoadingWhile$(this._flightService.getDestinations$(origin)).subscribe(destinationRoutes => {
+    this._flightService.getDestinations$(origin).subscribe(destinationRoutes => {
       const newState: BookingState = addOrigin((this._currentState()), origin, destinationRoutes);
       this._updateStateStack(newState);
     });
@@ -92,7 +92,7 @@ export class MakeBookingComponent {
     const datestring = formatISOWithOptions({ representation: 'date' }, date);
     const state = (this._currentState());
     if (state.kind === 'destination') {
-      this._loadingService.setLoadingWhile$(this._flightService.getFlights$(state.route.origin, state.route.destination)).subscribe(flights => {
+      this._flightService.getFlights$(state.route.origin, state.route.destination).subscribe(flights => {
         const newState = addDate(state, datestring, flights);
         this._updateStateStack(newState);
       });
@@ -128,7 +128,7 @@ export class MakeBookingComponent {
     const datestring = formatISOWithOptions({ representation: 'date' }, date);
     const state = (this._currentState());
     if (state.kind === 'return_flight_requested') {
-      this._loadingService.setLoadingWhile$(this._flightService.getFlights$(state.returnRoute.origin, state.returnRoute.destination)).subscribe(flights => {
+      this._flightService.getFlights$(state.returnRoute.origin, state.returnRoute.destination).subscribe(flights => {
         const newState = addReturnDate(state, datestring, flights);
         this._updateStateStack(newState);
       });

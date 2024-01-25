@@ -1,24 +1,33 @@
-import { APP_INITIALIZER, ApplicationConfig, ErrorHandler } from '@angular/core';
+import { APP_INITIALIZER, ApplicationConfig, ErrorHandler, importProvidersFrom } from '@angular/core';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { provideClientHydration } from '@angular/platform-browser';
-import { HTTP_INTERCEPTORS, provideHttpClient } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptors } from '@angular/common/http';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { routes } from './app.routes';
 import { AppConfigService } from './shared/services/app-config.service';
-import { GlobalHttpErrorHandler } from './shared/utility/global-http-error-handler.interceptor';
-import { AuthInterceptor } from './user/utility/auth-Interceptor';
-import { CustomErrorHandler } from './shared/utility/custom-error-handler.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { loadingUiInterceptor } from './shared/utility/loading-ui.interceptor';
+import { authInterceptor } from './shared/utility/auth.interceptor';
+import { globalErrorInterceptor } from './shared/utility/global-error.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideRouter(routes), [
+    provideRouter(routes),
+    [
       provideClientHydration(),
       withComponentInputBinding(),
-      provideHttpClient(),
-      {
-        provide: ErrorHandler,
-        useClass: CustomErrorHandler
-      }
+      provideHttpClient(
+        withInterceptors([    // the order counts - the first interceptor will be the first to see the request and the last to see the response
+          loadingUiInterceptor,   // this will put up the loading spinner for every API call back to the server. If we want to do some background work, remove this and use the LoadingService directly on each call
+          authInterceptor,
+          globalErrorInterceptor
+        ])
+      ),
+      importProvidersFrom(
+        BrowserAnimationsModule,
+        MatSnackBarModule,
+      )
     ],
     {
       provide: APP_INITIALIZER,
@@ -26,16 +35,6 @@ export const appConfig: ApplicationConfig = {
         AppConfigService
       ],
       useFactory: (service: AppConfigService) => () => service.load(),  // we are setting the function here - not running it
-      multi: true
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: GlobalHttpErrorHandler,
-      multi: true
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
       multi: true
     }
   ],

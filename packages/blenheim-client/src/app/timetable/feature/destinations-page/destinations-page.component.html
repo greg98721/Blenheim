@@ -4,6 +4,6 @@
     <div class="city-name">{{origin.code | cityName}}</div>
     <div class="fluff">{{origin.fluff}}</div>
     <a [routerLink]="['/timetable', origin.code]" class="goto-timetable">See the timetable</a>
-    <a [routerLink]="['/booking']" [queryParams]="{origin: origin.code}" class="book-now">Book Now</a>
+    <a [routerLink]="['/booking/0']" [queryParams]="{origin: origin.code}" class="book-now">Book Now</a>
   </div>
 }

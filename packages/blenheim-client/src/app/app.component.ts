@@ -16,7 +16,7 @@ export class AppComponent {
   private _loadingService = inject(LoadingService);
   // As a general rule - use signals for databinding and observables for services so we keep the power to combine or filter them for whatever reason
   // Also we only want to call toSignal once per observable, so we store the result in a private field
-  private _isLoading = toSignal(this._loadingService.isLoading$);
+  private _isLoading = this._loadingService.isLoading;
 
   title = 'Marlborough';
 
