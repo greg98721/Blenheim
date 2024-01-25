@@ -46,7 +46,7 @@ export class MakeBookingComponent {
 
   /** We can use routing to provide a way of going forwards and backwards through the booking process, include an index in the route into the _bookingStateStack */
   @Input() set stateIndex(i: number) {
-    if (i === 0 && this._bookingStateStack.length === 0) {
+    if (i == 0 && this._bookingStateStack.length == 0) {
       // We're starting from scratch
       // if the origin is set in the query params we start from the second step
       const o = this._route.snapshot.queryParams['origin'];
@@ -68,9 +68,9 @@ export class MakeBookingComponent {
         });
       }
     } else if (i >= 0 && i < this._bookingStateStack.length) {
-      // we are moving to a state that already exists
+      // we are moving to a state that already exists - could be at top of the stack or older
       this._currentStackIndex = i;
-      this.bookingState.set(this._bookingStateStack[i]);
+      this.bookingState.set(this._currentState());
     } else {
       throw new Error(`Invalid state index ${i}`);
     }
