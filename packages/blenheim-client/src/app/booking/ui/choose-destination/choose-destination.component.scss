@@ -26,25 +26,17 @@
 
 .origin-summary {
   grid-area: origin-summary-area;
-  font-size: 2.5rem;
-  line-height: 3rem;
+  @include text-1;
   margin-bottom: 1.5rem;
   color: $primary-color;
   @media (max-width: $narrow-breakpoint) {
-    font-size: 2rem;
-    line-height: 2.5rem;
     margin-bottom: 1rem;
   }
 }
 
 .question {
   grid-area: destination-question-area;
-  font-size: 2.5rem;
-  line-height: 3rem;
-  @media (max-width: $narrow-breakpoint) {
-    font-size: 2rem;
-    line-height: 2.5rem;
-  }
+  @include text-1;
 }
 
 .destination-list {
@@ -52,11 +44,6 @@
   display: grid;
   grid-template-columns: 1fr;
   a {
-    font-size: 2.5rem;
-    line-height: 3rem;
-    @media (max-width: $narrow-breakpoint) {
-      font-size: 2rem;
-      line-height: 2.5rem;
-    }
+    @include text-1;
   }
 }

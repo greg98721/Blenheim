@@ -15,45 +15,17 @@ $big-wide: calc($wide-breakpoint * 0.28);
 .page-header {
   grid-column: span 5;
   color: $bright-primary-color;
-  font-size: 4vw;
-  line-height: 7vw;
-
-  @media (max-width: $narrow-breakpoint) {
-    font-size: 2rem;
-    line-height: 2.5rem;
-  }
-
-  @media (min-width: $wide-breakpoint) {
-    font-size: 4rem;
-    line-height: 7rem;
-  }
+  @include text-0;
 }
 
 .header {
   font-weight: 600;
-  font-size: 1.3vw;
-  line-height: 2vw;
-
-  @media (max-width: $narrow-breakpoint) {
-    font-size: 0.8rem;
-    line-height: 1.4rem;
-  }
-
-  @media (min-width: $wide-breakpoint) {
-    font-size: 1.3rem;
-    line-height: 2rem;
-  }
+  @include text-3;
 }
 
 a.destination {
+  @include table-header-2;
   grid-column: span 5;
-  color: $opposite-text-color;
-  background-color: $primary-color;
-  padding: 0.2rem;
-  margin-top: 1rem;
-  font-size: 1.3rem;
-  font-weight: 600;
-  cursor: pointer;
 }
 
 .destination:hover {
@@ -61,8 +33,5 @@ a.destination {
 }
 
 .table-content {
-  font-size: 1rem;
-  @media (max-width: $narrow-breakpoint) {
-    font-size: 0.8rem;
-  }
+  @include fixed-text-4;
 }

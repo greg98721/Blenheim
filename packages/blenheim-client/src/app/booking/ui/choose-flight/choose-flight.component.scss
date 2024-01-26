@@ -98,53 +98,25 @@
 }
 
 .price {
-  font-size: 2vw;
-  line-height: 2.2vw;
-  @media (max-width: $narrow-breakpoint) {
-    font-size: 1.5rem;
-    line-height: 1.6rem;
-  }
-  @media (min-width: $wide-breakpoint) {
-    font-size: 2rem;
-    line-height: 2.2rem;
-  }
+  @include text-2;
 }
 
 .seats-available,
 .flight-number {
-  font-size: 1.2vw;
-  line-height: 1.3vw;
-  @media (max-width: $narrow-breakpoint) {
-    font-size: 1rem;
-    line-height: 1.2rem;
-  }
-  @media (min-width: $wide-breakpoint) {
-    font-size: 1.2rem;
-    line-height: 1.3rem;
-  }
+  @include text-4;
 }
-
-.departs,
-.arrives {
-  font-size: 1.5vw;
-  line-height: 1.6vw;
-  .mat-icon {
-    padding-right: 0.8rem;
-  }
-  @media (max-width: $narrow-breakpoint) {
-    font-size: 1.2rem;
-    line-height: 1.3rem;
-  }
-  @media (min-width: $wide-breakpoint) {
-    font-size: 1.5rem;
-    line-height: 1.6rem;
-  }
-}
-
 
 .flight-number {
   grid-area: flight-number-area;
   text-align: center;
+}
+
+.departs,
+.arrives {
+  @include text-3;
+  .mat-icon {
+    padding-right: 0.8rem;
+  }
 }
 
 .departs {
@@ -157,16 +129,7 @@
 
 .fully-booked,
 .date-block {
-  font-size: 1.5vw;
-  line-height: 1.5vw;
-  @media (max-width: $narrow-breakpoint) {
-    font-size: 1.2rem;
-    line-height: 1.2rem;
-  }
-  @media (min-width: $wide-breakpoint) {
-    font-size: 1.5rem;
-    line-height: 1.5rem;
-  }
+  @include text-3;
 }
 
 .fully-booked {

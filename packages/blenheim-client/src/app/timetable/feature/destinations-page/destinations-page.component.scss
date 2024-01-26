@@ -15,16 +15,14 @@
 
   @media (max-width: $narrow-breakpoint) {
     grid-template-columns: 0.5fr 0.5fr;
-    grid-template-rows: 0.5rem max-content 0.25rem max-content 0.5rem max-content 0.5rem max-content;
+    grid-template-rows: 0.5rem max-content 0.25rem max-content 0.5rem max-content;
     grid-template-areas:
       ". ."
       "picture picture"
       ". ."
       "cityname-area cityname-area"
       ". ."
-      "timetable-area booking-area"
-      ". ."
-      "fluff-area fluff-area";
+      "timetable-area booking-area";
   }
 
   @media (min-width: $wide-breakpoint) {
@@ -53,49 +51,23 @@
 
 .city-name {
   grid-area: cityname-area;
-  font-size: 5vw;
-  line-height: 6vw;
+  @include text-0;
   color: $bright-primary-color;
-
-  @media (max-width: $narrow-breakpoint) {
-    font-size: 2.5rem;
-    line-height: 3rem;
-  }
-
-  @media (min-width: $wide-breakpoint) {
-    font-size: 5rem;
-    line-height: 6rem;
-  }
 }
 
 .fluff {
   grid-area: fluff-area;
-  font-size: 1.2rem;
+  @include text-4;
   font-style: italic;
-  font-weight: 200;
 
   @media (max-width: $narrow-breakpoint) {
-    font-size: 0.8rem;
-    line-height: 1rem;
-    font-style: normal;
-    font-weight: 300;
+    display: none;
   }
 }
 
 .goto-timetable,
 .book-now {
-  font-size: 2.5vw;
-  line-height: 3vw;
-
-  @media (max-width: $narrow-breakpoint) {
-    font-size: 1rem;
-    line-height: 1.2rem;
-  }
-
-  @media (min-width: $wide-breakpoint) {
-    font-size: 2.5rem;
-    line-height: 3rem;
-  }
+  @include text-2;
 }
 
 .goto-timetable {

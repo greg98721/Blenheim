@@ -31,16 +31,17 @@ $opposite-text-color: white;
 
 $narrow-breakpoint: 50rem;
 $wide-breakpoint: 100rem;
+$middle-breakpoint: 75rem;
 
 $half-wide: calc($wide-breakpoint / 2);
-$third-wide: calc($wide-breakpoint / 2);
+$third-wide: calc($wide-breakpoint / 3);
 $quarter-wide: calc($wide-breakpoint / 4);
 
 @font-face {
   font-family: "Mona Sans";
   src: url("assets/Mona-Sans.woff2") format("woff2 supports variations"),
     url("assets/Mona-Sans.woff2") format("woff2-variations");
-  font-weight: 200 900;
+  font-weight: 200 600 900;
   font-stretch: 75% 125%;
 }
 
@@ -49,6 +50,57 @@ $my-typography: mat.define-typography-config(
 );
 
 @include mat.all-component-typographies($my-typography);
+
+// Most text has a minimum size for small screens and a maximum size for large screens. It is variable in between.
+@mixin var-text($base-size) {
+  font-size: $base-size * 1vw;
+  line-height: $base-size * 1.1vw;
+  @media (max-width: $narrow-breakpoint) {
+    font-size: $base-size * 0.5rem;
+    line-height: $base-size * 0.6rem;
+  }
+  @media (min-width: $wide-breakpoint) {
+    font-size: $base-size * 1rem;
+    line-height: $base-size * 1.1rem;
+  }
+}
+
+@mixin text-0 {
+  @include var-text(5.0);
+}
+
+@mixin text-1 {
+  @include var-text(2.5);
+}
+
+@mixin text-2 {
+  @include var-text(2.0);
+}
+
+@mixin text-3 {
+  @include var-text(1.5);
+}
+
+@mixin text-4 {
+  @include var-text(1.2);
+}
+
+@mixin fixed-text-3 {
+  font-size: 1.3rem;
+}
+
+@mixin fixed-text-4 {
+  font-size: 1rem;
+}
+
+@mixin table-header-2 {
+  @include fixed-text-4;
+  color: $opposite-text-color;
+  background-color: $primary-color;
+  padding: 0.2rem;
+  margin-top: 1rem;
+  font-weight: 600;
+}
 
 html,
 body {

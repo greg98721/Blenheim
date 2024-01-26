@@ -39,48 +39,22 @@
 .headline {
   grid-area: main-area;
   text-align: center;
-  font-size: 12vw;
-  line-height: 14vw;
+  @include var-text(12);
   font-weight: 200;
   font-stretch: 125%;
 
-  @media (max-width: $narrow-breakpoint) {
-    font-size: 3rem;
-    font-weight: 400;
-    font-stretch: 100%;
-    line-height: 4rem;
-  }
-
-  @media (min-width: $wide-breakpoint) {
-    font-size: 12rem;
-    line-height: 14rem;
-  }
-}
-
-.timetable-link {
-  grid-area: action_1-area;
-  text-align: left;
-}
-
-.booking-link {
-  grid-area: action_2-area;
-  text-align: right;
 }
 
 .timetable-link,
 .booking-link {
-  font-size: 6vw;
-  line-height: 7vw;
-  margin: 0 1rem;
+  @include text-0;
+  text-align: center;
+}
 
-  @media (max-width: $narrow-breakpoint) {
-    font-size: 1.5rem;
-    line-height: 2rem;
-    text-align: center;
-  }
+.timetable-link {
+  grid-area: action_1-area;
+}
 
-  @media (min-width: $wide-breakpoint) {
-    font-size: 6rem;
-    line-height: 7rem;
-  }
+.booking-link {
+  grid-area: action_2-area;
 }

@@ -13,7 +13,6 @@ import { FinaliseReturnComponent } from '../../ui/finalise-return/finalise-retur
 import { ChooseFlightComponent } from '../../ui/choose-flight/choose-flight.component';
 import { BookingState, addDate, addDestination, addOrigin, addReturnDate, oneWayOnly, requestReturnFlight, selectOutboundFlight, selectReturnFlight, startBooking } from '../../model/booking-state';
 import { FlightService } from '../../../timetable/data-access/flight.service';
-import { LoadingService } from '../../../shared/services/loading.service';
 
 @Component({
   selector: 'app-make-booking',
@@ -38,7 +37,6 @@ export class MakeBookingComponent {
   private _currentStackIndex = 0;
 
   private _flightService = inject(FlightService);
-  private _loadingService = inject(LoadingService);
   private _router = inject(Router);
   private _route = inject(ActivatedRoute);
 
@@ -157,7 +155,7 @@ export class MakeBookingComponent {
 
     if (this._currentStackIndex < this._bookingStateStack.length - 1) {
       // remove the states after the insert point as the update will have invalidated them
-      const newStack = this._bookingStateStack.slice(0, this._currentStackIndex);
+      const newStack = this._bookingStateStack.slice(0, this._currentStackIndex + 1);
       // push the new state on the top of the stack
       newStack.push(newState);
       this._bookingStateStack = newStack;
