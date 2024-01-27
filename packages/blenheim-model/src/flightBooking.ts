@@ -14,37 +14,30 @@ export interface Passenger {
 export interface Ticket {
   firstName: string;
   surname: string;
+  ticketType: TicketType;
   passengerType: PassengerType;
   price: number;
   seatNumber?: string;
 }
 
-interface FlightBookingBase {
-  kind: 'oneWay' | 'return';
-  purchaserUsername: string;  // all purchasers must be registered users - it is just a test app after all
-}
-
-export interface OneWayBooking extends FlightBookingBase {
-  kind: 'oneWay';
+export interface BookingBlock {
   /** ISO format date only */
   date: string;
   flightNumber: string;
-  ticketType: TicketType;
   tickets: Ticket[];
 }
 
-export interface ReturnBooking extends FlightBookingBase {
+export interface OneWayBooking {
+  kind: 'oneWay';
+  purchaserUsername: string;  // all purchasers must be registered users - it is just a test app after all
+  details: BookingBlock;
+}
+
+export interface ReturnBooking {
   kind: 'return';
-  /** ISO format date only */
-  outboundDate: string;
-  outboundFlightNumber: string;
-  outboundTicketType: TicketType;
-  outboundTickets: Ticket[];
-  /** ISO format date only */
-  inboundDate: string;
-  inboundFlightNumber: string;
-  inboundTicketType: TicketType;
-  inboundTickets: Ticket[];
+  purchaserUsername: string;  // all purchasers must be registered users - it is just a test app after all
+  outboundDetails: BookingBlock;
+  returnDetails: BookingBlock;
 }
 
 export type FlightBooking = OneWayBooking | ReturnBooking;

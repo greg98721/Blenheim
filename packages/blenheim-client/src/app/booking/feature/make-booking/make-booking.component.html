@@ -14,8 +14,8 @@
   @case('outbound_flight') {
     <app-choose-return [bookingState]="bookingState()" (oneWaySelected)="selectOneWay()" (returnSelected)="selectReturn()"></app-choose-return>
   }
-  @case('one_way_booking') {
-    <app-finalise-oneway [bookingState]="bookingState()"></app-finalise-oneway>
+  @case('one_way_flights') {
+    <app-add-passengers [bookingState]="bookingState()"></app-add-passengers>
   }
   @case('return_flight_requested') {
     <app-choose-date [bookingState]="bookingState()" (dateSelected)="selectReturnDate($event)"></app-choose-date>
@@ -23,7 +23,13 @@
   @case('nominal_return_date') {
     <app-choose-flight [bookingState]="bookingState()" (flightSelected)="selectReturnFlight($event)"></app-choose-flight>
   }
-  @case('return_booking') {
-    <app-finalise-return [bookingState]="bookingState()"></app-finalise-return>
+  @case('return_flights') {
+    <app-add-passengers [bookingState]="bookingState()" (passengersAdded)="selectPassengers($event)"></app-add-passengers>
+  }
+  @case('one_way_booking_complete') {
+    <app-confirm-booking [bookingState]="bookingState()"></app-confirm-booking>
+  }
+  @case('return_booking_complete') {
+    <app-confirm-booking [bookingState]="bookingState()"></app-confirm-booking>
   }
 }

@@ -1,0 +1,40 @@
+<mat-card>
+  <mat-card-header>
+    @if (showReturn()) {
+      <mat-card-title>Outbound Flight Details</mat-card-title>
+    } @else {
+      <mat-card-title>Flight Details</mat-card-title>
+    }
+  </mat-card-header>
+  <mat-card-content>
+    <div>Taking off from {{outboundTimetableFlight()?.route?.origin | cityName}}</div>
+    <div>At {{outboundTimetableFlight()?.departs ?? 0 | minute}} {{outboundFlight()?.date | date:'cccc d LLLL'}}</div>
+    <div>Arriving {{outboundTimetableFlight()?.route?.destination| cityName}}</div>
+    <div>At {{outboundTimetableFlight()?.departs ?? 0 | minute}}</div>
+    @if((outboundFlight()?.emptyDiscountSeats ?? 0) > 0) {
+    <div>{{outboundFlight()?.emptyDiscountSeats}} discount seats available at {{outboundFlight()?.discountPrice |
+      currency: 'NZD'}}</div>
+    }
+    <div>{{outboundFlight()?.emptyFullPriceSeats}} fully flexible seats available at {{outboundFlight()?.fullPrice|
+      currency: 'NZD'}}</div>
+  </mat-card-content>
+</mat-card>
+@if (showReturn()) {
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Return Flight Details</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div>Taking off from {{returnTimetableFlight()?.route?.origin | cityName}}</div>
+      <div>At {{returnTimetableFlight()?.departs ?? 0 | minute}} {{returnFlight()?.date | date:'cccc d LLLL'}}</div>
+      <div>Arriving {{returnTimetableFlight()?.route?.destination| cityName}}</div>
+      <div>At {{returnTimetableFlight()?.departs ?? 0 | minute}}</div>
+      @if((returnFlight()?.emptyDiscountSeats ?? 0) > 0) {
+      <div>{{returnFlight()?.emptyDiscountSeats}} discount seats available at {{returnFlight()?.discountPrice |
+        currency: 'NZD'}}</div>
+      }
+      <div>{{returnFlight()?.emptyFullPriceSeats}} fully flexible seats available at {{returnFlight()?.fullPrice|
+        currency: 'NZD'}}</div>
+    </mat-card-content>
+  </mat-card>
+}

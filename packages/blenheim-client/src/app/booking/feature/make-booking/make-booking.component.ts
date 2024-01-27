@@ -3,16 +3,17 @@ import { Component, Input, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { formatISOWithOptions } from 'date-fns/fp';
 
-import { AirRoute, Airport, Flight } from '@blenheim/model';
+import { AirRoute, Airport, Flight, Passenger, TicketType } from '@blenheim/model';
 import { ChooseOriginComponent } from '../../ui/choose-origin/choose-origin.component';
 import { ChooseDestinationComponent } from '../../ui/choose-destination/choose-destination.component';
 import { ChooseDateComponent } from '../../ui/choose-date/choose-date.component';
 import { ChooseReturnComponent } from '../../ui/choose-return/choose-return.component';
-import { FinaliseOnewayComponent } from '../../ui/finalise-oneway/finalise-oneway.component';
-import { FinaliseReturnComponent } from '../../ui/finalise-return/finalise-return.component';
 import { ChooseFlightComponent } from '../../ui/choose-flight/choose-flight.component';
-import { BookingState, addDate, addDestination, addOrigin, addReturnDate, oneWayOnly, requestReturnFlight, selectOutboundFlight, selectReturnFlight, startBooking } from '../../model/booking-state';
+import { BookingState, createOneWayBooking, addDate, addDestination, addOrigin, addReturnDate, oneWayOnly, requestReturnFlight, selectOutboundFlight, selectReturnFlight, startBooking, createReturnBooking } from '../../model/booking-state';
 import { FlightService } from '../../../timetable/data-access/flight.service';
+import { AddPassengersComponent } from '../../ui/add-passengers/add-passengers.component';
+import { UserService } from '../../../user/data-access/user.service';
+import { ConfirmBookingComponent } from '../../ui/confirm-booking/confirm-booking.component';
 
 @Component({
   selector: 'app-make-booking',
@@ -25,8 +26,8 @@ import { FlightService } from '../../../timetable/data-access/flight.service';
     ChooseDateComponent,
     ChooseFlightComponent,
     ChooseReturnComponent,
-    FinaliseOnewayComponent,
-    FinaliseReturnComponent
+    AddPassengersComponent,
+    ConfirmBookingComponent
   ],
   templateUrl: './make-booking.component.html',
   styleUrl: './make-booking.component.scss'
@@ -37,6 +38,7 @@ export class MakeBookingComponent {
   private _currentStackIndex = 0;
 
   private _flightService = inject(FlightService);
+  private _userService = inject(UserService);
   private _router = inject(Router);
   private _route = inject(ActivatedRoute);
 
@@ -145,6 +147,20 @@ export class MakeBookingComponent {
       } else {
         throw new Error(`Cannot find timetable flight for flight ${flight.flightNumber}`);
       }
+    } else {
+      throw new Error(`Cannot set the return_flight state from ${state.kind}`);
+    }
+  }
+
+  selectPassengers(details: {outboundTicketType: TicketType, returnTicketType: TicketType | undefined, passengers: Passenger[]}) {
+    const state = (this._currentState());
+    const username = this._userService.currentUser?.username;
+    if (state.kind === 'one_way_flights' && username !== undefined) {
+      const newState = createOneWayBooking(state, details.outboundTicketType, details.passengers, username);
+      this._updateStateStack(newState);
+    } else if (state.kind === 'return_flights' && username !== undefined && details.returnTicketType !== undefined) {
+      const newState = createReturnBooking(state, details.outboundTicketType, details.returnTicketType, details.passengers, username);
+      this._updateStateStack(newState);
     } else {
       throw new Error(`Cannot set the return_flight state from ${state.kind}`);
     }
