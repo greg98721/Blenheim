@@ -8,7 +8,6 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '../auth/auth.guard';
 import { UsersService } from './users.service';
-import { map } from 'rxjs';
 
 @Controller('api/users')
 export class UsersController {
@@ -16,20 +15,17 @@ export class UsersController {
 
   @UseGuards(AuthGuard)
   @Get(':username')
-  user(@Param('username') username: string) {
-    return this._userService.findUser$(username).pipe(
-      map((user) => {
-        if (user) {
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          const { password, ...result } = user;
-          return result;
-        } else {
-          throw new HttpException(
-            `User ${username} not found`,
-            HttpStatus.NOT_FOUND,
-          );
-        }
-      }),
-    );
+  async user(@Param('username') username: string) {
+    const u = await this._userService.findUser(username);
+    if (u) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { passwordHash, ...user } = u;
+      return user;
+    } else {
+      throw new HttpException(
+        `User ${username} not found`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
   }
 }

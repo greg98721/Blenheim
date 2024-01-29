@@ -10,7 +10,7 @@
     <div>Taking off from {{outboundTimetableFlight()?.route?.origin | cityName}}</div>
     <div>At {{outboundTimetableFlight()?.departs ?? 0 | minute}} {{outboundFlight()?.date | date:'cccc d LLLL'}}</div>
     <div>Arriving {{outboundTimetableFlight()?.route?.destination| cityName}}</div>
-    <div>At {{outboundTimetableFlight()?.departs ?? 0 | minute}}</div>
+    <div>At {{outboundTimetableFlight()?.arrives ?? 0 | minute}}</div>
     @if((outboundFlight()?.emptyDiscountSeats ?? 0) > 0) {
     <div>{{outboundFlight()?.emptyDiscountSeats}} discount seats available at {{outboundFlight()?.discountPrice |
       currency: 'NZD'}}</div>

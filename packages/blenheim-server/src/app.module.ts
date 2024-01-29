@@ -7,6 +7,7 @@ import {
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { JwtModule } from '@nestjs/jwt';
+import * as Joi from '@hapi/joi';
 
 import { join } from 'path';
 
@@ -24,6 +25,13 @@ import { FrontendMiddleware } from './FrontendMiddleware';
     // This goes first so that the config service is available to other modules
     ConfigModule.forRoot({
       isGlobal: true,
+      validationSchema: Joi.object({
+        CLIENT_DIST: Joi.string().required(),
+        ACCESS_TOKEN_SECRET: Joi.string().required(),
+        ACCESS_TOKEN_EXPIRATION: Joi.number().required(),
+        REFRESH_TOKEN_SECRET: Joi.string().required(),
+        REFRESH_TOKEN_EXPIRATION: Joi.number().required(),
+      }),
     }),
     // This enables the server to serve the client files from the dist folder
     // Noye we use the async version of forRoot so that we can inject the config service
@@ -42,8 +50,10 @@ import { FrontendMiddleware } from './FrontendMiddleware';
     JwtModule.registerAsync({
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET'),
-        signOptions: { expiresIn: '3600s' },
+        secret: configService.get<string>('ACCESS_TOKEN_SECRET'),
+        signOptions: {
+          expiresIn: configService.get<number>('ACCESS_TOKEN_EXPIRATION'),
+        },
       }),
     }),
   ],
