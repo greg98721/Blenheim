@@ -2,7 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
-import { of } from 'rxjs';
+import * as bcrypt from 'bcrypt';
+import { ConfigService } from '@nestjs/config';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -15,10 +16,10 @@ describe('AuthService', () => {
           provide: UsersService,
           useValue: {
             // mock implementation of UsersService methods
-            findUser$: jest.fn().mockReturnValue(
-              of({
+            findUser: jest.fn().mockReturnValue(
+              Promise.resolve({
                 username: 'bob',
-                password: 'topSecret',
+                passwordHash: await bcrypt.hash('topSecret', 10),
                 firstName: 'Bob',
                 lastName: 'Smith',
                 birthDate: new Date(1973, 6, 21),
@@ -32,7 +33,30 @@ describe('AuthService', () => {
           provide: JwtService,
           useValue: {
             // mock implementation of JwtService methods
-            sign: jest.fn().mockReturnValue('test_token'),
+            signAsync: jest.fn().mockReturnValue(Promise.resolve('test_token')),
+            verifyAsync: jest.fn().mockReturnValue(
+              Promise.resolve({
+                username: 'bob',
+                tokenType: 'refresh',
+              }),
+            ),
+          },
+        },
+        {
+          provide: ConfigService,
+          useValue: {
+            // mock implementation of ConfigService methods
+            get: jest.fn((key: string) => {
+              if (key === 'REFRESH_TOKEN_SECRET') {
+                return 'test_secret' as any;
+              } else if (key === 'REFRESH_TOKEN_EXPIRATION') {
+                return 86400 as any;
+              } else if (key === 'ACCESS_TOKEN_EXPIRATION') {
+                return 900 as any;
+              } else {
+                return undefined;
+              }
+            }),
           },
         },
       ],
@@ -46,14 +70,18 @@ describe('AuthService', () => {
   });
 
   it('should return a JWT on successful login', async () => {
-    const result = {
-      access_token: 'test_token',
-    };
+    const tokens = await service.login('bob', 'topSecret');
+    expect(tokens.access_token).toEqual('test_token');
+    expect(tokens.refresh_token).toEqual('test_token');
+    expect(tokens.access_token_expiry).toEqual(900);
+  });
 
-    jest
-      .spyOn(service, 'login')
-      .mockImplementation(() => Promise.resolve(result));
-
-    expect(await service.login('bob', 'topSecret')).toEqual(result);
+  it('can refresh an access token', async () => {
+    // first login so the refresh token is in the list of valid tokens
+    await service.login('bob', 'topSecret');
+    const refreshTokens = await service.refreshAccessToken('test_token');
+    expect(refreshTokens.access_token).toEqual('test_token');
+    expect(refreshTokens.refresh_token).toEqual('test_token');
+    expect(refreshTokens.access_token_expiry).toEqual(900);
   });
 });

@@ -1,6 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { expect } from '@jest/globals';
-import { firstValueFrom } from 'rxjs';
 import { UsersService } from './users.service';
 
 describe('UsersService', () => {
@@ -8,6 +7,7 @@ describe('UsersService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [],
       providers: [UsersService],
     }).compile();
 
@@ -18,11 +18,13 @@ describe('UsersService', () => {
     expect(service).toBeDefined();
   });
 
-  it('should find a valid user', () => {
+  it('should find a valid user', async () => {
     // To test an observable - use firstValueFrom to turn it into a promise and then use expect(resolves.toBe()) to process the result asynchronously
-    return expect(firstValueFrom(service.findUser$('bob'))).resolves.toEqual({
+    const bob = await service.findUser('bob');
+
+    expect(bob).toEqual({
       username: 'bob',
-      password: 'topSecret',
+      passwordHash: bob?.passwordHash, // because the hash is not repeatable
       firstName: 'Bob',
       lastName: 'Smith',
       birthDate: new Date(1973, 6, 21),
@@ -30,9 +32,8 @@ describe('UsersService', () => {
       customerCode: 'ABC001',
     });
   });
-  it('should not find an invalid user', () => {
-    return expect(
-      firstValueFrom(service.findUser$('invalid')),
-    ).resolves.toEqual(undefined);
+
+  it('should not find an invalid user', async () => {
+    return expect(service.findUser('invalid')).resolves.toEqual(undefined);
   });
 });

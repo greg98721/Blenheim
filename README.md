@@ -184,7 +184,11 @@ export * from './src/test'
 
 See [Typescript project references](https://www.typescriptlang.org/docs/handbook/project-references.html)
 
-## Things To Note
+# Authentication
+
+The applications uses JWT for securing the API. It tries to follow current best practice by having a refresh token and an access token. The access token is used to secure each API call (the non public ones) and has a short expiry to limit the damage if hijacked. The access token is stored in memory. The refresh token is used to request a new access token when the current one expires without requiring the user to login again. It has a much longer expiry but can be only used once. When the access token is refreshed, a new refresh token is also issued. The refresh token is stored on the client in session storage. This is vulnerable to XSS attacks [but so are the alternatives such as cookies](https://academind.com/tutorials/localstorage-vs-cookies-xss). With Angular it is easier to prevent the XXS attack in the first place. On the server the generated refresh token is stored in the database which allows the server to check that it has not been used before.
+
+# Things To Note
 The automatic insertion of imports uses an absolute path - starting at `src/`. This falls over in Jest testing - better to use relative paths.
 
 ## Angular Configs
@@ -193,7 +197,7 @@ Before running the next step run `npm install` in the root folder to install the
 
 Run `ng add @angular/material` to add the material library
 
-# Naming Convention
+## Naming Convention
 
 Use the common practice to match what would be expected in Angular code
 * '_' prefix for private variables and members

@@ -7,7 +7,7 @@ import {
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { JwtModule } from '@nestjs/jwt';
-import * as Joi from '@hapi/joi';
+import * as Joi from 'joi';
 
 import { join } from 'path';
 
@@ -46,7 +46,6 @@ import { FrontendMiddleware } from './FrontendMiddleware';
         },
       ],
     }),
-    // Note we use the async version of register so that we can inject the config service
     JwtModule.registerAsync({
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({

@@ -9,10 +9,9 @@ export interface UserWithPassword extends User {
 @Injectable()
 export class UsersService {
   private _userCache: UserWithPassword[] = [];
-  private _refreshTokens = new Map<string, string>();
 
   async createTempUser(): Promise<UserWithPassword> {
-    const hashedPassword = await this.hashPassword('topSecret');
+    const hashedPassword = await bcrypt.hash('topSecret', 10);
     return {
       username: 'bob',
       passwordHash: hashedPassword,
@@ -30,28 +29,5 @@ export class UsersService {
       this._userCache.push(tempUser);
     }
     return this._userCache.find((u) => u.username === username);
-  }
-
-  async addRefreshToken(username: string, refreshToken: string) {
-    const hashedToken = await bcrypt.hash(refreshToken, 10);
-    this._refreshTokens.set(username, hashedToken);
-  }
-
-  async refreshTokenMatches(username: string, refreshToken: string) {
-    const token = this._refreshTokens.get(username);
-    if (!token) {
-      throw new Error(`No refresh token found for ${username}`);
-    }
-    return await bcrypt.compare(refreshToken, token);
-  }
-
-  removeRefreshToken(username: string) {
-    if (!this._refreshTokens.delete(username)) {
-      throw new Error(`No refresh token found for ${username}`);
-    }
-  }
-
-  async hashPassword(password: string) {
-    return await bcrypt.hash(password, 10);
   }
 }
