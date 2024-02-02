@@ -16,7 +16,7 @@ export interface TokenPayload {
 
 @Injectable()
 export class AuthService {
-  private _refreshTokens = new Map<string, string>();
+  _refreshTokens = new Map<string, string>();
 
   constructor(
     private _userService: UsersService,
@@ -92,7 +92,7 @@ export class AuthService {
       refreshOptions,
     );
     // store the refresh token so we can check it is only used once
-    this._storeRefreshToken(username, refreshToken);
+    await this._storeRefreshToken(username, refreshToken);
 
     return {
       access_token: accessToken,
