@@ -154,7 +154,7 @@ export class MakeBookingComponent {
 
   selectPassengers(details: {outboundTicketType: TicketType, returnTicketType: TicketType | undefined, passengers: Passenger[]}) {
     const state = (this._currentState());
-    const username = this._userService.currentUser?.username;
+    const username = this._userService.currentUser()?.username;
     if (state.kind === 'one_way_flights' && username !== undefined) {
       const newState = createOneWayBooking(state, details.outboundTicketType, details.passengers, username);
       this._updateStateStack(newState);
