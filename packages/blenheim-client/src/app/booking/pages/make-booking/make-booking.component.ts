@@ -71,6 +71,14 @@ export class MakeBookingComponent {
       // we are moving to a state that already exists - could be at top of the stack or older
       this._currentStackIndex = i;
       this.bookingState.set(this._currentState());
+    } else if (i >= 0 && i >= this._bookingStateStack.length) {
+      // we are moving to a state that doesn't exist yet, we need to navigate to the last state in the stack
+      if (this._bookingStateStack.length > 0) {
+        this._router.navigate([`../${this._bookingStateStack.length - 1}`], { relativeTo: this._route });
+      } else {
+        // if there are no states in the stack we need to start from scratch
+        this._router.navigate(['../0'], { relativeTo: this._route });
+      }
     } else {
       throw new Error(`Invalid state index ${i}`);
     }
