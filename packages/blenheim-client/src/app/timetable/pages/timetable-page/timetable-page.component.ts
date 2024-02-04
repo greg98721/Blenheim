@@ -3,7 +3,7 @@ import { Component, Input, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { Airport, TimetableFlight } from '@blenheim/model';
-import { WeekDisplayComponent } from '../../../shared/ui/week-display/week-display.component';
+import { WeekDisplayComponent } from '../../../shared/components/week-display/week-display.component';
 import { MinutePipe } from '../../../shared/pipes/minute.pipe';
 import { CityNamePipe } from '../../../shared/pipes/city-name.pipe';
 import { AirportWithTimetables } from '../../model/airport-with-timetables';

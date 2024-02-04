@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { AppConfigService } from '../../shared/services/app-config.service';
 import { Observable, catchError, map, of, switchMap, tap } from 'rxjs';
-import { LoginDialogComponent } from '../../shared/ui/login-dialog/login-dialog.component';
+import { LoginDialogComponent } from '../../shared/components/login-dialog/login-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { UserService } from '../../user/services/user.service';
 

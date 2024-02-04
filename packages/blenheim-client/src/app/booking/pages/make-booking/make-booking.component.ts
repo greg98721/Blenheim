@@ -4,16 +4,16 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { formatISOWithOptions } from 'date-fns/fp';
 
 import { AirRoute, Airport, Flight, Passenger, TicketType } from '@blenheim/model';
-import { ChooseOriginComponent } from '../../ui/choose-origin/choose-origin.component';
-import { ChooseDestinationComponent } from '../../ui/choose-destination/choose-destination.component';
-import { ChooseDateComponent } from '../../ui/choose-date/choose-date.component';
-import { ChooseReturnComponent } from '../../ui/choose-return/choose-return.component';
-import { ChooseFlightComponent } from '../../ui/choose-flight/choose-flight.component';
+import { ChooseOriginComponent } from '../../components/choose-origin/choose-origin.component';
+import { ChooseDestinationComponent } from '../../components/choose-destination/choose-destination.component';
+import { ChooseDateComponent } from '../../components/choose-date/choose-date.component';
+import { ChooseReturnComponent } from '../../components/choose-return/choose-return.component';
+import { ChooseFlightComponent } from '../../components/choose-flight/choose-flight.component';
 import { BookingState, createOneWayBooking, addDate, addDestination, addOrigin, addReturnDate, oneWayOnly, requestReturnFlight, selectOutboundFlight, selectReturnFlight, startBooking, createReturnBooking } from '../../model/booking-state';
 import { FlightService } from '../../../timetable/services/flight.service';
-import { AddPassengersComponent } from '../../ui/add-passengers/add-passengers.component';
+import { AddPassengersComponent } from '../../components/add-passengers/add-passengers.component';
 import { UserService } from '../../../user/services/user.service';
-import { ConfirmBookingComponent } from '../../ui/confirm-booking/confirm-booking.component';
+import { ConfirmBookingComponent } from '../../components/confirm-booking/confirm-booking.component';
 
 @Component({
   selector: 'app-make-booking',

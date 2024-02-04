@@ -3,7 +3,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { LoadingService } from './shared/services/loading.service';
-import { LoadingOverlayComponent } from './shared/ui/loading-overlay/loading-overlay.component';
+import { LoadingOverlayComponent } from './shared/components/loading-overlay/loading-overlay.component';
 
 @Component({
   selector: 'app-root',
