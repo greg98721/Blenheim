@@ -10,9 +10,9 @@ import { ChooseDateComponent } from '../../ui/choose-date/choose-date.component'
 import { ChooseReturnComponent } from '../../ui/choose-return/choose-return.component';
 import { ChooseFlightComponent } from '../../ui/choose-flight/choose-flight.component';
 import { BookingState, createOneWayBooking, addDate, addDestination, addOrigin, addReturnDate, oneWayOnly, requestReturnFlight, selectOutboundFlight, selectReturnFlight, startBooking, createReturnBooking } from '../../model/booking-state';
-import { FlightService } from '../../../timetable/data-access/flight.service';
+import { FlightService } from '../../../timetable/services/flight.service';
 import { AddPassengersComponent } from '../../ui/add-passengers/add-passengers.component';
-import { UserService } from '../../../user/data-access/user.service';
+import { UserService } from '../../../user/services/user.service';
 import { ConfirmBookingComponent } from '../../ui/confirm-booking/confirm-booking.component';
 
 @Component({

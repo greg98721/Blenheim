@@ -2,7 +2,7 @@ import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, ResolveFn, RouterStateSnapshot } from "@angular/router";
 import { Airport, cityName, isAirport, TimetableFlight } from "@blenheim/model";
 import { map } from "rxjs";
-import { FlightService } from "../data-access/flight.service";
+import { FlightService } from "../services/flight.service";
 import { LoadingService } from '../../shared/services/loading.service';
 import { AirportWithTimetables } from "../model/airport-with-timetables";
 

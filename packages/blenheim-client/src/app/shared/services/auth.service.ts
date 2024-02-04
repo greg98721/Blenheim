@@ -4,7 +4,7 @@ import { AppConfigService } from '../../shared/services/app-config.service';
 import { Observable, catchError, map, of, switchMap, tap } from 'rxjs';
 import { LoginDialogComponent } from '../../shared/ui/login-dialog/login-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-import { UserService } from '../../user/data-access/user.service';
+import { UserService } from '../../user/services/user.service';
 
 @Injectable({
   providedIn: 'root'
