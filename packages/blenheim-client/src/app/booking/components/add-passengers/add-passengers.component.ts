@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatCardModule } from '@angular/material/card';
 import { BookingState } from '../../model/booking-state';
 import { Flight, Passenger, TicketType, TimetableFlight } from '@blenheim/model';
 import { CityNamePipe } from '../../../shared/pipes/city-name.pipe';
@@ -9,7 +8,7 @@ import { MinutePipe } from '../../../shared/pipes/minute.pipe';
 @Component({
   selector: 'app-add-passengers',
   standalone: true,
-  imports: [CommonModule, MatCardModule, CityNamePipe, MinutePipe],
+  imports: [CommonModule, CityNamePipe, MinutePipe],
   templateUrl: './add-passengers.component.html',
   styleUrl: './add-passengers.component.scss'
 })

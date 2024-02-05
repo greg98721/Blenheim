@@ -1,0 +1,13 @@
+@use "../styles.scss" as *;
+
+:host {
+  display: grid;
+  height: 100%;
+  grid-template-columns: 1fr;
+  grid-template-rows: max-content 1fr;
+}
+
+.router-outlet {
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+}
