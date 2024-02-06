@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
-import { MatIconModule } from '@angular/material/icon'
+import { MatIconModule } from '@angular/material/icon';
 
 import { CityNamePipe } from '../../../shared/pipes/city-name.pipe';
 import { MinutePipe } from '../../../shared/pipes/minute.pipe';

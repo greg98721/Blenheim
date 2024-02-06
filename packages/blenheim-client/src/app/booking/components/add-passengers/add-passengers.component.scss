@@ -1,0 +1,157 @@
+@use "../../../../styles.scss" as *;
+
+.layout {
+  display: grid;
+  grid-template-columns: 0.5fr 0.5fr;
+  grid-template-areas: "flight-details-area passenger-area";
+
+  @media (max-width: $narrow-breakpoint) {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "flight-details-area"
+      "passenger-area";
+  }
+  @media (min-width: $wide-breakpoint) {
+    width: $wide-breakpoint;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+.flight-details-block {
+  grid-area: flight-details-area;
+}
+
+.flight-item {
+  border: 0.15rem solid $primary-color;
+  margin: 0.5vw;
+  display: grid;
+  grid-template-columns: max-content 0.5fr 0.5fr;
+  grid-template-rows: max-content max-content max-content max-content;
+  grid-template-areas:
+    "flight-header-area flight-header-area flight-header-area"
+    "departs-icon-area departs-text-area departs-text-area"
+    "arrives-icon-area arrives-text-area arrives-text-area"
+    ". fully-flexible-area discount-area";
+
+  @media (max-width: $narrow-breakpoint) {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "flight-header-area"
+      "departs-text-area"
+      "arrives-text-area"
+      "fully-flexible-area"
+      "discount-area";
+  }
+}
+
+.flight-details-header {
+  @include table-header-2;
+  grid-area: flight-header-area;
+  margin-top: 0;
+}
+
+.departs-text {
+  @include fixed-text-4;
+  grid-area: departs-text-area;
+}
+
+.arrives-text {
+  @include fixed-text-4;
+  grid-area: arrives-text-area;
+}
+
+.departs-icon {
+  grid-area: departs-icon-area;
+  margin-right: 0.5rem;
+  @media (max-width: $narrow-breakpoint) {
+    display: none;
+  }
+}
+
+.arrives-icon {
+  grid-area: arrives-icon-area;
+  margin-right: 0.5rem;
+  @media (max-width: $narrow-breakpoint) {
+    display: none;
+  }
+}
+
+.fully-flexible, .discount {
+  border-style: solid;
+  border-width: 0.2rem;
+  padding: 0.1rem;
+  text-align: center;
+}
+
+.fully-flexible {
+  grid-area: fully-flexible-area;
+  border-top-left-radius: 1rem;
+  border-bottom-left-radius: 1rem;
+  margin: 0.5rem 0 0.5rem 0.5rem;
+  @media (max-width: $narrow-breakpoint) {
+    border-top-left-radius: 1rem;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 1rem;
+    margin: 0.5rem 0.5rem  0 0.5rem;
+  }
+}
+
+.discount {
+  grid-area: discount-area;
+  border-top-right-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+  margin: 0.5rem 0.5rem 0.5rem 0;
+  @media (max-width: $narrow-breakpoint) {
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+    margin: 0 0.5rem 0.5rem 0.5rem;
+  }
+}
+
+.booked-out {
+  background-color: lightgray;
+  border-color: gray;
+  color: gray;
+}
+
+.available {
+  border-color: $accent-color;
+  color: $accent-color;
+  cursor: pointer;
+}
+
+.available:hover {
+  background-color: rgba($dull-accent-color, 0.2);
+  border-width: 0.3rem;
+  padding: 0;
+  color: black;
+}
+
+.selected {
+  border-color: $accent-color;
+  background-color: rgba($dull-accent-color, 0.3);
+  font-weight: 600;
+}
+
+.default {
+  border-color: $primary-color;
+  background-color: rgba($dull-primary-color, 0.15);
+  font-weight: 600;
+}
+
+.fare-type {
+  @include fixed-text-4;
+  margin: 0.5rem;
+}
+
+.price {
+  @include fixed-text-3;
+  margin: 0.5rem;
+}
+
+.available-seats {
+  @include fixed-text-4;
+  margin: 0.5rem;
+}

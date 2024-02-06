@@ -1,32 +1,60 @@
-<div>
-  <div>
-    {{showReturn() ? 'Outbound Flight Details': 'Flight Details' }}
-  </div>
-  <div>Taking off from {{outboundTimetableFlight()?.route?.origin | cityName}}</div>
-  <div>At {{outboundTimetableFlight()?.departs ?? 0 | minute}} {{outboundFlight()?.date | date:'cccc d LLLL'}}</div>
-  <div>Arriving {{outboundTimetableFlight()?.route?.destination| cityName}}</div>
-  <div>At {{outboundTimetableFlight()?.arrives ?? 0 | minute}}</div>
-  @if((outboundFlight()?.emptyDiscountSeats ?? 0) > 0) {
-  <div>{{outboundFlight()?.emptyDiscountSeats}} discount seats available at {{outboundFlight()?.discountPrice |
-    currency: 'NZD'}}</div>
-  }
-  <div>{{outboundFlight()?.emptyFullPriceSeats}} fully flexible seats available at {{outboundFlight()?.fullPrice|
-    currency: 'NZD'}}</div>
-</div>
-@if (showReturn()) {
-  <div>
-    <div>
-      Return Flight Details
+<div class="layout">
+  <div class="flight-details-block">
+    <div class="flight-item">
+      <div class="flight-details-header">
+        {{showReturn() ? 'Outbound Flight Details': 'Flight Details' }}
+      </div>
+      <mat-icon class="departs-icon">flight_takeoff</mat-icon>
+      <div class="departs-text">
+        Taking off from {{outboundTimetableFlight()?.route?.origin | cityName}} at {{outboundTimetableFlight()?.departs
+        ?? 0 | minute}} {{outboundFlight()?.date | date:'cccc d LLLL'}}
+      </div>
+      <mat-icon class="arrives-icon">flight_land</mat-icon>
+      <div class="arrives-text">
+        Arriving {{outboundTimetableFlight()?.route?.destination| cityName}} at {{outboundTimetableFlight()?.arrives ??
+        0 | minute}}
+      </div>
+      <div class="fully-flexible" (click)="selectOutboundFareType('fullFare')" matRipple [matRippleDisabled]="outboundFullFareState()!='available'"
+        [ngClass]="{'booked-out': outboundFullFareState()=='booked out', 'available':outboundFullFareState()=='available', 'selected': outboundFullFareState()=='selected', 'default':outboundFullFareState()=='default',  }">
+        <div class="fare-type">Fully Flexible Fare</div>
+        <div class="price">{{outboundFlight()?.fullPrice| currency: 'NZD'}}</div>
+        <div class="available-seats">{{outboundFlight()?.emptyFullPriceSeats}} seats available</div>
+      </div>
+      <div class="discount" (click)="selectOutboundFareType('discount')" matRipple [matRippleDisabled]="outboundDiscountFareState()!='available'"
+        [ngClass]="{'booked-out': outboundDiscountFareState()=='booked out', 'available':outboundDiscountFareState()=='available', 'selected': outboundDiscountFareState()=='selected', 'default':outboundDiscountFareState()=='default',  }">
+        <div class="fare-type">Discount Fare</div>
+        <div class="price">{{outboundFlight()?.discountPrice| currency: 'NZD'}}</div>
+        <div class="available-seats">{{outboundFlight()?.emptyDiscountSeats}} seats available</div>
+      </div>
     </div>
-    <div>Taking off from {{returnTimetableFlight()?.route?.origin | cityName}}</div>
-    <div>At {{returnTimetableFlight()?.departs ?? 0 | minute}} {{returnFlight()?.date | date:'cccc d LLLL'}}</div>
-    <div>Arriving {{returnTimetableFlight()?.route?.destination| cityName}}</div>
-    <div>At {{returnTimetableFlight()?.arrives ?? 0 | minute}}</div>
-    @if((returnFlight()?.emptyDiscountSeats ?? 0) > 0) {
-    <div>{{returnFlight()?.emptyDiscountSeats}} discount seats available at {{returnFlight()?.discountPrice |
-      currency: 'NZD'}}</div>
+    @if (showReturn()) {
+    <div class="flight-item">
+      <div class="flight-details-header">
+        Return Flight Details
+      </div>
+      <mat-icon class="departs-icon">flight_takeoff</mat-icon>
+      <div class="departs-text">
+        Taking off from {{returnTimetableFlight()?.route?.origin | cityName}} at {{returnTimetableFlight()?.departs ?? 0
+        | minute}} {{returnFlight()?.date | date:'cccc d LLLL'}}
+      </div>
+      <mat-icon class="arrives-icon">flight_land</mat-icon>
+      <div class="arrives-text">
+        Arriving {{returnTimetableFlight()?.route?.destination| cityName}} at {{returnTimetableFlight()?.arrives ?? 0 |
+        minute}}
+      </div>
+      <div class="fully-flexible" (click)="selectReturnFareType('fullFare')" matRipple [matRippleDisabled]="returnFullFareState()!='available'"
+        [ngClass]="{'booked-out': returnFullFareState()=='booked out', 'available':returnFullFareState()=='available', 'selected': returnFullFareState()=='selected', 'default':returnFullFareState()=='default',  }">
+        <div class="fare-type">Fully Flexible Fare</div>
+        <div class="price">{{returnFlight()?.fullPrice| currency: 'NZD'}}</div>
+        <div class="available-seats">{{returnFlight()?.emptyFullPriceSeats}} seats available</div>
+      </div>
+      <div class="discount" (click)="selectReturnFareType('discount')" matRipple [matRippleDisabled]="returnDiscountFareState()!='available'"
+        [ngClass]="{'booked-out': returnDiscountFareState()=='booked out', 'available':returnDiscountFareState()=='available', 'selected': returnDiscountFareState()=='selected', 'default':returnDiscountFareState()=='default',  }">
+        <div class="fare-type">Discount Fare</div>
+        <div class="price">{{returnFlight()?.discountPrice| currency: 'NZD'}}</div>
+        <div class="available-seats">{{returnFlight()?.emptyDiscountSeats}} seats available</div>
+      </div>
+    </div>
     }
-    <div>{{returnFlight()?.emptyFullPriceSeats}} fully flexible seats available at {{returnFlight()?.fullPrice|
-      currency: 'NZD'}}</div>
   </div>
-}
+</div>
