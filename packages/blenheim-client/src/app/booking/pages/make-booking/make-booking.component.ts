@@ -3,13 +3,13 @@ import { Component, Input, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { formatISOWithOptions } from 'date-fns/fp';
 
-import { AirRoute, Airport, Flight, Passenger, TicketType } from '@blenheim/model';
+import { AirRoute, Airport, Flight, Passenger, FareType } from '@blenheim/model';
 import { ChooseOriginComponent } from '../../components/choose-origin/choose-origin.component';
 import { ChooseDestinationComponent } from '../../components/choose-destination/choose-destination.component';
 import { ChooseDateComponent } from '../../components/choose-date/choose-date.component';
 import { ChooseReturnComponent } from '../../components/choose-return/choose-return.component';
 import { ChooseFlightComponent } from '../../components/choose-flight/choose-flight.component';
-import { BookingState, createOneWayBooking, addDate, addDestination, addOrigin, addReturnDate, oneWayOnly, requestReturnFlight, selectOutboundFlight, selectReturnFlight, startBooking, createReturnBooking } from '../../model/booking-state';
+import { BookingState, createBookingCompleteState, addDate, addDestination, addOrigin, addReturnDate, oneWayOnly, requestReturnFlight, selectOutboundFlight, selectReturnFlight, startBooking } from '../../model/booking-state';
 import { FlightService } from '../../../timetable/services/flight.service';
 import { AddPassengersComponent } from '../../components/add-passengers/add-passengers.component';
 import { UserService } from '../../../user/services/user.service';
@@ -160,14 +160,11 @@ export class MakeBookingComponent {
     }
   }
 
-  selectPassengers(details: {outboundTicketType: TicketType, returnTicketType: TicketType | undefined, passengers: Passenger[]}) {
-    const state = (this._currentState());
+  selectPassengers(details: { outboundFareType: FareType, returnFareType: FareType, passengers: Passenger[] }) {
+    const state = this._currentState();
     const username = this._userService.currentUser()?.username;
-    if (state.kind === 'one_way_flights' && username !== undefined) {
-      const newState = createOneWayBooking(state, details.outboundTicketType, details.passengers, username);
-      this._updateStateStack(newState);
-    } else if (state.kind === 'return_flights' && username !== undefined && details.returnTicketType !== undefined) {
-      const newState = createReturnBooking(state, details.outboundTicketType, details.returnTicketType, details.passengers, username);
+    if ((state.kind === 'one_way_flights' || state.kind === 'return_flights') && username !== undefined) {
+      const newState = createBookingCompleteState(state, details.outboundFareType, details.returnFareType, details.passengers, username);
       this._updateStateStack(newState);
     } else {
       throw new Error(`Cannot set the return_flight state from ${state.kind}`);

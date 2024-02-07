@@ -1,4 +1,4 @@
-import { Airport, AirRoute, EMPTY_FLIGHT, Flight, maximumBookingDay, OneWayBooking, Passenger, PassengerType, ReturnBooking, startOfDayInTimezone, TicketType, TimetableFlight, timezone } from "@blenheim/model";
+import { Airport, AirRoute, EMPTY_FLIGHT, Flight, maximumBookingDay, OneWayBooking, Passenger, PassengerType, ReturnBooking, startOfDayInTimezone, FareType, TimetableFlight, timezone, Ticket } from "@blenheim/model";
 import { addDays, parseISO, differenceInCalendarDays, eachDayOfInterval, isSameDay } from 'date-fns/fp'; // Note using the functional version of the date-fns library
 
 /** Just so we have something to initialise with */
@@ -272,88 +272,77 @@ export function selectReturnFlight(state: BookingState, returnTimetableFlight: T
   }
 }
 
-function calcPrice(ticketType: TicketType, passengerType: PassengerType, flight: Flight): number {
+function calcPrice(ticketType: FareType, passengerType: PassengerType, flight: Flight): number {
   const base = ticketType === 'full' ? flight.fullPrice : flight.discountPrice;
   const adjusted = passengerType === 'adult' ? base : Math.round(base * 0.5);	// children are half price
   return adjusted;
 }
 
-export function createOneWayBooking(state: BookingState, ticketType: TicketType, passengers: Passenger[], username: string): BookingState {
-  if (state.kind === 'one_way_flights') {
+export function createBookingCompleteState(state: BookingState, outboundFareType: FareType, returnFareType: FareType, passengers: Passenger[], username: string): BookingState {
 
-    const tickets = passengers.map(p => ({
+  if (state.kind === 'one_way_flights' || state.kind === 'return_flights') {
+
+    const outboundTickets: Ticket[] = passengers.map(p => ({
       firstName: p.firstName,
       surname: p.surname,
-      ticketType: ticketType,
+      fareType: outboundFareType,
       passengerType: p.passengerType,
-      price: calcPrice(ticketType, p.passengerType, state.outboundFlight),
+      price: calcPrice(outboundFareType, p.passengerType, state.outboundFlight),
       seatNumber: undefined,
     }));
 
-    const onewayBooking: OneWayBooking = {
-      kind: 'oneWay',
-      purchaserUsername: username,
-      details: {
-        date: state.outboundFlight.date,
-        flightNumber: state.outboundTimetableFlight.flightNumber,
-        tickets: tickets,
+    if (state.kind === 'one_way_flights') {
+
+      const onewayBooking: OneWayBooking = {
+        kind: 'oneWay',
+        purchaserUsername: username,
+        details: {
+          date: state.outboundFlight.date,
+          flightNumber: state.outboundTimetableFlight.flightNumber,
+          tickets: outboundTickets,
+        }
       }
-    }
 
-    return {
-      kind: 'one_way_booking_complete',
-      outboundTimetableFlight: state.outboundTimetableFlight,
-      outboundFlight: state.outboundFlight,
-      booking: onewayBooking
-    };
-  } else {
-    throw new Error(`Cannot create one way booking complete state from ${state.kind}`);
-  }
-}
+      return {
+        kind: 'one_way_booking_complete',
+        outboundTimetableFlight: state.outboundTimetableFlight,
+        outboundFlight: state.outboundFlight,
+        booking: onewayBooking
+      };
+    } else {
 
-export function createReturnBooking(state: BookingState, outboundTicketType: TicketType, returnTicketType: TicketType, passengers: Passenger[], username: string): BookingState {
-  if (state.kind === 'return_flights') {
+      const returnTickets: Ticket[] = passengers.map(p => ({
+        firstName: p.firstName,
+        surname: p.surname,
+        fareType: returnFareType,
+        passengerType: p.passengerType,
+        price: calcPrice(returnFareType, p.passengerType, state.returnFlight),
+        seatNumber: undefined,
+      }));
 
-    const outboundTickets = passengers.map(p => ({
-      firstName: p.firstName,
-      surname: p.surname,
-      ticketType: outboundTicketType,
-      passengerType: p.passengerType,
-      price: calcPrice(outboundTicketType, p.passengerType, state.outboundFlight),
-      seatNumber: undefined,
-    }));
-
-    const returnTickets = passengers.map(p => ({
-      firstName: p.firstName,
-      surname: p.surname,
-      ticketType: returnTicketType,
-      passengerType: p.passengerType,
-      price: calcPrice(returnTicketType, p.passengerType, state.returnFlight),
-      seatNumber: undefined,
-    }));
-
-    const returnBooking: ReturnBooking = {
-      kind: 'return',
-      purchaserUsername: username,
-      outboundDetails: {
-        date: state.outboundFlight.date,
-        flightNumber: state.outboundTimetableFlight.flightNumber,
-        tickets: outboundTickets,
-      },
-      returnDetails: {
-        date: state.returnFlight.date,
-        flightNumber: state.returnTimetableFlight.flightNumber,
-        tickets: returnTickets,
+      const returnBooking: ReturnBooking = {
+        kind: 'return',
+        purchaserUsername: username,
+        outboundDetails: {
+          date: state.outboundFlight.date,
+          flightNumber: state.outboundTimetableFlight.flightNumber,
+          tickets: outboundTickets,
+        },
+        returnDetails: {
+          date: state.returnFlight.date,
+          flightNumber: state.returnTimetableFlight.flightNumber,
+          tickets: returnTickets,
+        }
       }
-    }
 
-    return {
-      kind: 'return_booking_complete',
-      outboundTimetableFlight: state.outboundTimetableFlight,
-      outboundFlight: state.outboundFlight,
-      returnTimetableFlight: state.returnTimetableFlight,
-      returnFlight: state.returnFlight,
-      booking: returnBooking
+      return {
+        kind: 'return_booking_complete',
+        outboundTimetableFlight: state.outboundTimetableFlight,
+        outboundFlight: state.outboundFlight,
+        returnTimetableFlight: state.returnTimetableFlight,
+        returnFlight: state.returnFlight,
+        booking: returnBooking
+      }
     }
   } else {
     throw new Error(`Cannot create booking created state from ${state.kind}`);

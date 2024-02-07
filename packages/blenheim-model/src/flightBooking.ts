@@ -1,7 +1,7 @@
 import { Flight } from "./flight";
 import { TimetableFlight } from "./timetableFlight";
 
-export type TicketType = 'unknown' | 'full' | 'discount';
+export type FareType = 'unknown' | 'full' | 'discount';
 export type PassengerType = 'unknown' | 'adult' | 'child';
 
 
@@ -14,7 +14,7 @@ export interface Passenger {
 export interface Ticket {
   firstName: string;
   surname: string;
-  ticketType: TicketType;
+  fareType: FareType;
   passengerType: PassengerType;
   price: number;
   seatNumber?: string;

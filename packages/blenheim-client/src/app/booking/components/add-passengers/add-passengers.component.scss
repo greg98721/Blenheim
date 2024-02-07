@@ -2,7 +2,7 @@
 
 .layout {
   display: grid;
-  grid-template-columns: 0.5fr 0.5fr;
+  grid-template-columns: 0.4fr 0.6fr;
   grid-template-areas: "flight-details-area passenger-area";
 
   @media (max-width: $narrow-breakpoint) {
@@ -154,4 +154,63 @@
 .available-seats {
   @include fixed-text-4;
   margin: 0.5rem;
+}
+
+.passenger-form-block {
+  grid-area: passenger-area;
+  margin: 0.5vw;
+}
+
+.passenger-header {
+  @include fixed-text-4;
+}
+
+.passenger {
+  display: grid;
+  grid-template-columns: 0.4fr 0.4fr 0.2fr max-content;
+  grid-template-rows: max-content;
+  grid-template-areas:
+    "first-name-area surname-area ticket-type-area delete-button-area";
+  @media (max-width: $narrow-breakpoint) {
+    grid-template-columns: 0.8fr 0.2fr;
+    grid-template-rows: max-content max-content max-content;
+    grid-template-areas:
+      "first-name-area first-name-area"
+      "surname-area surname-area"
+      "ticket-type-area delete-button-area";
+  }
+  border: 0.15rem solid $primary-color;
+  margin: 0.5vw;
+}
+
+.first-name {
+  grid-area: first-name-area;
+  margin: 0.25vw;
+}
+
+.surname {
+  grid-area: surname-area;
+  margin: 0.25vw;
+}
+
+.ticket-type {
+  grid-area: ticket-type-area;
+  margin: 0.25vw;
+}
+
+.delete-button {
+  grid-area: delete-button-area;
+  margin: 0.25vw;
+}
+
+.add-passenger {
+  display:flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  width: 100%;
+  .add-passenger-button {
+    flex: 0 0 auto;
+    margin: 0.5vw;
+    color: white;
+  }
 }

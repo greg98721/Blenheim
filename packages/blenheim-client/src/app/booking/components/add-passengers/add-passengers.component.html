@@ -14,13 +14,15 @@
         Arriving {{outboundTimetableFlight()?.route?.destination| cityName}} at {{outboundTimetableFlight()?.arrives ??
         0 | minute}}
       </div>
-      <div class="fully-flexible" (click)="selectOutboundFareType('fullFare')" matRipple [matRippleDisabled]="outboundFullFareState()!='available'"
+      <div class="fully-flexible" (click)="selectOutboundFareType('full')" matRipple
+        [matRippleDisabled]="outboundFullFareState()!='available'"
         [ngClass]="{'booked-out': outboundFullFareState()=='booked out', 'available':outboundFullFareState()=='available', 'selected': outboundFullFareState()=='selected', 'default':outboundFullFareState()=='default',  }">
         <div class="fare-type">Fully Flexible Fare</div>
         <div class="price">{{outboundFlight()?.fullPrice| currency: 'NZD'}}</div>
         <div class="available-seats">{{outboundFlight()?.emptyFullPriceSeats}} seats available</div>
       </div>
-      <div class="discount" (click)="selectOutboundFareType('discount')" matRipple [matRippleDisabled]="outboundDiscountFareState()!='available'"
+      <div class="discount" (click)="selectOutboundFareType('discount')" matRipple
+        [matRippleDisabled]="outboundDiscountFareState()!='available'"
         [ngClass]="{'booked-out': outboundDiscountFareState()=='booked out', 'available':outboundDiscountFareState()=='available', 'selected': outboundDiscountFareState()=='selected', 'default':outboundDiscountFareState()=='default',  }">
         <div class="fare-type">Discount Fare</div>
         <div class="price">{{outboundFlight()?.discountPrice| currency: 'NZD'}}</div>
@@ -42,13 +44,15 @@
         Arriving {{returnTimetableFlight()?.route?.destination| cityName}} at {{returnTimetableFlight()?.arrives ?? 0 |
         minute}}
       </div>
-      <div class="fully-flexible" (click)="selectReturnFareType('fullFare')" matRipple [matRippleDisabled]="returnFullFareState()!='available'"
+      <div class="fully-flexible" (click)="selectReturnFareType('full')" matRipple
+        [matRippleDisabled]="returnFullFareState()!='available'"
         [ngClass]="{'booked-out': returnFullFareState()=='booked out', 'available':returnFullFareState()=='available', 'selected': returnFullFareState()=='selected', 'default':returnFullFareState()=='default',  }">
         <div class="fare-type">Fully Flexible Fare</div>
         <div class="price">{{returnFlight()?.fullPrice| currency: 'NZD'}}</div>
         <div class="available-seats">{{returnFlight()?.emptyFullPriceSeats}} seats available</div>
       </div>
-      <div class="discount" (click)="selectReturnFareType('discount')" matRipple [matRippleDisabled]="returnDiscountFareState()!='available'"
+      <div class="discount" (click)="selectReturnFareType('discount')" matRipple
+        [matRippleDisabled]="returnDiscountFareState()!='available'"
         [ngClass]="{'booked-out': returnDiscountFareState()=='booked out', 'available':returnDiscountFareState()=='available', 'selected': returnDiscountFareState()=='selected', 'default':returnDiscountFareState()=='default',  }">
         <div class="fare-type">Discount Fare</div>
         <div class="price">{{returnFlight()?.discountPrice| currency: 'NZD'}}</div>
@@ -57,4 +61,54 @@
     </div>
     }
   </div>
-</div>
+  <div class="passenger-form-block">
+    <div class="passenger-header">
+      Add up to passengers
+    </div>
+    <form [formGroup]="passengersForm">
+      <ng-container formArrayName="passengers">
+        @for(passenger of passengers.controls; track passenger.value) {
+          <div [formGroupName]="$index" class="passenger">
+            <mat-form-field appearance="fill" class="first-name">
+              <mat-label>First Name</mat-label>
+              <input matInput formControlName="firstName">
+              @if (passenger.get('firstName')?.errors?.['required']) {
+                <mat-error>A first name is required</mat-error>
+              }
+            </mat-form-field>
+            <mat-form-field appearance="fill" class="surname">
+              <mat-label>Surname</mat-label>
+              <input matInput formControlName="surname">
+              @if (passenger.get('surname')?.errors?.['required']) {
+                <mat-error>A surname is required</mat-error>
+              }
+            </mat-form-field>
+            <mat-radio-group formControlName="passengerType" aria-label="Select an option" class="ticket-type">
+              <mat-radio-button value="adult">Adult</mat-radio-button>
+              <mat-radio-button value="child">Child</mat-radio-button>
+            </mat-radio-group>
+            <button
+              mat-icon-button
+              color="accent"
+              class="delete-button"
+              (click)="removePassenger($index)"
+              matTooltip="Remove this passenger"
+              aria-label="Remove this passenger">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        }
+      </ng-container>
+    </form>
+    <div class="add-passenger">
+      <button
+        mat-fab
+        color="accent"
+        class="add-passenger-button"
+        (click)="addPassenger()"
+        matTooltip="Add another passenger"
+        aria-label="Add another passenger">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+  </div>

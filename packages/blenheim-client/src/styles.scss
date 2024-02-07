@@ -9,6 +9,7 @@ $theme: mat.define-light-theme(
       accent: mat.define-palette(mat.$cyan-palette),
       warn: mat.define-palette(mat.$red-palette),
     ),
+    density: -2,
   )
 );
 
