@@ -14,6 +14,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { UserService } from '../../../user/services/user.service';
 
 type FareState = 'booked out' | 'available' | 'selected' | 'default';
 @Component({
@@ -24,6 +25,8 @@ type FareState = 'booked out' | 'available' | 'selected' | 'default';
   styleUrl: './add-passengers.component.scss'
 })
 export class AddPassengersComponent {
+
+  private _userService = inject(UserService);
 
   private _bookingState = signal<BookingState>({ kind: 'undefined' });
 
@@ -88,7 +91,7 @@ export class AddPassengersComponent {
 
   hasChildFares = computed<boolean>(() => {
     const trigger = this.formChanged();
-    return (this.passengersForm?.value?.passengers ?? []).filter(p => p.passengerType == 'child').length > 0 ?? false;
+    return (this.passengersForm?.value?.passengers ?? []).filter(p => p.passengerType == 'child').length > 0;
   });
 
   // these are used to set the buttons
@@ -107,16 +110,16 @@ export class AddPassengersComponent {
 
   private _fb = inject(FormBuilder);
 
-  private _passengerSubform() {
+  private _passengerSubform(firstName: string, lastName: string) {
     return this._fb.nonNullable.group({
-      firstName: ['', Validators.required],
-      surname: ['', Validators.required],
+      firstName: [firstName, Validators.required],
+      lastName: [lastName, Validators.required],
       passengerType: ['adult'],
     });
   }
 
   passengersForm = this._fb.nonNullable.group({
-    passengers: this._fb.array([this._passengerSubform()])
+    passengers: this._fb.array([this._passengerSubform(this._userService.currentUser()?.firstName ?? '', this._userService.currentUser()?.lastName ?? '')])
   });
 
   formChanged = toSignal(this.passengersForm.valueChanges);
@@ -153,7 +156,7 @@ export class AddPassengersComponent {
   }
 
   addPassenger() {
-    this.passengers.push(this._passengerSubform());
+    this.passengers.push(this._passengerSubform('', ''));
 
     // check if this removes the option to select a discount fare
     const state = this._bookingState();
@@ -236,7 +239,7 @@ export class AddPassengersComponent {
   }
 
   submit() {
-    const passengers = this.passengersForm.value as Passenger[];
+    const passengers = this.passengersForm.value.passengers as Passenger[];
     const outboundFareType: FareType = (this.outboundFullFareState() == 'selected' || this.outboundFullFareState() == 'default') ? 'full' : 'discount';
     const returnFareType: FareType = (this.returnFullFareState() == 'selected' || this.returnFullFareState() == 'default') ? 'full' : 'discount';
     // it does not matter if the return flight is not shown, the return ticket type will be ignored in that case

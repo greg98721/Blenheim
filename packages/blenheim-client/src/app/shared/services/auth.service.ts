@@ -40,7 +40,12 @@ export class AuthService {
         tap((response: any) => {
           this._handleAccessResponse(username, response);
         }),
-        map(() => true),
+        switchMap((loginResponse: any) => {
+          // because the user could have changed their username we need to get the user data again
+          return this._userService.getUserData$(username).pipe(
+            map(() => true),
+          )
+        }),
         catchError((error: HttpErrorResponse) => {
           if (error.status === 401) {
             // the probable cause is that the refresh token has expired - so we need to login again

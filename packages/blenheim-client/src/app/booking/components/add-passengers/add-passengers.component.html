@@ -76,11 +76,11 @@
                 <mat-error>A first name is required</mat-error>
               }
             </mat-form-field>
-            <mat-form-field appearance="fill" class="surname">
-              <mat-label>Surname</mat-label>
-              <input matInput formControlName="surname">
-              @if (passenger.get('surname')?.errors?.['required']) {
-                <mat-error>A surname is required</mat-error>
+            <mat-form-field appearance="fill" class="lastName">
+              <mat-label>Last Name</mat-label>
+              <input matInput formControlName="lastName">
+              @if (passenger.get('lastName')?.errors?.['required']) {
+                <mat-error>A last name is required</mat-error>
               }
             </mat-form-field>
             <mat-radio-group formControlName="passengerType" aria-label="Select an option" class="ticket-type">

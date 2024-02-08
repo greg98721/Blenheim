@@ -183,13 +183,13 @@
   grid-template-columns: 0.4fr 0.4fr 0.2fr max-content;
   grid-template-rows: max-content;
   grid-template-areas:
-    "first-name-area surname-area ticket-type-area delete-button-area";
+    "first-name-area lastName-area ticket-type-area delete-button-area";
   @media (max-width: $narrow-breakpoint) {
     grid-template-columns: 0.8fr 0.2fr;
     grid-template-rows: max-content max-content max-content;
     grid-template-areas:
       "first-name-area first-name-area"
-      "surname-area surname-area"
+      "lastName-area lastName-area"
       "ticket-type-area delete-button-area";
   }
   border: 0.15rem solid $primary-color;
@@ -201,8 +201,8 @@
   margin: 0.25vw;
 }
 
-.surname {
-  grid-area: surname-area;
+.lastName {
+  grid-area: lastName-area;
   margin: 0.25vw;
 }
 

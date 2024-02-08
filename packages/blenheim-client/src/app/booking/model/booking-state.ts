@@ -284,7 +284,7 @@ export function createBookingCompleteState(state: BookingState, outboundFareType
 
     const outboundTickets: Ticket[] = passengers.map(p => ({
       firstName: p.firstName,
-      surname: p.surname,
+      lastName: p.lastName,
       fareType: outboundFareType,
       passengerType: p.passengerType,
       price: calcPrice(outboundFareType, p.passengerType, state.outboundFlight),
@@ -313,7 +313,7 @@ export function createBookingCompleteState(state: BookingState, outboundFareType
 
       const returnTickets: Ticket[] = passengers.map(p => ({
         firstName: p.firstName,
-        surname: p.surname,
+        lastName: p.lastName,
         fareType: returnFareType,
         passengerType: p.passengerType,
         price: calcPrice(returnFareType, p.passengerType, state.returnFlight),

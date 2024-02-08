@@ -7,13 +7,13 @@ export type PassengerType = 'unknown' | 'adult' | 'child';
 
 export interface Passenger {
   firstName: string;
-  surname: string;
+  lastName: string;
   passengerType: PassengerType;
 }
 
 export interface Ticket {
   firstName: string;
-  surname: string;
+  lastName: string;
   fareType: FareType;
   passengerType: PassengerType;
   price: number;
