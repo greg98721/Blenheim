@@ -63,7 +63,7 @@
   </div>
   <div class="passenger-form-block">
     <div class="passenger-header">
-      Add up to passengers
+      Add up to {{ maxPassengers() }} passengers
     </div>
     <form [formGroup]="passengersForm">
       <ng-container formArrayName="passengers">
@@ -91,6 +91,7 @@
               mat-icon-button
               color="accent"
               class="delete-button"
+              [disabled]="this.passengers.controls.length <= 1"
               (click)="removePassenger($index)"
               matTooltip="Remove this passenger"
               aria-label="Remove this passenger">
@@ -105,10 +106,32 @@
         mat-fab
         color="accent"
         class="add-passenger-button"
+        [disabled]="this.passengers.controls.length >= maxPassengers()"
         (click)="addPassenger()"
         matTooltip="Add another passenger"
         aria-label="Add another passenger">
-        <mat-icon>add</mat-icon>
+        <mat-icon>plus_one</mat-icon>
       </button>
     </div>
   </div>
+  <div class="summary-block">
+    <div class="total-top">
+      <div class="total-label">Total Price:</div>
+      <div class="total-value">{{ totalPrice() | currency: 'NZD'}}</div>
+    </div>
+    @if (hasChildFares()) {
+      <div class="child-note">* Children fly half price</div>
+    }
+    <button
+      mat-raised-button
+      color="accent"
+      [disabled]="!passengersForm.valid"
+      (click)="submit()"
+      class="payment-button">
+      Go to Payment
+    </button>
+    @if (!passengersForm.valid) {
+      <mat-error>All passenger details need to be filled in</mat-error>
+    }
+  </div>
+</div>

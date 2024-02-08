@@ -3,13 +3,17 @@
 .layout {
   display: grid;
   grid-template-columns: 0.4fr 0.6fr;
-  grid-template-areas: "flight-details-area passenger-area";
+  grid-template-rows: max-content 1fr;
+  grid-template-areas:
+    "flight-details-area passenger-area"
+    "summary-area passenger-area";
 
   @media (max-width: $narrow-breakpoint) {
     grid-template-columns: 1fr;
     grid-template-areas:
       "flight-details-area"
-      "passenger-area";
+      "passenger-area"
+      "summary-area";
   }
   @media (min-width: $wide-breakpoint) {
     width: $wide-breakpoint;
@@ -54,16 +58,24 @@
 .departs-text {
   @include fixed-text-4;
   grid-area: departs-text-area;
+  margin-top: 0.5rem;
+  @media (max-width: $narrow-breakpoint) {
+    margin-left: 0.5rem;
+  }
 }
 
 .arrives-text {
   @include fixed-text-4;
   grid-area: arrives-text-area;
+  margin-top: 0.5rem;
+  @media (max-width: $narrow-breakpoint) {
+    margin-left: 0.5rem;
+  }
 }
 
 .departs-icon {
   grid-area: departs-icon-area;
-  margin-right: 0.5rem;
+  margin: 0.5rem;
   @media (max-width: $narrow-breakpoint) {
     display: none;
   }
@@ -71,7 +83,7 @@
 
 .arrives-icon {
   grid-area: arrives-icon-area;
-  margin-right: 0.5rem;
+  margin: 0.5rem;
   @media (max-width: $narrow-breakpoint) {
     display: none;
   }
@@ -158,11 +170,12 @@
 
 .passenger-form-block {
   grid-area: passenger-area;
-  margin: 0.5vw;
+  margin: 0.5rem;
 }
 
 .passenger-header {
   @include fixed-text-4;
+  margin: 0.5rem;
 }
 
 .passenger {
@@ -213,4 +226,48 @@
     margin: 0.5vw;
     color: white;
   }
+}
+
+.summary-block {
+  grid-area: summary-area;
+  margin: 0.5vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+}
+
+.total-top {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.total-label {
+  flex: 0 0 auto;
+  @include fixed-text-3;
+}
+
+.total-value {
+  flex: 0 0 auto;
+  @include fixed-text-2;
+  font-weight: 600;
+  text-align: right;
+  line-height: 4rem;
+  border-top: 0.2rem solid black;
+  border-bottom: 0.2rem solid black;
+}
+
+.child-note {
+  @include fixed-text-4;
+  flex: 0 0 auto;
+}
+
+.payment-button {
+  @include fixed-text-3;
+  font-weight: 600;
+  flex: 0 0 auto;
+  color: white;
+  margin-top: 2rem;
 }

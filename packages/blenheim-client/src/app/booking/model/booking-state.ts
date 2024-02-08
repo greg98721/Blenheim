@@ -272,8 +272,8 @@ export function selectReturnFlight(state: BookingState, returnTimetableFlight: T
   }
 }
 
-function calcPrice(ticketType: FareType, passengerType: PassengerType, flight: Flight): number {
-  const base = ticketType === 'full' ? flight.fullPrice : flight.discountPrice;
+export function calcPrice(ticketType: FareType, passengerType: PassengerType, flight: Flight | undefined): number {
+  const base = (ticketType === 'full') ? (flight?.fullPrice ?? 0) : (flight?.discountPrice ?? 0);
   const adjusted = passengerType === 'adult' ? base : Math.round(base * 0.5);	// children are half price
   return adjusted;
 }

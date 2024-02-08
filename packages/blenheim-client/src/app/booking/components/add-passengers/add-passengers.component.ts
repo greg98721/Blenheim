@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Input, Output, computed, inject, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatRippleModule } from '@angular/material/core';
 
-import { BookingState } from '../../model/booking-state';
+import { BookingState, calcPrice } from '../../model/booking-state';
 import { Flight, Passenger, FareType, TimetableFlight } from '@blenheim/model';
 import { CityNamePipe } from '../../../shared/pipes/city-name.pipe';
 import { MinutePipe } from '../../../shared/pipes/minute.pipe';
@@ -65,6 +66,31 @@ export class AddPassengersComponent {
     }
   });
 
+  totalPrice = computed<number>(() => {
+    const trigger = this.formChanged();
+    const state = this._bookingState();
+    const passengers = this.passengersForm?.value?.passengers ?? [];
+    const adultPassengers = passengers.filter(p => p.passengerType == 'adult').length;
+    const childPassengers = passengers.filter(p => p.passengerType == 'child').length;
+    if (state.kind == 'one_way_flights') {
+      const fareType = this.outboundDiscountFareState() == 'selected' ? 'discount' : 'full';
+      return calcPrice(fareType, 'adult', this.outboundFlight()) * adultPassengers + calcPrice(fareType, 'child', this.outboundFlight()) * childPassengers;
+    } else if (state.kind == 'return_flights') {
+      const outboundFareType = this.outboundDiscountFareState() == 'selected' ? 'discount' : 'full';
+      const returnFareType = this.returnDiscountFareState() == 'selected' ? 'discount' : 'full';
+      const outboundPrice = calcPrice(outboundFareType, 'adult', this.outboundFlight()) * adultPassengers + calcPrice(outboundFareType, 'child', this.outboundFlight()) * childPassengers;
+      const returnPrice = calcPrice(returnFareType, 'adult', this.returnFlight()) * adultPassengers + calcPrice(returnFareType, 'child', this.returnFlight()) * childPassengers;
+      return outboundPrice + returnPrice;
+    } else {
+      return 0;
+    }
+  });
+
+  hasChildFares = computed<boolean>(() => {
+    const trigger = this.formChanged();
+    return (this.passengersForm?.value?.passengers ?? []).filter(p => p.passengerType == 'child').length > 0 ?? false;
+  });
+
   // these are used to set the buttons
   outboundFullFareState = signal<FareState>('selected');
   returnFullFareState = signal<FareState>('selected');
@@ -93,16 +119,75 @@ export class AddPassengersComponent {
     passengers: this._fb.array([this._passengerSubform()])
   });
 
+  formChanged = toSignal(this.passengersForm.valueChanges);
+
+  maxPassengers = computed<number>(() => {
+    const state = this._bookingState();
+    if (state.kind == 'one_way_flights') {
+      if (this.outboundDiscountFareState() == 'selected') {
+        return this.outboundFlight()?.emptyDiscountSeats ?? 1;
+      } else {
+        return this.outboundFlight()?.emptyFullPriceSeats ?? 1;
+      }
+    } else if (state.kind == 'return_flights') {
+      let outbound: number
+      if (this.outboundDiscountFareState() == 'selected') {
+        outbound = this.outboundFlight()?.emptyDiscountSeats ?? 1;
+      } else {
+        outbound = this.outboundFlight()?.emptyFullPriceSeats ?? 1;
+      }
+      let inbound: number
+      if (this.returnDiscountFareState() == 'selected') {
+        inbound = this.returnFlight()?.emptyDiscountSeats ?? 1;
+      } else {
+        inbound = this.returnFlight()?.emptyFullPriceSeats ?? 1;
+      }
+      return Math.min(outbound, inbound);
+    } else {
+      return 1;
+    }
+  });
+
   get passengers() {
     return this.passengersForm.get('passengers') as FormArray;
   }
 
   addPassenger() {
     this.passengers.push(this._passengerSubform());
+
+    // check if this removes the option to select a discount fare
+    const state = this._bookingState();
+    if (state.kind == 'one_way_flights' || state.kind == 'return_flights') {
+      if (state.outboundFlight.emptyDiscountSeats < this.passengers.controls.length) {
+        this.outboundFullFareState.set('default');
+        this.outboundDiscountFareState.set('booked out');
+      }
+      if (state.kind == 'return_flights') {
+        if (state.returnFlight.emptyDiscountSeats < this.passengers.controls.length) {
+          this.returnFullFareState.set('default');
+          this.returnDiscountFareState.set('booked out');
+        }
+      }
+    }
   }
 
   removePassenger(index: number) {
     this.passengers.removeAt(index);
+
+    // check if this adds the option to select a discount fare
+    const state = this._bookingState();
+    if (state.kind == 'one_way_flights' || state.kind == 'return_flights') {
+      if (state.outboundFlight.emptyDiscountSeats >= this.passengers.controls.length && this.outboundFullFareState() == 'default') {
+        this.outboundFullFareState.set('selected');
+        this.outboundDiscountFareState.set('available');
+      }
+      if (state.kind == 'return_flights') {
+        if (state.returnFlight.emptyDiscountSeats >= this.passengers.controls.length && this.returnFullFareState() == 'default') {
+          this.returnFullFareState.set('selected');
+          this.returnDiscountFareState.set('available');
+        }
+      }
+    }
   }
 
   @Input() set bookingState(state: BookingState) {

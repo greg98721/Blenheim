@@ -9,7 +9,6 @@ $theme: mat.define-light-theme(
       accent: mat.define-palette(mat.$cyan-palette),
       warn: mat.define-palette(mat.$red-palette),
     ),
-    density: -2,
   )
 );
 
@@ -84,6 +83,10 @@ $my-typography: mat.define-typography-config(
 
 @mixin text-4 {
   @include var-text(1.2);
+}
+
+@mixin fixed-text-2 {
+  font-size: 2rem;
 }
 
 @mixin fixed-text-3 {
