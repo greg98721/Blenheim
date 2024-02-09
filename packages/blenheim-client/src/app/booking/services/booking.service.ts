@@ -13,7 +13,7 @@ export class BookingService {
   private _config = inject(AppConfigService);
 
   makeTheBooking$(booking: FlightBooking): Observable<boolean> {
-    const url = this._config.apiUrl('api/booking');
+    const url = this._config.apiUrl('api/bookings');
     const body = booking;
     return this._http.post(url, body).pipe(
       map((_: any) => true),

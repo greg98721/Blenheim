@@ -19,6 +19,8 @@ import { UsersService } from './users/users.service';
 import { AuthService } from './auth/auth.service';
 import { UsersController } from './users/users.controller';
 import { FrontendMiddleware } from './FrontendMiddleware';
+import { BookingsController } from './bookings/bookings.controller';
+import { BookingsService } from './bookings/bookings.service';
 
 @Module({
   imports: [
@@ -61,8 +63,9 @@ import { FrontendMiddleware } from './FrontendMiddleware';
     FlightsController,
     AuthController,
     UsersController,
+    BookingsController,
   ],
-  providers: [ScheduleService, UsersService, AuthService],
+  providers: [ScheduleService, UsersService, AuthService, BookingsService],
 })
 // To enable the server to host the client files
 export class AppModule implements NestModule {

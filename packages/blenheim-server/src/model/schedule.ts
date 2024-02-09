@@ -196,6 +196,23 @@ function getTimetableFlightsFromRoute(
     .filter((d) => d.flights.length > 0);
 }
 
+export function bookSeats(
+  schedule: Schedule,
+  flightNumber: string,
+  dateOfFlight: string,
+  fullPriceSeats: number,
+  discountSeats: number,
+) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, prettier/prettier
+  const { timetableFlight, flight } = getTimetableFlight(
+    schedule,
+    flightNumber,
+    dateOfFlight,
+  );
+  flight.emptyDiscountSeats -= discountSeats;
+  flight.emptyFullPriceSeats -= fullPriceSeats;
+}
+
 function createRoutes(rnd: PsuedoRandom): ServerAirRoute[] {
   const oneWay: ServerAirRoute[] = [
     {

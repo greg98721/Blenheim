@@ -295,6 +295,7 @@ export function createBookingCompleteState(state: BookingState, outboundFareType
 
       const onewayBooking: OneWayBooking = {
         kind: 'oneWay',
+        bookingReference: '',
         purchaserUsername: username,
         details: {
           date: state.outboundFlight.date,
@@ -322,6 +323,7 @@ export function createBookingCompleteState(state: BookingState, outboundFareType
 
       const returnBooking: ReturnBooking = {
         kind: 'return',
+        bookingReference: '',
         purchaserUsername: username,
         outboundDetails: {
           date: state.outboundFlight.date,

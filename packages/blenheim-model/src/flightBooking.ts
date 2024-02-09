@@ -29,12 +29,14 @@ export interface BookingBlock {
 
 export interface OneWayBooking {
   kind: 'oneWay';
+  bookingReference: string;
   purchaserUsername: string;  // all purchasers must be registered users - it is just a test app after all
   details: BookingBlock;
 }
 
 export interface ReturnBooking {
   kind: 'return';
+  bookingReference: string;
   purchaserUsername: string;  // all purchasers must be registered users - it is just a test app after all
   outboundDetails: BookingBlock;
   returnDetails: BookingBlock;
