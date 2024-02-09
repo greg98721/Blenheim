@@ -171,6 +171,11 @@ export class MakeBookingComponent {
     }
   }
 
+  allDone(confirmed: boolean) {
+    // if confirmed is true call the server to make the booking
+    this._router.navigate(['/']);
+  }
+
   private _updateStateStack(newState: BookingState) {
     // first we will update the stack with the new state
 

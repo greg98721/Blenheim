@@ -27,9 +27,9 @@
     <app-add-passengers [bookingState]="bookingState()" (passengersAdded)="selectPassengers($event)"></app-add-passengers>
   }
   @case('one_way_booking_complete') {
-    <app-confirm-booking [bookingState]="bookingState()"></app-confirm-booking>
+    <app-confirm-booking [bookingState]="bookingState()" (bookingConfirmed)="allDone($event)"></app-confirm-booking>
   }
   @case('return_booking_complete') {
-    <app-confirm-booking [bookingState]="bookingState()"></app-confirm-booking>
+    <app-confirm-booking [bookingState]="bookingState()" (bookingConfirmed)="allDone($event)"></app-confirm-booking>
   }
 }
