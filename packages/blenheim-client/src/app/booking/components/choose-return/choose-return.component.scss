@@ -24,18 +24,7 @@
 }
 
 .oneway-option, .return-option {
-  font-size: 2.5vw;
-  line-height: 2.7vw;
-
-  @media (max-width: $narrow-breakpoint) {
-    font-size: 1.25rem;
-    line-height: 1.35rem;
-  }
-
-  @media (min-width: $wide-breakpoint) {
-    font-size: 2.5rem;
-    line-height: 2.7rem;
-  }
+  @include text-2;
 }
 
 .oneway-option {

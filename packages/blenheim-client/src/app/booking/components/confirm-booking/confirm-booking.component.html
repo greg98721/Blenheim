@@ -1,1 +1,10 @@
-<p>confirm-booking works!</p>
+<div class="layout">
+  <div class="general-comment">At this point the user would transfer to some form of payment gateway. As a technology demo that will be assumed by declaring the payment has been made.
+  </div>
+  <button mat-raised-button color="accent" (click)="confirmBooking()" class="make-payment">
+    {{ totalPrice() | currency: 'NZD' }} Payment Made
+  </button>
+  <button mat-raised-button (click)="cancelBooking()" class="cancel-booking">
+    Cancel the Booking
+  </button>
+</div>

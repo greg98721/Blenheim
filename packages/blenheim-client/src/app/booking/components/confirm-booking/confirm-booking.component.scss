@@ -1,0 +1,46 @@
+@use "../../../../styles.scss" as *;
+
+.layout {
+  display: grid;
+  height: 100%;
+  grid-template-columns: 0.5fr 40rem 0.5fr;
+  grid-template-rows: 0.5fr max-content 2vw max-content 2vw max-content 0.5fr;
+  grid-template-areas:
+    ". . ."
+    ". comment-area ."
+    ". . ."
+    ". make-payment-area ."
+    ". . ."
+    ". cancel-booking-area ."
+    ". . .";
+
+  @media (max-width: $narrow-breakpoint) {
+    margin: 1rem;
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.3fr max-content 1rem max-content 1rem max-content 0.7fr;
+    grid-template-areas:
+      "."
+      "comment-area"
+      "."
+      "make-payment-area"
+      "."
+      "cancel-booking-area"
+      ".";
+  }
+}
+
+.general-comment {
+  grid-area: comment-area;
+  color: $primary-color;
+  @include text-2;
+}
+
+.make-payment {
+  grid-area: make-payment-area;
+  @include fixed-text-3;
+}
+
+.cancel-booking {
+  grid-area: cancel-booking-area;
+  @include fixed-text-3;
+}
