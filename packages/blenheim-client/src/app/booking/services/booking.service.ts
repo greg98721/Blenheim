@@ -12,11 +12,14 @@ export class BookingService {
   private _http = inject(HttpClient);
   private _config = inject(AppConfigService);
 
-  makeTheBooking$(booking: FlightBooking): Observable<boolean> {
+  makeTheBooking$(booking: FlightBooking): Observable<FlightBooking> {
     const url = this._config.apiUrl('api/bookings');
     const body = booking;
-    return this._http.post(url, body).pipe(
-      map((_: any) => true),
+    return this._http.post<string>(url, body).pipe(
+      map((ref: string) => {
+        booking.bookingReference = ref;
+        return booking;
+      }),
       catchError((error: HttpErrorResponse) => {
           throw new TypeError(`Could not create booking: ${error.message}`);
       })

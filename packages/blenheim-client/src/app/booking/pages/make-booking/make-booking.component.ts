@@ -14,6 +14,7 @@ import { FlightService } from '../../../timetable/services/flight.service';
 import { AddPassengersComponent } from '../../components/add-passengers/add-passengers.component';
 import { UserService } from '../../../user/services/user.service';
 import { ConfirmBookingComponent } from '../../components/confirm-booking/confirm-booking.component';
+import { BookingService } from '../../services/booking.service';
 
 @Component({
   selector: 'app-make-booking',
@@ -38,6 +39,7 @@ export class MakeBookingComponent {
   private _currentStackIndex = 0;
 
   private _flightService = inject(FlightService);
+  private _bookingservice = inject(BookingService);
   private _userService = inject(UserService);
   private _router = inject(Router);
   private _route = inject(ActivatedRoute);
@@ -173,7 +175,19 @@ export class MakeBookingComponent {
 
   allDone(confirmed: boolean) {
     // if confirmed is true call the server to make the booking
-    this._router.navigate(['/']);
+    if (confirmed) {
+      const state = this._currentState();
+      if (state.kind === 'one_way_booking_complete' || state.kind === 'return_booking_complete') {
+        this._bookingservice.makeTheBooking$(state.booking).subscribe(booking => {
+          this._router.navigate(['/']);
+        });
+      } else {
+        throw new Error(`Cannot make a booking from state ${state.kind}`);
+      }
+    } else {
+      // if not confirmed jump out anyway
+      this._router.navigate(['/']);
+    }
   }
 
   private _updateStateStack(newState: BookingState) {

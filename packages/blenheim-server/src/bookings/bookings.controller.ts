@@ -13,7 +13,7 @@ import { FlightBooking } from '@blenheim/model';
 import { BookingsService } from './bookings.service';
 import { ScheduleService } from '../schedule/schedule.service';
 
-@Controller('bookings')
+@Controller('api/bookings')
 export class BookingsController {
   constructor(
     private readonly _bookingService: BookingsService,
