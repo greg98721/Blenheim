@@ -30,4 +30,40 @@ export class UsersService {
     }
     return this._userCache.find((u) => u.username === username);
   }
+
+  async addUser(user: User, password: string) {
+    if (this._userCache.find((u) => u.username === user.username)) {
+      throw new Error('User already exists');
+    } else {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      this._userCache.push({ ...user, passwordHash: hashedPassword });
+    }
+  }
+
+  updateUser(user: User) {
+    this._userCache = this._userCache.map((u) => {
+      if (u.username === user.username) {
+        return { ...user, passwordHash: u.passwordHash };
+      } else {
+        return u;
+      }
+    });
+  }
+
+  async updateUserPassword(username: string, password: string) {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    this._userCache = this._userCache.map((u) => {
+      if (u.username === username) {
+        u.passwordHash = hashedPassword;
+        return u;
+      } else {
+        return u;
+      }
+    });
+  }
+
+  deleteUser(username: string) {
+    // Delete booking
+    this._userCache = this._userCache.filter((u) => u.username !== username);
+  }
 }

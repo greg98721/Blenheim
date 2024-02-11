@@ -3,19 +3,19 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class BookingsService {
-  private _bookings: FlightBooking[] = [];
+  private _bookingCache: FlightBooking[] = [];
 
   addBooking(booking: FlightBooking): string {
     const ref = this._generateBookingReference();
     booking.bookingReference = ref;
     // Add booking to database
-    this._bookings.push(booking);
+    this._bookingCache.push(booking);
     return ref;
   }
 
   bookingsForFlight(flightNumber: string, date: string) {
     // Get bookings for flight
-    return this._bookings.filter((booking) => {
+    return this._bookingCache.filter((booking) => {
       if (booking.kind === 'oneWay') {
         return (
           booking.details.flightNumber === flightNumber &&
@@ -34,14 +34,14 @@ export class BookingsService {
 
   bookingsForUser(username: string) {
     // Get bookings for user
-    return this._bookings.filter((booking) => {
+    return this._bookingCache.filter((booking) => {
       return booking.purchaserUsername === username;
     });
   }
 
   updateBooking(booking: FlightBooking) {
     // Update booking
-    this._bookings = this._bookings.map((b) => {
+    this._bookingCache = this._bookingCache.map((b) => {
       if (b.bookingReference === booking.bookingReference) {
         return booking;
       } else {
@@ -52,7 +52,7 @@ export class BookingsService {
 
   deleteBooking(bookingRef: string) {
     // Delete booking
-    this._bookings = this._bookings.filter(
+    this._bookingCache = this._bookingCache.filter(
       (b) => b.bookingReference !== bookingRef,
     );
   }
