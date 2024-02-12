@@ -1,7 +1,7 @@
 import { APP_INITIALIZER, ApplicationConfig, ErrorHandler, importProvidersFrom } from '@angular/core';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { provideClientHydration } from '@angular/platform-browser';
-import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptors } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { routes } from './app.routes';
@@ -22,7 +22,8 @@ export const appConfig: ApplicationConfig = {
           loadingUiInterceptor,   // this will put up the loading spinner for every API call back to the server. If we want to do some background work, remove this and use the LoadingService directly on each call
           authInterceptor,
           globalErrorInterceptor
-        ])
+        ]),
+        withFetch()
       ),
       importProvidersFrom(
         BrowserAnimationsModule,

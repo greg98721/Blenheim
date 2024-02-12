@@ -42,7 +42,7 @@ export class AuthService {
         }),
         switchMap((loginResponse: any) => {
           // because the user could have changed their username we need to get the user data again
-          return this._userService.getUserData$(username).pipe(
+          return this._userService.getUser$(username).pipe(
             map(() => true),
           )
         }),
@@ -89,7 +89,7 @@ export class AuthService {
             }),
             switchMap((loginResponse: any) => {
               // because the user could have changed their username we need to get the user data again
-              return this._userService.getUserData$(loginDetails.username).pipe(
+              return this._userService.getUser$(loginDetails.username).pipe(
                 map((user) => (user !== undefined))
               )
             }),

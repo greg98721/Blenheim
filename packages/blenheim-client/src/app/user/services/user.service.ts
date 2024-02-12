@@ -17,7 +17,7 @@ export class UserService {
     return this._currentUser;
   }
 
-  getUserData$(username: string): Observable<User | undefined> {
+  getUser$(username: string): Observable<User | undefined> {
     const userUrl = this._config.apiUrl(`api/users/${username}`);
     return this._http.get(userUrl).pipe(
       map((userResponse: any) => {
@@ -27,6 +27,40 @@ export class UserService {
         this._currentUser.set(user);
       }),
       catchError(() =>of(undefined))
+    );
+  }
+
+  createUser$(user: User, password: string): Observable<User> {
+    const userUrl = this._config.apiUrl('api/users');
+    const body = { user, password };
+    return this._http.post(userUrl, body).pipe(
+      map(() => user),
+      catchError(() =>of(user))
+    );
+  }
+
+  updateUser$(user: User): Observable<User> {
+    const userUrl = this._config.apiUrl('api/users');
+    return this._http.patch(userUrl, user).pipe(
+      map(() => user),
+      catchError(() =>of(user))
+    );
+  }
+
+  updatePassword$(username: string, password: string): Observable<boolean> {
+    const userUrl = this._config.apiUrl('api/users/password');
+    const body = { username, password };
+    return this._http.patch(userUrl, body).pipe(
+      map(() => true),
+      catchError(() =>of(false))
+    );
+  }
+
+  deleteUser$(username: string): Observable<boolean> {
+    const userUrl = this._config.apiUrl(`api/users/${username}`);
+    return this._http.delete(userUrl).pipe(
+      map(() => true),
+      catchError(() =>of(false))
     );
   }
 }
