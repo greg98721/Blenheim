@@ -224,7 +224,7 @@
   .add-passenger-button {
     flex: 0 0 auto;
     margin: 0.5vw;
-    color: white;
+    color: $opposite-text-color;
   }
 }
 
@@ -268,6 +268,6 @@
   @include fixed-text-3;
   font-weight: 600;
   flex: 0 0 auto;
-  color: white;
+  color: $opposite-text-color;
   margin-top: 2rem;
 }

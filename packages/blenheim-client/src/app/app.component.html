@@ -1,12 +1,21 @@
 <mat-toolbar color="primary">
-  <button mat-icon-button aria-label="Return to home page" (click)="returnToHome()">
-    <mat-icon>home</mat-icon>
-  </button>
-  <span class="title">Marlborough <span class="title-air">Air</span></span>
+  <div class="toolbarGrid">
+    <button mat-icon-button class="home-button" aria-label="Return to home page" (click)="returnToHome()">
+      <mat-icon>home</mat-icon>
+    </button>
+    <div class="title">Marlborough <span class="title-air">Air</span></div>
+    <div></div>
+    @if (loggedIn()) {
+      <button mat-raised-button color="primary" class="userDetails" aria-label="View user details"
+        (click)="returnToHome()">{{ firstName() }} {{ lastName() }}</button>
+    } @else {
+      <div></div>
+    }
+  </div>
 </mat-toolbar>
 <div class="router-outlet">
   <router-outlet></router-outlet>
 </div>
 @if(isLoading()) {
-  <app-loading-overlay />
+<app-loading-overlay />
 }

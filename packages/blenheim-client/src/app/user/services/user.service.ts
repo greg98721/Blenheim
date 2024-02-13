@@ -3,11 +3,14 @@ import { Injectable, inject, signal } from '@angular/core';
 import { User } from '@blenheim/model';
 import { AppConfigService } from '../../shared/services/app-config.service';
 import { Observable, catchError, map, of, tap } from 'rxjs';
+import { ToolbarService } from '../../shared/services/toolbar.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
+
+  private _toolbarService = inject(ToolbarService);
   private _currentUser = signal<User | undefined>(undefined);
 
   private _http = inject(HttpClient);
@@ -25,6 +28,7 @@ export class UserService {
       }),
       tap((user: User) => {
         this._currentUser.set(user);
+        this._toolbarService.userName.set({ first: user.firstName, last: user.lastName });
       }),
       catchError(() =>of(undefined))
     );
@@ -35,6 +39,10 @@ export class UserService {
     const body = { user, password };
     return this._http.post(userUrl, body).pipe(
       map(() => user),
+      tap((user: User) => {
+        this._currentUser.set(user);
+        this._toolbarService.userName.set({ first: user.firstName, last: user.lastName });
+      }),
       catchError(() =>of(user))
     );
   }
@@ -43,6 +51,10 @@ export class UserService {
     const userUrl = this._config.apiUrl('api/users');
     return this._http.patch(userUrl, user).pipe(
       map(() => user),
+      tap((user: User) => {
+        this._currentUser.set(user);
+        this._toolbarService.userName.set({ first: user.firstName, last: user.lastName });
+      }),
       catchError(() =>of(user))
     );
   }
@@ -59,6 +71,9 @@ export class UserService {
   deleteUser$(username: string): Observable<boolean> {
     const userUrl = this._config.apiUrl(`api/users/${username}`);
     return this._http.delete(userUrl).pipe(
+      tap(() => {
+        this._toolbarService.userName.set(undefined);
+      }),
       map(() => true),
       catchError(() =>of(false))
     );

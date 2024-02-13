@@ -11,12 +11,45 @@
   overflow-y: auto;
 }
 
+.home-button {
+  color: $opposite-text-color;
+}
+
+.toolbarGrid {
+  display: grid;
+  grid-template-columns: max-content max-content 1fr max-content;
+  width: 100%;
+
+  @media (max-width: $narrow-breakpoint) {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  @media (min-width: $wide-breakpoint) {
+    width: $wide-breakpoint;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
 .title {
   font-weight: 200;
   font-stretch: 125%;
   font-size: 2rem;
+  margin-top: 0.5rem;
 }
 
 .title-air {
   font-weight: 400;
+}
+
+.userDetails {
+  @include fixed-text-3;
+  border: 0.2rem solid $opposite-text-color;
+  padding: 0.1rem 1rem;
+  border-radius: 1rem;
+  margin: 0.2rem 0.5rem;
+  @media (max-width: $narrow-breakpoint) {
+    display: none;
+  }
 }
