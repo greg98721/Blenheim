@@ -37,4 +37,8 @@ export class AppComponent {
   returnToHome() {
     this._router.navigate(['/']);
   }
+
+  goToUserDetails() {
+    this._router.navigate(['/user']);
+  }
 }

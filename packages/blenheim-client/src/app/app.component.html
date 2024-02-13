@@ -7,7 +7,7 @@
     <div></div>
     @if (loggedIn()) {
       <button mat-raised-button color="primary" class="userDetails" aria-label="View user details"
-        (click)="returnToHome()">{{ firstName() }} {{ lastName() }}</button>
+        (click)="goToUserDetails()">{{ firstName() }} {{ lastName() }}</button>
     } @else {
       <div></div>
     }

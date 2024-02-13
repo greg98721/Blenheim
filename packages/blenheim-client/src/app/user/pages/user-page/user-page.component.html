@@ -1,0 +1,26 @@
+<div class="layout">
+  @if (currentUser() !== undefined) {
+    <div class="title">
+      User Details
+      <button class="edit-button" mat-fab color="accent" aria-label="Edit the user details" matTooltip="Edit the details" (click)="editTheUser()">
+        <mat-icon>edit</mat-icon>
+      </button>
+    </div>
+    <div class="user-details">
+      <div class="label">First Name</div>
+      <div>{{ currentUser()?.firstName ?? '' }}</div>
+      <div class="label">Last Name</div>
+      <div>{{ currentUser()?.lastName ?? '' }}</div>
+      <div class="label">Username</div>
+      <div>{{ currentUser()?.username ?? '' }}</div>
+      <div class="label">Email</div>
+      <div>{{ currentUser()?.email ?? '' }}</div>
+      <div class="label">Address</div>
+      <div>{{ currentUser()?.address ?? '' }}</div>
+      <div class="label">Phone Number</div>
+      <div>{{ currentUser()?.phoneNumber ?? '' }}</div>
+    </div>
+
+    <div class="booking-title">Bookings</div>
+  }
+</div>

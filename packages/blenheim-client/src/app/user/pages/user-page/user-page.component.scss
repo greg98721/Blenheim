@@ -1,0 +1,62 @@
+@use "../../../../styles.scss" as *;
+
+.layout {
+  display: grid;
+  grid-template-rows: 0.3fr max-content max-content 5vw max-content 0.7fr;
+  grid-template-columns: 1fr max-content 1fr;
+  grid-template-areas:
+    ". . ."
+    ". title-area ."
+    ". details-area ."
+    ". . ."
+    ". booking-title-area ."
+    ". . .";
+  height: 100%;
+  @media (max-width: $narrow-breakpoint) {
+    grid-template-rows: 0.3fr max-content max-content 2.5rem max-content 0.7fr;
+  }
+  @media (min-width: $wide-breakpoint) {
+    grid-template-rows: 0.3fr max-content max-content 5rem max-content 0.7fr;
+    width: $wide-breakpoint;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+.title {
+  grid-area: title-area;
+  @include text-0;
+  color: $bright-primary-color;
+}
+
+.edit-button {
+  margin-left: 2rem;
+  color: $opposite-text-color;
+}
+
+.user-details {
+  grid-area: details-area;
+  @include text-2;
+  display: grid;
+  grid-template-columns: 20vw max-content;
+  gap: 0.2rem;
+  white-space: pre-wrap;
+  margin-left: auto;
+  margin-right: auto;
+  @media (max-width: $narrow-breakpoint) {
+    grid-template-columns: 10rem max-content;
+  }
+  @media (min-width: $wide-breakpoint) {
+    grid-template-columns: 20rem max-content;
+  }
+}
+
+.label {
+  color: $bright-primary-color;
+}
+
+.booking-title {
+  grid-area: booking-title-area;
+  color: $bright-primary-color;
+  @include text-0;
+}
