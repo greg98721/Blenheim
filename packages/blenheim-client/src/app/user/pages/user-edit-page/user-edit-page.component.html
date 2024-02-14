@@ -1,1 +1,57 @@
-<p>user-edit-page works!</p>
+<div class="layout">
+  <div class="header">Enter the User Details</div>
+  <form [formGroup]="userForm" class="user-form">
+    <mat-form-field appearance="fill">
+      <mat-label>First Name</mat-label>
+      <input matInput formControlName="firstName">
+      @if (userForm.get('firstName')?.errors?.['required']) {
+      <mat-error>A first name is required</mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Last Name</mat-label>
+      <input matInput formControlName="lastName">
+      @if (userForm.get('lastName')?.errors?.['required']) {
+      <mat-error>A last name is required</mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Username</mat-label>
+      <input matInput formControlName="username">
+      @if (userForm.get('username')?.errors?.['required']) {
+      <mat-error>A username is required</mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Date Of Birth</mat-label>
+      <input matInput formControlName="birthDate">
+      @if (userForm.get('birthDate')?.errors?.['required']) {
+      <mat-error>A date of birth is required</mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Address</mat-label>
+      <textarea matInput formControlName="address" rows="5" style="resize: none;" ></textarea>
+      @if (userForm.get('address')?.errors?.['required']) {
+      <mat-error>An address is required</mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Email Address</mat-label>
+      <input matInput formControlName="email">
+      @if (userForm.get('email')?.errors?.['email']) {
+      <mat-error>The email address needs to have a valid format</mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Phone Number</mat-label>
+      <input matInput formControlName="phoneNumber">
+    </mat-form-field>
+  </form>
+  <button mat-raised-button color="accent" (click)="submitForm()" [disabled]="!userForm.valid" class="submit-button">
+    Submit
+  </button>
+  <button mat-raised-button (click)="submitForm()" class="cancel-button">
+    Cancel
+  </button>
+</div>

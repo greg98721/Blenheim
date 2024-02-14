@@ -1,0 +1,72 @@
+@use "../../../../styles.scss" as *;
+
+.layout {
+  display: grid;
+  grid-template-rows: 0.3fr max-content max-content max-content max-content 0.7fr;
+  grid-template-columns: 1fr max-content 1fr;
+  grid-template-areas:
+    ". . ."
+    ". title-area ."
+    ". form-area ."
+    ". submit-area ."
+    ". cancel-area ."
+    ". . .";
+  height: 100%;
+  gap: 1vw;
+  @media (max-width: $narrow-breakpoint) {
+    width: 100%;
+    gap: 0.5rem;
+    grid-template-columns: 0 1fr 0;
+  }
+  @media (min-width: $wide-breakpoint) {
+    width: $wide-breakpoint;
+    gap: 1rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+.header {
+  @include text-1;
+  grid-area: title-area;
+  color: $bright-primary-color;
+}
+
+.user-form {
+  grid-area: form-area;
+  display: grid;
+  grid-template-rows: repeat(7, max-content);
+  grid-template-columns: max-content;
+  gap: 1vw;
+  @media (max-width: $narrow-breakpoint) {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+  @media (min-width: $wide-breakpoint) {
+    gap: 1rem;
+  }
+  mat-form-field {
+    width: 30vw;
+    @media (max-width: $narrow-breakpoint) {
+      width: 100%;
+    }
+    @media (min-width: $wide-breakpoint) {
+      width: 30rem;
+    }
+  }
+}
+
+.submit-button, .cancel-button {
+  width: 100%;
+  @include fixed-text-3;
+}
+
+.submit-button {
+  grid-area: submit-area;
+  color: $opposite-text-color;
+  font-weight: 600;
+}
+
+.cancel-button {
+  grid-area: cancel-area;
+}
