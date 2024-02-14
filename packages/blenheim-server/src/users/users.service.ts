@@ -19,7 +19,6 @@ export class UsersService {
       lastName: 'Smith',
       birthDate: new Date(1973, 6, 21),
       address: '16 Julian Street\nRedwoodtown\nBlenheim 7201',
-      customerCode: 'ABC001',
     };
   }
 

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, computed, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -8,7 +8,8 @@ import { UserService } from '../../services/user.service';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { format } from 'date-fns/fp';
+import { format, parse } from 'date-fns';
+import { User } from '@blenheim/model';
 
 @Component({
   selector: 'app-user-edit-page',
@@ -23,6 +24,7 @@ export class UserEditPageComponent implements OnInit {
 
   private _userService = inject(UserService);
   currentUser = this._userService.currentUser;
+  isNewUser = computed(() => this.currentUser === undefined);
 
   userForm = this._fb.nonNullable.group({
     username: ['', Validators.required],
@@ -40,18 +42,34 @@ export class UserEditPageComponent implements OnInit {
         username: this.currentUser()?.username,
         firstName: this.currentUser()?.firstName,
         lastName: this.currentUser()?.lastName,
-        birthDate: format('P', new Date()),
+        birthDate: format(new Date(), 'P'),
         address: this.currentUser()?.address,
         email: this.currentUser()?.email,
         phoneNumber: this.currentUser()?.phoneNumber,
       });
+
+      // we are using the user name as the key, so we don't want to allow it to be changed
+      this.userForm.get('username')?.disable();
     }
   }
 
   submitForm() {
-    if (this.userForm.valid) {
-      // this._userService.updateUser(this.userForm.value);
+    const bd = parse((this.userForm.value.birthDate ?? ''), 'P', new Date());
+    const u: User = {
+      username: this.userForm.value.username ?? '',
+      firstName: this.userForm.value.firstName ?? '',
+      lastName: this.userForm.value.lastName ?? '',
+      birthDate: bd,
+      address: this.userForm.value.address ?? '',
+      email: this.userForm.value.email ?? '',
+      phoneNumber: this.userForm.value.phoneNumber ?? '',
+    };
+    this._userService.updateUser$(u).subscribe(() => {
       this._router.navigate(['/user']);
-    }
+    });
+  }
+
+  cancel() {
+    this._router.navigate(['/user']);
   }
 }

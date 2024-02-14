@@ -6,5 +6,4 @@ export interface User {
   address: string;
   email?: string;
   phoneNumber?: string;
-  customerCode: string;
 }

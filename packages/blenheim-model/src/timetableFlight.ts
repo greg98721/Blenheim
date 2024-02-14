@@ -1,4 +1,4 @@
-import { getDay } from 'date-fns/fp';   // Note using the functional version of the date-fns library
+import { getDay } from 'date-fns';
 
 import { AirRoute } from './airRoute';
 

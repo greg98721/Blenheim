@@ -1,8 +1,8 @@
 import {
   startOfDay,
   endOfDay
-} from 'date-fns/fp'; // Note using the functional version of the date-fns library
-import { getTimezoneOffset, utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz';
+} from 'date-fns';
+import { utcToZonedTime } from 'date-fns-tz';
 
 function calculateInTimezone(fn: (dt: Date) => Date, timezone: string, d: Date): Date {
   const u = d.getTime();

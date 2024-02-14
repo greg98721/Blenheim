@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { formatISOWithOptions } from 'date-fns/fp';
+import { formatISO } from 'date-fns';
 
 import { AirRoute, Airport, Flight, Passenger, FareType } from '@blenheim/model';
 import { ChooseOriginComponent } from '../../components/choose-origin/choose-origin.component';
@@ -99,7 +99,7 @@ export class MakeBookingComponent {
   }
 
   selectDate(date: Date) {
-    const datestring = formatISOWithOptions({ representation: 'date' }, date);
+    const datestring = formatISO(date, { representation: 'date' });
     const state = (this._currentState());
     if (state.kind === 'destination') {
       this._flightService.getFlights$(state.route.origin, state.route.destination).subscribe(flights => {
@@ -135,7 +135,7 @@ export class MakeBookingComponent {
   }
 
   selectReturnDate(date: Date) {
-    const datestring = formatISOWithOptions({ representation: 'date' }, date);
+    const datestring = formatISO(date, { representation: 'date' });
     const state = (this._currentState());
     if (state.kind === 'return_flight_requested') {
       this._flightService.getFlights$(state.returnRoute.origin, state.returnRoute.destination).subscribe(flights => {

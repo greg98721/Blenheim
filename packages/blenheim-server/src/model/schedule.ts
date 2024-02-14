@@ -1,9 +1,9 @@
 import {
   addDays,
-  formatISOWithOptions,
+  formatISO,
   eachDayOfInterval,
   differenceInCalendarDays,
-} from 'date-fns/fp'; // Note using the functional version of the date-fns library
+} from 'date-fns';
 import { getTimezoneOffset } from 'date-fns-tz';
 import {
   Aircraft,
@@ -181,8 +181,8 @@ function getTimetableFlightsFromRoute(
   }
 
   const start = addDays(
-    1,
     startOfDayInTimezone(timezone(route.origin), new Date()),
+    1,
   );
 
   return route.timetableFlights
@@ -678,7 +678,7 @@ function createFlights(
     };
   };
 
-  return eachDayOfInterval({ start: start, end: addDays(42, start) })
+  return eachDayOfInterval({ start: start, end: addDays(start, 42) })
     .filter((d) => {
       // first filter the days when there is no flight
       const t = getTimetableDayFromDate(d);
@@ -688,7 +688,7 @@ function createFlights(
       const e = createEmptySeatsAndPrice(d);
       return {
         flightNumber: timetableFlight.flightNumber,
-        date: formatISOWithOptions({ representation: 'date' }, d),
+        date: formatISO(d, { representation: 'date' }),
         emptyFullPriceSeats: e.emptyFullPriceSeats,
         emptyDiscountSeats: e.emptyDiscountSeats,
         fullPrice: e.fullPrice,

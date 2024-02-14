@@ -1,5 +1,5 @@
 import { Airport, AirRoute, EMPTY_FLIGHT, Flight, maximumBookingDay, OneWayBooking, Passenger, PassengerType, ReturnBooking, startOfDayInTimezone, FareType, TimetableFlight, timezone, Ticket } from "@blenheim/model";
-import { addDays, parseISO, differenceInCalendarDays, eachDayOfInterval, isSameDay } from 'date-fns/fp'; // Note using the functional version of the date-fns library
+import { addDays, parseISO, differenceInCalendarDays, eachDayOfInterval, isSameDay } from 'date-fns';
 
 /** Just so we have something to initialise with */
 export interface UndefinedState {
@@ -109,8 +109,8 @@ export function addDestination(state: BookingState, route: AirRoute): BookingSta
       const originTimeZone = timezone(state.origin);
       // the local date of the user does not count - only the current time at the origin
       // we want starting tomorrow as too hard to determine what remains of today
-      const earliest = addDays(1, startOfDayInTimezone(originTimeZone, new Date()));
-      const latest = addDays(maximumBookingDay, earliest);
+      const earliest = addDays(startOfDayInTimezone(originTimeZone, new Date()), 1);
+      const latest = addDays(earliest, maximumBookingDay);
 
       return { kind: 'destination', route: route, earliest, latest };
     } else {
@@ -126,20 +126,20 @@ export function addDate(state: BookingState, nominalDate: string, timetableFligh
     const originTimeZone = timezone(state.route.origin);
     const sel = parseISO(nominalDate);
     const selected = startOfDayInTimezone(originTimeZone, sel);
-    const earliest = addDays(1, startOfDayInTimezone(originTimeZone, new Date()));
+    const earliest = addDays(startOfDayInTimezone(originTimeZone, new Date()), 1);
 
     // we want a five day selection around the selected date taking into account where the selected date is near one end of the possible range
-    const gap = differenceInCalendarDays(earliest, selected);
+    const gap = differenceInCalendarDays(selected, earliest);
     let dayRange: Date[];
     let selIndex: number;
     if (gap < 3) {
-      dayRange = eachDayOfInterval({ start: earliest, end: addDays(4, earliest) })
+      dayRange = eachDayOfInterval({ start: earliest, end: addDays(earliest, 4) })
       selIndex = gap;
     } else if (gap > (maximumBookingDay - 2)) {
-      dayRange = eachDayOfInterval({ start: addDays(maximumBookingDay - 4, earliest), end: addDays(maximumBookingDay, earliest) })
+      dayRange = eachDayOfInterval({ start: addDays(earliest, maximumBookingDay - 4), end: addDays(earliest, maximumBookingDay) })
       selIndex = gap - maximumBookingDay + 4;
     } else {
-      dayRange = eachDayOfInterval({ start: addDays(-2, selected), end: addDays(+2, selected) })
+      dayRange = eachDayOfInterval({ start: addDays(selected, -2), end: addDays(selected, 2) })
       selIndex = 2;
     }
 
@@ -149,7 +149,7 @@ export function addDate(state: BookingState, nominalDate: string, timetableFligh
 
     const withinRange = timetableFlights.map(f => {
       const parsed = f.flights.map(p => ({ date: parseISO(p.date), flight: p }));
-      const filtered = dayRange.map(d => parsed.find(p => isSameDay(p.date, d))?.flight ?? EMPTY_FLIGHT);
+      const filtered = dayRange.map(d => parsed.find(p => isSameDay(d, p.date))?.flight ?? EMPTY_FLIGHT);
       return { timetableFlight: f.timetableFlight, flights: filtered };
     });
     const filtered = withinRange.filter(f => f.flights.filter(l => l.flightNumber !== '').length > 0);
@@ -190,10 +190,10 @@ export function requestReturnFlight(state: BookingState): BookingState {
 
       // the local date of the user does not count - only the current time at the origin
       // we want starting tomorrow as too hard to determine what remains of today
-      const tomorrow = addDays(1, startOfDayInTimezone(destinationTimeZone, new Date()));
+      const tomorrow = addDays(startOfDayInTimezone(destinationTimeZone, new Date()), 1);
       const dateOfOutboundFlight = parseISO(state.outboundFlight.date);
-      const earliest = addDays(1, dateOfOutboundFlight);
-      const latest = addDays(maximumBookingDay, tomorrow);
+      const earliest = addDays(dateOfOutboundFlight, 1);
+      const latest = addDays(tomorrow, maximumBookingDay);
 
       return { kind: 'return_flight_requested', outboundTimetableFlight: state.outboundTimetableFlight, outboundFlight: state.outboundFlight, returnRoute, earliest, latest };
     } else {
@@ -209,28 +209,28 @@ export function addReturnDate(state: BookingState, nominalReturnDate: string, ti
     const destinationTimeZone = timezone(state.returnRoute.origin);
     const sel = parseISO(nominalReturnDate);
     const selected = startOfDayInTimezone(destinationTimeZone, sel);
-    const tomorrow = addDays(1, startOfDayInTimezone(destinationTimeZone, new Date()));
+    const tomorrow = addDays(startOfDayInTimezone(destinationTimeZone, new Date()), 1);
     const dateOfOutboundFlight = parseISO(state.outboundFlight.date);
-    const earliest = addDays(1, dateOfOutboundFlight);
-    const latest = addDays(maximumBookingDay, tomorrow);
+    const earliest = addDays(dateOfOutboundFlight, 1);
+    const latest = addDays(tomorrow, maximumBookingDay);
 
     // we want up to a five day selection around the selected date taking into account where the selected date is near one end of the possible range
-    const totalGap = differenceInCalendarDays(earliest, latest);
-    const earlyGap = differenceInCalendarDays(earliest, selected);
-    const lateGap = differenceInCalendarDays(selected, latest);
+    const totalGap = differenceInCalendarDays(latest, earliest);
+    const earlyGap = differenceInCalendarDays(selected, earliest);
+    const lateGap = differenceInCalendarDays(latest, selected);
     let dayRange: Date[];
     let selIndex: number;
     if (totalGap < 5) {
       dayRange = eachDayOfInterval({ start: earliest, end: latest })
       selIndex = earlyGap;
     } else if (earlyGap < 3) {
-      dayRange = eachDayOfInterval({ start: earliest, end: addDays(4, earliest) })
+      dayRange = eachDayOfInterval({ start: earliest, end: addDays(earliest, 4) })
       selIndex = earlyGap;
     } else if (lateGap < 3) {
-      dayRange = eachDayOfInterval({ start: addDays(-4, latest), end: latest })
+      dayRange = eachDayOfInterval({ start: addDays(latest, -4), end: latest })
       selIndex = 4 - lateGap;
     } else {
-      dayRange = eachDayOfInterval({ start: addDays(-2, selected), end: addDays(+2, selected) })
+      dayRange = eachDayOfInterval({ start: addDays(selected, -2), end: addDays(selected, 2) })
       selIndex = 2;
     }
 
@@ -240,7 +240,7 @@ export function addReturnDate(state: BookingState, nominalReturnDate: string, ti
 
     const withinRange = timetableReturnFlights.map(f => {
       const parsed = f.flights.map(p => ({ date: parseISO(p.date), flight: p }));
-      const filtered = dayRange.map(d => parsed.find(p => isSameDay(p.date, d))?.flight ?? EMPTY_FLIGHT);
+      const filtered = dayRange.map(d => parsed.find(p => isSameDay(d, p.date))?.flight ?? EMPTY_FLIGHT);
       return { timetableFlight: f.timetableFlight, flights: filtered };
     });
     const filtered = withinRange.filter(f => f.flights.filter(l => l.flightNumber !== '').length > 0);
