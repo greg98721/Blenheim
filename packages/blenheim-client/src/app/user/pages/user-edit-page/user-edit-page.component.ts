@@ -8,7 +8,7 @@ import { UserService } from '../../services/user.service';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { format, parse } from 'date-fns';
+import { format, parseISO, parse, formatISO } from 'date-fns';
 import { User } from '@blenheim/model';
 
 @Component({
@@ -27,7 +27,6 @@ export class UserEditPageComponent implements OnInit {
   isNewUser = computed(() => this.currentUser === undefined);
 
   userForm = this._fb.nonNullable.group({
-    username: ['', Validators.required],
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
     birthDate: ['', Validators.required],
@@ -37,29 +36,26 @@ export class UserEditPageComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    if (this.currentUser !== undefined) {
+    const u = this.currentUser();
+    if (u !== undefined) {
       this.userForm.patchValue({
-        username: this.currentUser()?.username,
-        firstName: this.currentUser()?.firstName,
-        lastName: this.currentUser()?.lastName,
-        birthDate: format(new Date(), 'P'),
-        address: this.currentUser()?.address,
-        email: this.currentUser()?.email,
-        phoneNumber: this.currentUser()?.phoneNumber,
+        firstName: u.firstName,
+        lastName: u.lastName,
+        birthDate: format(parseISO(u.birthDate??''), 'P'),
+        address: u.address,
+        email: u.email,
+        phoneNumber: u.phoneNumber,
       });
-
-      // we are using the user name as the key, so we don't want to allow it to be changed
-      this.userForm.get('username')?.disable();
     }
   }
 
   submitForm() {
-    const bd = parse((this.userForm.value.birthDate ?? ''), 'P', new Date());
+    const dob = this.userForm.value.birthDate ? formatISO(parse(this.userForm.value.birthDate, 'P', new Date()), { representation: 'date' }) : '';
     const u: User = {
-      username: this.userForm.value.username ?? '',
+      username: this.currentUser()?.username ?? '',
       firstName: this.userForm.value.firstName ?? '',
       lastName: this.userForm.value.lastName ?? '',
-      birthDate: bd,
+      birthDate: dob,
       address: this.userForm.value.address ?? '',
       email: this.userForm.value.email ?? '',
       phoneNumber: this.userForm.value.phoneNumber ?? '',

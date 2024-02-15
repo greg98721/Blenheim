@@ -1,5 +1,5 @@
 <div class="layout">
-  <div class="header">Enter the User Details</div>
+  <div class="header">Update Your Details</div>
   <form [formGroup]="userForm" class="user-form">
     <mat-form-field appearance="fill">
       <mat-label>First Name</mat-label>
@@ -16,15 +16,8 @@
       }
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Username</mat-label>
-      <input matInput formControlName="username">
-      @if (userForm.get('username')?.errors?.['required']) {
-      <mat-error>A username is required</mat-error>
-      }
-    </mat-form-field>
-    <mat-form-field appearance="fill">
       <mat-label>Date Of Birth</mat-label>
-      <input matInput formControlName="birthDate">
+      <input matInput formControlName="birthDate" placeholder="DD/MM/YYYY">
       @if (userForm.get('birthDate')?.errors?.['required']) {
       <mat-error>A date of birth is required</mat-error>
       }
@@ -49,9 +42,9 @@
     </mat-form-field>
   </form>
   <button mat-raised-button color="accent" (click)="submitForm()" [disabled]="!userForm.valid" class="submit-button">
-    Submit
+    Update
   </button>
   <button mat-raised-button (click)="submitForm()" class="cancel-button">
-    Cancel
+    Cancel Changes
   </button>
 </div>

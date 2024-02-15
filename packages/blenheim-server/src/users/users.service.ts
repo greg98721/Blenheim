@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { formatISO } from 'date-fns';
 import * as bcrypt from 'bcrypt';
 
 import { User } from '@blenheim/model';
@@ -17,8 +18,10 @@ export class UsersService {
       passwordHash: hashedPassword,
       firstName: 'Bob',
       lastName: 'Smith',
-      birthDate: new Date(1973, 6, 21),
+      birthDate: formatISO(new Date(1973, 6, 21), { representation: 'date' }),
       address: '16 Julian Street\nRedwoodtown\nBlenheim 7201',
+      email: 'bob@here.com',
+      phoneNumber: '03 578 1234',
     };
   }
 

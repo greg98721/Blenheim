@@ -4,6 +4,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule, RouterOutlet } from '@angular/router';
+import { setDefaultOptions } from 'date-fns';
+import { enNZ } from 'date-fns/locale'
 import { LoadingService } from './shared/services/loading.service';
 import { LoadingOverlayComponent } from './shared/components/loading-overlay/loading-overlay.component';
 import { ToolbarService } from './shared/services/toolbar.service';
@@ -29,6 +31,10 @@ export class AppComponent {
   firstName = computed<string>(() => this._toolbarService.userName()?.first ?? '');
   lastName = computed<string>(() => this._toolbarService.userName()?.last ?? '');
   loggedIn = computed<boolean>(() => this._toolbarService.userName() !== undefined);
+
+  constructor() {
+    setDefaultOptions({ locale: enNZ });
+  }
 
   get isLoading() {
     return this._isLoading;
