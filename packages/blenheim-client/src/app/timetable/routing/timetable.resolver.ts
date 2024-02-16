@@ -11,7 +11,6 @@ export const resolveTimetables: ResolveFn<AirportWithTimetables[]> =
     route: ActivatedRouteSnapshot,
     _: RouterStateSnapshot,
     flightService = inject(FlightService),
-    loadingService = inject(LoadingService)
   ) => {
     const origin = route.paramMap.get('origin');
 

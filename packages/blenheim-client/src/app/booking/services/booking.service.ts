@@ -25,4 +25,13 @@ export class BookingService {
       })
     );
   }
+
+  bookingsForUser$(username: string): Observable<FlightBooking[]> {
+    const url = this._config.apiUrl(`api/bookings/forUser/${username}`);
+    return this._http.get<FlightBooking[]>(url).pipe(
+      catchError((error: HttpErrorResponse) => {
+        throw new TypeError(`Could not retrieve bookings: ${error.message}`);
+      })
+    );
+  }
 }

@@ -1,3 +1,4 @@
+import { Airport } from "./airRoute";
 import { Flight } from "./flight";
 import { TimetableFlight } from "./timetableFlight";
 
@@ -24,6 +25,12 @@ export interface BookingBlock {
   /** ISO format date only */
   date: string;
   flightNumber: string;
+  origin: Airport;
+  /** offset in minutes from the start of the day in the origin timezone */
+  departs: number;
+  destination: Airport;
+  /** offset in minutes from the start of the timetable day in the destination timezone - could be negative for some flights */
+  arrives: number;
   tickets: Ticket[];
 }
 

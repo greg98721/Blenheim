@@ -300,6 +300,10 @@ export function createBookingCompleteState(state: BookingState, outboundFareType
         details: {
           date: state.outboundFlight.date,
           flightNumber: state.outboundTimetableFlight.flightNumber,
+          origin: state.outboundTimetableFlight.route.origin,
+          departs: state.outboundTimetableFlight.departs,
+          destination: state.outboundTimetableFlight.route.destination,
+          arrives: state.outboundTimetableFlight.arrives,
           tickets: outboundTickets,
         }
       }
@@ -328,11 +332,19 @@ export function createBookingCompleteState(state: BookingState, outboundFareType
         outboundDetails: {
           date: state.outboundFlight.date,
           flightNumber: state.outboundTimetableFlight.flightNumber,
+          origin: state.outboundTimetableFlight.route.origin,
+          departs: state.outboundTimetableFlight.departs,
+          destination: state.outboundTimetableFlight.route.destination,
+          arrives: state.outboundTimetableFlight.arrives,
           tickets: outboundTickets,
         },
         returnDetails: {
           date: state.returnFlight.date,
           flightNumber: state.returnTimetableFlight.flightNumber,
+          origin: state.returnTimetableFlight.route.origin,
+          departs: state.returnTimetableFlight.departs,
+          destination: state.returnTimetableFlight.route.destination,
+          arrives: state.returnTimetableFlight.arrives,
           tickets: returnTickets,
         }
       }

@@ -179,7 +179,7 @@ export class MakeBookingComponent {
       const state = this._currentState();
       if (state.kind === 'one_way_booking_complete' || state.kind === 'return_booking_complete') {
         this._bookingservice.makeTheBooking$(state.booking).subscribe(booking => {
-          this._router.navigate(['/']);
+          this._router.navigate(['/user']);
         });
       } else {
         throw new Error(`Cannot make a booking from state ${state.kind}`);
