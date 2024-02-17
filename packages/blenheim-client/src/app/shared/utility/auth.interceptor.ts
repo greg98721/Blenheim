@@ -1,15 +1,15 @@
 import { HttpEvent, HttpHandlerFn, HttpInterceptorFn, HttpRequest } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Observable, switchMap } from 'rxjs';
-import { AuthService } from '../services/auth.service';
+import { UserService } from '../../user/services/user.service';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  const authService = inject(AuthService);
-  if (authService.shouldRefreshAccesssToken) {
-    return authService.refreshAccessToken$().pipe(
+  const userService = inject(UserService);
+  if (userService.shouldRefreshAccesssToken) {
+    return userService.refreshAccessToken$().pipe(
       switchMap((username) => {
         if (username) {
-          return attachAccessToken$(req, next, authService.accessToken);
+          return attachAccessToken$(req, next, userService.accessToken);
         } else {
           // we tried - don't add a header and let the error handling deal with it
           return next(req);
@@ -17,7 +17,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
       })
     );
   } else {
-    return attachAccessToken$(req, next, authService.accessToken);
+    return attachAccessToken$(req, next, userService.accessToken);
   }
 };
 

@@ -1,5 +1,5 @@
 <div class="layout">
-  <div class="header">Update Your Details</div>
+  <div class="header">Create New User</div>
   <form [formGroup]="userForm" class="user-form">
     <mat-form-field appearance="fill">
       <mat-label>First Name</mat-label>
@@ -16,6 +16,27 @@
       }
     </mat-form-field>
     <mat-form-field appearance="fill">
+      <mat-label>Username</mat-label>
+      <input matInput formControlName="username">
+      @if (userForm.get('username')?.errors?.['required']) {
+      <mat-error>A username is required</mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Password</mat-label>
+      <input matInput formControlName="password" type="password">
+      @if (userForm.get('password')?.errors?.['required']) {
+        <mat-error>A password is required</mat-error>
+      }
+      @else if (userForm.get('password')?.errors?.['minlength']) {
+        <mat-error>At least 8 characters are required in the password</mat-error>
+      }
+      </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Confirm Password</mat-label>
+      <input matInput formControlName="confirmPassword" type="password">
+      </mat-form-field>
+    <mat-form-field appearance="fill">
       <mat-label>Date Of Birth</mat-label>
       <input matInput formControlName="birthDate" placeholder="DD/MM/YYYY">
       @if (userForm.get('birthDate')?.errors?.['required']) {
@@ -26,7 +47,7 @@
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Address</mat-label>
-      <textarea matInput formControlName="address" rows="5" style="resize: none;" ></textarea>
+      <textarea matInput formControlName="address" rows="5" style="resize: none;"></textarea>
       @if (userForm.get('address')?.errors?.['required']) {
       <mat-error>An address is required</mat-error>
       }
@@ -42,11 +63,15 @@
       <mat-label>Phone Number</mat-label>
       <input matInput formControlName="phoneNumber">
     </mat-form-field>
+    @if (userForm.errors?.['passwordMatchError']) {
+      <!-- For some weird reason this will not work if place inside a form field -->
+      <mat-error>The two passwords do not match</mat-error>
+      }
   </form>
   <button mat-raised-button color="accent" (click)="submitForm()" [disabled]="!userForm.valid" class="submit-button">
-    Update
+    Submit
   </button>
-  <button mat-raised-button (click)="submitForm()" class="cancel-button">
-    Cancel Changes
+  <button mat-raised-button (click)="cancel()" class="cancel-button">
+    Cancel New User
   </button>
 </div>

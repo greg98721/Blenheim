@@ -13,10 +13,14 @@ import {
 import { AuthGuard } from '../auth/auth.guard';
 import { UsersService } from './users.service';
 import { User } from '@blenheim/model';
+import { AuthService } from '../auth/auth.service';
 
 @Controller('api/users')
 export class UsersController {
-  constructor(private _userService: UsersService) {}
+  constructor(
+    private _userService: UsersService,
+    private _authService: AuthService,
+  ) {}
 
   @UseGuards(AuthGuard)
   @Get(':username')
@@ -34,10 +38,12 @@ export class UsersController {
     }
   }
 
-  @UseGuards(AuthGuard)
+  // This is anonymous to enable creating a new user
   @Post()
   async add(@Body() data: { user: User; password: string }) {
     await this._userService.addUser(data.user, data.password);
+    // then login in with this user
+    return await this._authService.login(data.user.username, data.password);
   }
 
   @UseGuards(AuthGuard)
