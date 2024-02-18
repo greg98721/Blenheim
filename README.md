@@ -143,7 +143,7 @@ Create a file `Blenheim.code.workspace`. When you open this project as a workspa
 ```json
 "allowedCommonJsDependencies": [ "@blenheim/model"]
 ```
-- Create a package.json file. Note we are setting the main and type definitions to the index.ts in the root. Note the version number - this will be important for the dependencies in the apps. The Typescript version is the least common denominator between the two apps.
+- Create a package.json file. Note we are setting the main and type definitions to the index.ts in the root. The Typescript version is the least common denominator between the two apps.
 
 ```json
 {
@@ -183,6 +183,12 @@ export * from './src/test'
 ```
 
 See [Typescript project references](https://www.typescriptlang.org/docs/handbook/project-references.html)
+
+In the client and server `package.json` files add the following to the `dependencies` section to reference this library.
+
+```json
+    "@blenheim/model": "file:../blenheim-model",
+```
 
 # Authentication
 
