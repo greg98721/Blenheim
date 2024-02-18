@@ -57,24 +57,15 @@ export class UserService {
     );
   }
 
-  updateUser$(user: User): Observable<User> {
+  updateUser$(user: User, password?: string): Observable<User> {
     const userUrl = this._config.apiUrl('api/users');
-    return this._http.patch(userUrl, user).pipe(
+    return this._http.patch(userUrl, { user, password }).pipe(
       map(() => user),
       tap((user: User) => {
         this._currentUser.set(user);
         this._toolbarService.userName.set({ first: user.firstName, last: user.lastName });
       }),
       catchError(() =>of(user))
-    );
-  }
-
-  updatePassword$(username: string, password: string): Observable<boolean> {
-    const userUrl = this._config.apiUrl('api/users/password');
-    const body = { username, password };
-    return this._http.patch(userUrl, body).pipe(
-      map(() => true),
-      catchError(() =>of(false))
     );
   }
 

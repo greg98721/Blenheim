@@ -5,7 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router, RouterModule } from '@angular/router';
 import { UserService } from '../../services/user.service';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, AbstractControlOptions, FormBuilder, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { format, parseISO, parse, formatISO } from 'date-fns';
@@ -30,11 +30,13 @@ export class UserEditPageComponent implements OnInit {
   userForm = this._fb.nonNullable.group({
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
+    password: ['', [Validators.minLength(8)]],
+    confirmPassword: [''],
     birthDate: ['', [Validators.required, dateAsTextValidator]],
     address: ['', Validators.required],
     email: ['', Validators.email],
     phoneNumber: [''],
-  });
+  }, { validators: optionalPasswordValidator } as AbstractControlOptions);
 
   ngOnInit(): void {
     const u = this.currentUser();
@@ -42,7 +44,7 @@ export class UserEditPageComponent implements OnInit {
       this.userForm.patchValue({
         firstName: u.firstName,
         lastName: u.lastName,
-        birthDate: format(parseISO(u.birthDate??''), 'P'),
+        birthDate: format(parseISO(u.birthDate ?? ''), 'P'),
         address: u.address,
         email: u.email,
         phoneNumber: u.phoneNumber,
@@ -52,7 +54,7 @@ export class UserEditPageComponent implements OnInit {
 
   submitForm() {
     const dob = this.userForm.value.birthDate ? formatISO(parse(this.userForm.value.birthDate, 'P', new Date()), { representation: 'date' }) : '';
-    const u: User = {
+    const user: User = {
       username: this.currentUser()?.username ?? '',
       firstName: this.userForm.value.firstName ?? '',
       lastName: this.userForm.value.lastName ?? '',
@@ -61,7 +63,8 @@ export class UserEditPageComponent implements OnInit {
       email: this.userForm.value.email ?? '',
       phoneNumber: this.userForm.value.phoneNumber ?? '',
     };
-    this._userService.updateUser$(u).subscribe(() => {
+    const password = (this.userForm.value.password && this.userForm.value.password?.length > 0) ? this.userForm.value.password : undefined;
+    this._userService.updateUser$(user, password).subscribe(() => {
       this._router.navigate(['/user']);
     });
   }
@@ -69,4 +72,18 @@ export class UserEditPageComponent implements OnInit {
   cancel() {
     this._router.navigate(['/user']);
   }
+}
+
+/** Only validate the password if the user has typed something/anything in the field */
+const optionalPasswordValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+  if (control.get('password')?.touched && control.get('password')?.value?.length > 0) {
+    const password = control.get('password');
+    const confirmPassword = control.get('confirmPassword');
+    if (password && confirmPassword && password.value != confirmPassword.value) {
+      return {
+        passwordMatchError: true
+      }
+    }
+  }
+  return null;
 }

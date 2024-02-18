@@ -48,14 +48,8 @@ export class UsersController {
 
   @UseGuards(AuthGuard)
   @Patch()
-  async updateUser(@Body() user: User) {
-    return this._userService.updateUser(user);
-  }
-
-  @UseGuards(AuthGuard)
-  @Patch('password')
-  async updatePassword(@Body() data: { username: string; password: string }) {
-    return this._userService.updateUserPassword(data.username, data.password);
+  async updateUser(@Body() body: { user: User; password?: string }) {
+    return this._userService.updateUser(body.user, body.password);
   }
 
   @UseGuards(AuthGuard)

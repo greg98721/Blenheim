@@ -42,22 +42,17 @@ export class UsersService {
     }
   }
 
-  updateUser(user: User) {
+  async updateUser(user: User, password: string | undefined) {
+    const hash = password ? await bcrypt.hash(password, 10) : undefined;
     this._userCache = this._userCache.map((u) => {
       if (u.username === user.username) {
-        return { ...user, passwordHash: u.passwordHash };
-      } else {
-        return u;
-      }
-    });
-  }
-
-  async updateUserPassword(username: string, password: string) {
-    const hashedPassword = await bcrypt.hash(password, 10);
-    this._userCache = this._userCache.map((u) => {
-      if (u.username === username) {
-        u.passwordHash = hashedPassword;
-        return u;
+        if (hash) {
+          // new password
+          return { ...user, passwordHash: hash };
+        } else {
+          // use the old password hash
+          return { ...user, passwordHash: u.passwordHash };
+        }
       } else {
         return u;
       }
