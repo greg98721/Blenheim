@@ -2,6 +2,7 @@ import { Component, computed, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatMenuModule } from '@angular/material/menu';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { setDefaultOptions } from 'date-fns';
@@ -13,7 +14,7 @@ import { ToolbarService } from './shared/services/toolbar.service';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterModule, RouterOutlet, LoadingOverlayComponent, MatToolbarModule, MatButtonModule, MatIconModule],
+  imports: [CommonModule, RouterModule, RouterOutlet, LoadingOverlayComponent, MatToolbarModule, MatButtonModule, MatIconModule, MatMenuModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
@@ -43,6 +44,15 @@ export class AppComponent {
   returnToHome() {
     this._router.navigate(['/']);
   }
+
+  goToDestinations() {
+    this._router.navigate(['/destinations']);
+  }
+
+  makeABooking() {
+    this._router.navigate(['/booking/0']);
+  }
+
 
   goToUserDetails() {
     this._router.navigate(['/user']);
