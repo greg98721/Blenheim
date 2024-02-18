@@ -10,6 +10,7 @@ import { enNZ } from 'date-fns/locale'
 import { LoadingService } from './shared/services/loading.service';
 import { LoadingOverlayComponent } from './shared/components/loading-overlay/loading-overlay.component';
 import { ToolbarService } from './shared/services/toolbar.service';
+import { UserService } from './user/services/user.service';
 
 @Component({
   selector: 'app-root',
@@ -52,7 +53,6 @@ export class AppComponent {
   makeABooking() {
     this._router.navigate(['/booking/0']);
   }
-
 
   goToUserDetails() {
     this._router.navigate(['/user']);

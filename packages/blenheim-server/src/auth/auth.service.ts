@@ -68,10 +68,6 @@ export class AuthService {
     }
   }
 
-  async logout(username: string) {
-    this._removeRefreshToken(username);
-  }
-
   private async createTokens(username: string) {
     // The default options in JwtService are set for access tokens
     const accessToken = await this._jwtService.signAsync({

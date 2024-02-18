@@ -37,7 +37,7 @@ export class UserService {
         this._currentUser.set(user);
         this._toolbarService.userName.set({ first: user.firstName, last: user.lastName });
       }),
-      catchError(() =>of(undefined))
+      catchError(() => of(undefined))
     );
   }
 
@@ -53,7 +53,7 @@ export class UserService {
         this._handleAccessResponse(user.username, response);
         return true;
       }),
-      catchError(() =>of(false))
+      catchError(() => of(false))
     );
   }
 
@@ -65,7 +65,7 @@ export class UserService {
         this._currentUser.set(user);
         this._toolbarService.userName.set({ first: user.firstName, last: user.lastName });
       }),
-      catchError(() =>of(user))
+      catchError(() => of(user))
     );
   }
 
@@ -76,7 +76,7 @@ export class UserService {
         this._toolbarService.userName.set(undefined);
       }),
       map(() => true),
-      catchError(() =>of(false))
+      catchError(() => of(false))
     );
   }
 
