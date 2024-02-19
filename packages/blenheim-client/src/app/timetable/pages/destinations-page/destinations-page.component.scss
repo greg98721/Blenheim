@@ -1,4 +1,5 @@
 @use "../../../../styles.scss" as *;
+@use "@angular/material" as mat;
 
 .layout {
   display: grid;
@@ -52,7 +53,7 @@
 .city-name {
   grid-area: cityname-area;
   @include text-0;
-  color: $bright-primary-color;
+  color: mat.get-theme-color($theme, primary-fixed);
 }
 
 .fluff {

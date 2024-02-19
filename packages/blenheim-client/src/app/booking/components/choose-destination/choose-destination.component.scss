@@ -1,4 +1,5 @@
 @use "../../../../styles.scss" as *;
+@use "@angular/material" as mat;
 
 .layout {
   display: grid;
@@ -28,7 +29,7 @@
   grid-area: origin-summary-area;
   @include text-1;
   margin-bottom: 1.5rem;
-  color: $primary-color;
+  color: mat.get-theme-color($theme, primary);
   @media (max-width: $narrow-breakpoint) {
     margin-bottom: 1rem;
   }

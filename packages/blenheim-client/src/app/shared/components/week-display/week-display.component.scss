@@ -1,4 +1,6 @@
 @use '../../../../styles.scss' as *;
+@use "@angular/material" as mat;
+@use '@angular/material-experimental' as matx;
 
 .day-list {
   display: grid;
@@ -7,12 +9,12 @@
 }
 
 .show-day {
-  color: $primary-color;
+  color: mat.get-theme-color($theme, primary);
   font-weight: 900;
 }
 
 .dont-show-day {
-  color: $dull-primary-color;
+  color: mat.get-theme-color($theme, secondary);
 }
 
 .narrow {

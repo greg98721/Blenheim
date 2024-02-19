@@ -89,8 +89,7 @@
             </mat-radio-group>
             <button
               mat-icon-button
-              color="accent"
-              class="delete-button"
+              class="tertiary-button delete-button"
               [disabled]="this.passengers.controls.length <= 1"
               (click)="removePassenger($index)"
               matTooltip="Remove this passenger"
@@ -104,8 +103,7 @@
     <div class="add-passenger">
       <button
         mat-fab
-        color="accent"
-        class="add-passenger-button"
+        class="tertiary-button add-passenger-button"
         [disabled]="this.passengers.controls.length >= maxPassengers()"
         (click)="addPassenger()"
         matTooltip="Add another passenger"
@@ -124,10 +122,9 @@
     }
     <button
       mat-raised-button
-      color="accent"
       [disabled]="!passengersForm.valid"
       (click)="submit()"
-      class="payment-button">
+      class="tertiary-button payment-button">
       Go to Payment
     </button>
     @if (!passengersForm.valid) {

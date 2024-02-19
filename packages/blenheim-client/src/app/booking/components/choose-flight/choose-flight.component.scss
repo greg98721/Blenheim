@@ -1,4 +1,6 @@
 @use "../../../../styles.scss" as *;
+@use "@angular/material" as mat;
+@use '@angular/material-experimental' as matx;
 
 .layout {
   display: grid;
@@ -72,20 +74,20 @@
 .date-block,
 .timetable-block,
 .flight-block {
-  border: 1px solid $dull-primary-color;
+  border: 1px solid mat.get-theme-color($theme, secondary);
 }
 
 .date-block,
 .timetable-block {
-  background-color: rgba($dull-primary-color, 0.3);
+  background-color: rgba(mat.get-theme-color($theme, secondary), 0.3);
 }
 
 @media (min-width: $narrow-breakpoint) {
   .selected {
-    border-color: $dull-accent-color;
+    border-color: mat.get-theme-color($theme, tertiary-fixed-dim);
   }
   .date-block.selected {
-    background-color: rgba($dull-accent-color, 0.3);
+    background-color: rgba(mat.get-theme-color($theme, tertiary-fixed-dim), 0.3);
   }
 }
 
@@ -133,5 +135,5 @@
 }
 
 .fully-booked {
-  color: $primary-color;
+  color: mat.get-theme-color($theme, primary);
 }

@@ -2,7 +2,7 @@
   @if (currentUser() !== undefined) {
   <div class="title">
     User Details
-    <button class="edit-button" mat-fab color="accent" aria-label="Edit the user details" matTooltip="Edit the details"
+    <button class="tertiary-button edit-button" mat-fab aria-label="Edit the user details" matTooltip="Edit the details"
       (click)="editTheUser()">
       <mat-icon>edit</mat-icon>
     </button>
@@ -25,7 +25,7 @@
   </div>
 
   <div class="booking-title">Bookings
-    <button class="edit-button" mat-fab color="accent" aria-label="Add a new booking" matTooltip="Create a new booking"
+    <button class="tertiary-button edit-button" mat-fab aria-label="Add a new booking" matTooltip="Create a new booking"
     (click)="addBooking()">
     <mat-icon>plus_one</mat-icon>
   </button>

@@ -1,4 +1,5 @@
 @use "../../../../styles.scss" as *;
+@use "@angular/material" as mat;
 
 .layout {
   display: grid;
@@ -37,12 +38,12 @@
 .title {
   grid-area: title-area;
   @include text-0;
-  color: $bright-primary-color;
+  color: mat.get-theme-color($theme, primary-fixed);
 }
 
 .edit-button {
   margin-left: 2rem;
-  color: $opposite-text-color;
+  color: mat.get-theme-color($theme, on-primary);
 }
 
 .user-details {
@@ -64,12 +65,12 @@
 }
 
 .label {
-  color: $bright-primary-color;
+  color: mat.get-theme-color($theme, primary-fixed);
 }
 
 .booking-title {
   grid-area: booking-title-area;
-  color: $bright-primary-color;
+  color: mat.get-theme-color($theme, primary-fixed);
   @include text-1;
 }
 
@@ -87,7 +88,7 @@
 }
 
 .flight-details-block {
-  border: 0.15rem solid $primary-color;
+  border: 0.15rem solid mat.get-theme-color($theme, primary);
   border-radius: 1vw;
   padding: 0.5vw;
   gap: 1vw;
@@ -113,7 +114,7 @@
 
 .flight-details-header {
   @include text-2;
-  color: $bright-primary-color;
+  color: mat.get-theme-color($theme, primary-fixed);
   grid-area: flight-header-area;
 }
 

@@ -1,33 +1,22 @@
 @use "@angular/material" as mat;
+@use '@angular/material-experimental' as matx;
 @use "sass:map";
 @include mat.core();
 
-$theme: mat.define-light-theme(
-  (
-    color: (
-      primary: mat.define-palette(mat.$deep-purple-palette),
-      accent: mat.define-palette(mat.$cyan-palette),
-      warn: mat.define-palette(mat.$red-palette),
-    ),
+$theme: matx.define-theme((
+  color: (
+    theme-type: light,
+    primary: matx.$m3-cyan-palette,
+    tertiary: matx.$m3-azure-palette
+  ),
+  typography: (
+    brand-family: 'Mona Sans',
+    bold-weight: 900
+  ),
+  density: (
+    scale: -1
   )
-);
-
-@include mat.all-component-themes($theme);
-$color-config: mat.get-color-config($theme);
-
-$primary-palette: map.get($color-config, "primary");
-$accent-palette: map.get($color-config, "accent");
-$warn-palette: map.get($color-config, "warn");
-
-$bright-primary-color: mat.get-color-from-palette($primary-palette, A400);
-$primary-color: mat.get-color-from-palette($primary-palette, 700);
-$dull-primary-color: mat.get-color-from-palette($primary-palette, 100);
-
-$bright-accent-color: mat.get-color-from-palette($accent-palette, A400);
-$accent-color: mat.get-color-from-palette($accent-palette, A700);
-$dull-accent-color: mat.get-color-from-palette($accent-palette, 100);
-
-$opposite-text-color: white;
+));
 
 $narrow-breakpoint: 50rem;
 $wide-breakpoint: 100rem;
@@ -44,12 +33,6 @@ $quarter-wide: calc($wide-breakpoint / 4);
   font-weight: 200 600 900;
   font-stretch: 75% 125%;
 }
-
-$my-typography: mat.define-typography-config(
-  $font-family: "Mona Sans",
-);
-
-@include mat.all-component-typographies($my-typography);
 
 // Most text has a minimum size for small screens and a maximum size for large screens. It is variable in between.
 @mixin var-text($base-size) {
@@ -99,11 +82,15 @@ $my-typography: mat.define-typography-config(
 
 @mixin table-header-2 {
   @include fixed-text-4;
-  color: $opposite-text-color;
-  background-color: $primary-color;
+  color: mat.get-theme-color($theme, on-primary);
+  background-color: mat.get-theme-color($theme, primary);
   padding: 0.2rem;
   margin-top: 1rem;
   font-weight: 600;
+}
+
+html {
+  @include mat.all-component-themes($theme);
 }
 
 html,
@@ -118,15 +105,38 @@ body {
 
 a,
 a:visited {
-  color: $accent-color;
+  color: mat.get-theme-color($theme, tertiary);
   text-decoration: none;
 }
 
 a:hover {
-  color: $bright-accent-color;
+  color: mat.get-theme-color($theme, tertiary-fixed);
   text-decoration: underline;
 }
 
 mat-label {
-  color: $accent-color;
+  color: mat.get-theme-color($theme, tertiary);
+}
+
+.primary-button {
+  @include mat.button-color($theme, $color-variant: primary);
+}
+
+.primary-toolbar {
+  color: gren;
+  // @include mat.toolbar-color($theme, $color-variant: primary);
+}
+
+.tertiary-button {
+  @include mat.button-color($theme, $color-variant: tertiary);
+}
+
+.tertiary-calendar {
+  color: grren;
+  // @include mat.calendar-color($theme, $color-variant: tertiary);
+}
+
+.tertiary-spinner {
+  color: green;
+  // @include mat.spinner-color($theme, $color-variant: tertiary);
 }

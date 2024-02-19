@@ -1,4 +1,5 @@
 @use "../../../../styles.scss" as *;
+@use "@angular/material" as mat;
 
 .layout {
   display: grid;
@@ -29,7 +30,7 @@
 .header {
   @include text-1;
   grid-area: title-area;
-  color: $bright-primary-color;
+  color: mat.get-theme-color($theme, primary-fixed);
 }
 
 .user-form {
@@ -63,7 +64,7 @@
 
 .submit-button {
   grid-area: submit-area;
-  color: $opposite-text-color;
+  color: mat.get-theme-color($theme, on-primary);
   font-weight: 600;
 }
 
