@@ -1,4 +1,5 @@
 @use "../../../../styles.scss" as *;
+@use "@angular/material" as mat;
 
 .layout {
   display: grid;
@@ -38,7 +39,7 @@
 .destination-summary {
   @include text-1;
   margin-bottom: 1.5rem;
-  color: $primary-color;
+  color: mat.get-theme-color($theme, primary);
   @media (max-width: $narrow-breakpoint) {
     margin-bottom: 1rem;
   }
@@ -51,6 +52,6 @@
 
 .date-picker {
   grid-area: date-picker-area;
-  border: 1px solid rgba($accent-color, 0.5);
-  background-color: rgba($opposite-text-color, 0.15);
+  border: 1px solid rgba(mat.get-theme-color($theme, tertiary), 0.5);
+  background-color: rgba(mat.get-theme-color($theme, on-primary), 0.15);
 }

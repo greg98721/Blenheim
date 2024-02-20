@@ -1,4 +1,7 @@
 @use "../../../../styles.scss" as *;
+@use "@angular/material" as mat;
+@use '@angular/material-experimental' as matx;
+
 
 $small-wide: calc($wide-breakpoint * 0.18);
 $big-wide: calc($wide-breakpoint * 0.28);
@@ -14,7 +17,7 @@ $big-wide: calc($wide-breakpoint * 0.28);
 
 .page-header {
   grid-column: span 5;
-  color: $bright-primary-color;
+  color: mat.get-theme-color($theme, primary-fixed);
   @include text-0;
 }
 
@@ -29,7 +32,7 @@ a.destination {
 }
 
 .destination:hover {
-  color: $accent-color;
+  color: mat.get-theme-color($theme, tertiary);
 }
 
 .table-content {

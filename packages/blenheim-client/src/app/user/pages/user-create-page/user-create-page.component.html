@@ -68,10 +68,10 @@
       <mat-error>The two passwords do not match</mat-error>
       }
   </form>
-  <button mat-raised-button color="accent" (click)="submitForm()" [disabled]="!userForm.valid" class="submit-button">
+  <button mat-flat-button (click)="submitForm()" [disabled]="!userForm.valid" class="tertiary-button submit-button">
     Submit
   </button>
-  <button mat-raised-button (click)="cancel()" class="cancel-button">
+  <button mat-flat-button (click)="cancel()" class="cancel-button">
     Cancel New User
   </button>
 </div>

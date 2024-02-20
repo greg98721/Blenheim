@@ -1,4 +1,5 @@
 @use "../../../../styles.scss" as *;
+@use "@angular/material" as mat;
 
 .layout {
   display: grid;
@@ -27,7 +28,7 @@
 }
 
 .flight-item {
-  border: 0.15rem solid $primary-color;
+  border: 0.15rem solid mat.get-theme-color($theme, primary);
   margin: 0.5vw;
   display: grid;
   grid-template-columns: max-content 0.5fr 0.5fr;
@@ -129,27 +130,27 @@
 }
 
 .available {
-  border-color: $accent-color;
-  color: $accent-color;
+  border-color: mat.get-theme-color($theme, tertiary);
+  color: mat.get-theme-color($theme, tertiary);
   cursor: pointer;
 }
 
 .available:hover {
-  background-color: rgba($dull-accent-color, 0.2);
+  background-color: rgba(mat.get-theme-color($theme, tertiary-fixed-dim), 0.2);
   border-width: 0.3rem;
   padding: 0;
   color: black;
 }
 
 .selected {
-  border-color: $accent-color;
-  background-color: rgba($dull-accent-color, 0.3);
+  border-color: mat.get-theme-color($theme, tertiary);
+  background-color: rgba(mat.get-theme-color($theme, tertiary-fixed-dim), 0.3);
   font-weight: 600;
 }
 
 .default {
-  border-color: $primary-color;
-  background-color: rgba($dull-primary-color, 0.15);
+  border-color: mat.get-theme-color($theme, primary);
+  background-color: rgba(mat.get-theme-color($theme, secondary), 0.15);
   font-weight: 600;
 }
 
@@ -192,7 +193,7 @@
       "lastName-area lastName-area"
       "ticket-type-area delete-button-area";
   }
-  border: 0.15rem solid $primary-color;
+  border: 0.15rem solid mat.get-theme-color($theme, primary);
   margin: 0.5vw;
 }
 
@@ -224,7 +225,7 @@
   .add-passenger-button {
     flex: 0 0 auto;
     margin: 0.5vw;
-    color: $opposite-text-color;
+    color: mat.get-theme-color($theme, on-primary);
   }
 }
 
@@ -268,6 +269,6 @@
   @include fixed-text-3;
   font-weight: 600;
   flex: 0 0 auto;
-  color: $opposite-text-color;
+  color: mat.get-theme-color($theme, on-primary);
   margin-top: 2rem;
 }

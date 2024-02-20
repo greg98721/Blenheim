@@ -1,4 +1,6 @@
 @use "../styles.scss" as *;
+@use "@angular/material" as mat;
+@use '@angular/material-experimental' as matx;
 
 :host {
   display: grid;
@@ -12,7 +14,7 @@
 }
 
 .menu-button {
-  color: $opposite-text-color;
+  color: mat.get-theme-color($theme, on-primary);
 }
 
 .toolbarGrid {
@@ -45,7 +47,7 @@
 
 .userDetails {
   @include fixed-text-3;
-  border: 0.2rem solid $opposite-text-color;
+  border: 0.2rem solid mat.get-theme-color($theme, on-primary);
   padding: 0.1rem 1rem;
   border-radius: 1rem;
   margin: 0.2rem 0.5rem;

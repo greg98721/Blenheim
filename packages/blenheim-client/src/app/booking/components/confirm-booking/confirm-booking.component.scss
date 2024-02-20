@@ -1,4 +1,5 @@
 @use "../../../../styles.scss" as *;
+@use "@angular/material" as mat;
 
 .layout {
   display: grid;
@@ -31,7 +32,7 @@
 
 .general-comment {
   grid-area: comment-area;
-  color: $primary-color;
+  color: mat.get-theme-color($theme, primary);
   @include text-2;
 }
 
