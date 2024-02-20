@@ -1,22 +1,36 @@
 @use "@angular/material" as mat;
-@use '@angular/material-experimental' as matx;
+@use "@angular/material-experimental" as matx;
 @use "sass:map";
 @include mat.core();
 
-$theme: matx.define-theme((
-  color: (
-    theme-type: light,
-    primary: matx.$m3-cyan-palette,
-    tertiary: matx.$m3-azure-palette
-  ),
-  typography: (
-    brand-family: 'Mona Sans',
-    bold-weight: 900
-  ),
-  density: (
-    scale: -1
+
+@font-face {
+  font-family: "Mona Sans";
+  src:
+    url("assets/Mona-Sans.woff2") format("woff2 supports variations"),
+    url("assets/Mona-Sans.woff2") format("woff2-variations");
+  font-weight: 200 600 900;
+  font-stretch: 75% 125%;
+}
+
+$theme: matx.define-theme(
+  (
+    color: (
+      theme-type: light,
+      primary: matx.$m3-green-palette,
+      tertiary: matx.$m3-blue-palette,
+    ),
+    typography: (
+      brand-family: "Mona Sans",
+      plain-family: "Mona Sans",
+      bold-weight: 900,
+      regular-weight: 400,
+    ),
+    density: (
+      scale: 0,
+    ),
   )
-));
+);
 
 $narrow-breakpoint: 50rem;
 $wide-breakpoint: 100rem;
@@ -25,14 +39,6 @@ $middle-breakpoint: 75rem;
 $half-wide: calc($wide-breakpoint / 2);
 $third-wide: calc($wide-breakpoint / 3);
 $quarter-wide: calc($wide-breakpoint / 4);
-
-@font-face {
-  font-family: "Mona Sans";
-  src: url("assets/Mona-Sans.woff2") format("woff2 supports variations"),
-    url("assets/Mona-Sans.woff2") format("woff2-variations");
-  font-weight: 200 600 900;
-  font-stretch: 75% 125%;
-}
 
 // Most text has a minimum size for small screens and a maximum size for large screens. It is variable in between.
 @mixin var-text($base-size) {
@@ -49,7 +55,7 @@ $quarter-wide: calc($wide-breakpoint / 4);
 }
 
 @mixin text-0 {
-  @include var-text(5.0);
+  @include var-text(5);
 }
 
 @mixin text-1 {
@@ -57,7 +63,7 @@ $quarter-wide: calc($wide-breakpoint / 4);
 }
 
 @mixin text-2 {
-  @include var-text(2.0);
+  @include var-text(2);
 }
 
 @mixin text-3 {
@@ -91,6 +97,7 @@ $quarter-wide: calc($wide-breakpoint / 4);
 
 html {
   @include mat.all-component-themes($theme);
+  @include mat.all-component-typographies($theme);
 }
 
 html,
@@ -101,16 +108,17 @@ body {
 body {
   margin: 0;
   -webkit-font-smoothing: antialiased;
+  font: mat.get-theme-typography($theme, body-medium, font);
 }
 
 a,
 a:visited {
-  color: mat.get-theme-color($theme, tertiary);
+  color: mat.get-theme-color($theme, tertiary, 40);
   text-decoration: none;
 }
 
 a:hover {
-  color: mat.get-theme-color($theme, tertiary-fixed);
+  color: mat.get-theme-color($theme, tertiary, 70);
   text-decoration: underline;
 }
 
@@ -122,21 +130,23 @@ mat-label {
   @include mat.button-color($theme, $color-variant: primary);
 }
 
-.primary-toolbar {
-  color: gren;
-  // @include mat.toolbar-color($theme, $color-variant: primary);
+.secondary-button {
+  @include mat.button-color($theme, $color-variant: secondary);
 }
 
 .tertiary-button {
   @include mat.button-color($theme, $color-variant: tertiary);
 }
 
+.primary-toolbar {
+  color: mat.get-theme-color($theme, on-primary-container);
+  background-color:  mat.get-theme-color($theme, primary-container);
+}
+
 .tertiary-calendar {
-  color: grren;
-  // @include mat.calendar-color($theme, $color-variant: tertiary);
+  color: mat.get-theme-color($theme, primary);
 }
 
 .tertiary-spinner {
-  color: green;
-  // @include mat.spinner-color($theme, $color-variant: tertiary);
+  @include mat.progress-spinner-color($theme, $color-variant: tertiary);
 }

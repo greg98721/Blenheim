@@ -1,6 +1,6 @@
 <mat-toolbar class="primary-toolbar">
   <div class="toolbarGrid">
-    <button mat-icon-button class="menu-button" aria-label="Return to home page"n [matMenuTriggerFor]="menu">
+    <button mat-icon-button aria-label="Menu for all pages"n [matMenuTriggerFor]="menu">
       <mat-icon>menu</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
@@ -24,7 +24,7 @@
     <div class="title">Marlborough <span class="title-air">Air</span></div>
     <div></div>
     @if (loggedIn()) {
-      <button mat-raised-button class="primary-button userDetails" aria-label="View user details"
+      <button mat-flat-button class="secondary-button" aria-label="View user details"
         (click)="goToUserDetails()">{{ firstName() }} {{ lastName() }}</button>
     } @else {
       <div></div>
