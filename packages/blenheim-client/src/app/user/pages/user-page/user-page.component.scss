@@ -37,19 +37,17 @@
 
 .title {
   grid-area: title-area;
-  @include text-0;
-  color: mat.get-theme-color($theme, primary-fixed);
+  @include header-0;
 }
 
 .edit-button {
   margin-left: 2rem;
-  color: mat.get-theme-color($theme, on-primary);
 }
 
 .user-details {
   grid-area: details-area;
-  @include text-2;
   display: grid;
+  @include text-2;
   grid-template-columns: max-content 1fr;
   gap: 0.2vw 1vw;
   white-space: pre-wrap;
@@ -65,12 +63,12 @@
 }
 
 .label {
-  color: mat.get-theme-color($theme, primary-fixed);
+  @include label-2;
 }
 
 .booking-title {
   grid-area: booking-title-area;
-  color: mat.get-theme-color($theme, primary-fixed);
+  color: mat.get-theme-color($theme, primary);
   @include text-1;
 }
 
@@ -114,16 +112,16 @@
 
 .flight-details-header {
   @include text-2;
-  color: mat.get-theme-color($theme, primary-fixed);
+  color: mat.get-theme-color($theme, primary);
   grid-area: flight-header-area;
 }
 
 .departs-text {
-  @include text-2;
+  @include text-3;
   grid-area: departs-text-area;
 }
 
 .arrives-text {
-  @include text-2;
+  @include text-3;
   grid-area: arrives-text-area;
 }

@@ -1,10 +1,16 @@
 @use "../../../../styles.scss" as *;
-@use '@angular/material-experimental' as matx;
+@use "@angular/material" as mat;
+@use "@angular/material-experimental" as matx;
 
 .layout {
   display: grid;
   height: 100%;
-  background-image: url("../../../../assets/a220.jpg");
+  @if (mat.get-theme-type($theme) == dark) {
+    background-image: url("../../../../assets/a220-dark.jpg");
+  } @else {
+    background-image: url("../../../../assets/a220.jpg");
+  }
+
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -47,7 +53,7 @@
 .booking-link {
   @include text-0;
   text-align: center;
-  background-color: rgba(255, 255, 255, 0.45);
+  background-color: rgba(mat.get-theme-color($theme, on-primary), 0.35);
 }
 
 .timetable-link {

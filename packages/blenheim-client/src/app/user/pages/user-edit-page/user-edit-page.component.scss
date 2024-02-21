@@ -30,7 +30,7 @@
 .header {
   @include text-1;
   grid-area: title-area;
-  color: mat.get-theme-color($theme, primary-fixed);
+  color: mat.get-theme-color($theme, primary);
 }
 
 .user-form {
@@ -64,7 +64,6 @@
 
 .submit-button {
   grid-area: submit-area;
-  color: mat.get-theme-color($theme, on-primary);
   font-weight: 600;
 }
 

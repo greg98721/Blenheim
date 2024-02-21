@@ -1,12 +1,10 @@
 @use "../../../../styles.scss" as *;
 @use "@angular/material" as mat;
-@use '@angular/material-experimental' as matx;
+@use "@angular/material-experimental" as matx;
 
 .layout {
   display: grid;
   grid-template-columns: 0.25fr repeat(5, 0.15fr);
-  column-gap: 1px;
-  row-gap: 1px;
   @media (max-width: $narrow-breakpoint) {
     grid-template-columns: 0.4fr 0.6fr;
   }
@@ -21,7 +19,6 @@
   grid-column: span 5;
   font-size: 3vw;
   line-height: 4vw;
-  padding-left: 1rem;
   @media (max-width: $narrow-breakpoint) {
     font-size: 1.5rem;
     line-height: 1.6rem;
@@ -50,7 +47,7 @@
     "flight-number-area flight-number-area"
     "departs-area arrives-area";
   align-items: stretch;
-  padding: 0.2rem;
+  padding: 0.2vw 1vw;
   @media (max-width: $narrow-breakpoint) {
     grid-template-columns: 1fr;
     grid-template-rows: auto auto auto;
@@ -59,6 +56,10 @@
       "departs-area"
       "arrives-area";
     justify-items: center;
+    padding: 0.1rem 0.5rem;
+  }
+  @media (min-width: $wide-breakpoint) {
+    padding: 0.2rem 1rem;
   }
 }
 
@@ -68,26 +69,26 @@
   grid-template-rows: auto auto;
   justify-items: center;
   align-items: center;
-  padding: 0.2rem;
+  padding: 0.2rem 1rem;
 }
 
 .date-block,
 .timetable-block,
 .flight-block {
-  border: 1px solid mat.get-theme-color($theme, secondary);
+  border: 1px solid mat.get-theme-color($theme, on-secondary-container);
 }
 
 .date-block,
 .timetable-block {
-  background-color: rgba(mat.get-theme-color($theme, secondary), 0.3);
+  background-color: mat.get-theme-color($theme, secondary-container);
 }
 
 @media (min-width: $narrow-breakpoint) {
   .selected {
-    border-color: mat.get-theme-color($theme, tertiary-fixed-dim);
+    border-color: mat.get-theme-color($theme, on-tertiary-container);
   }
   .date-block.selected {
-    background-color: rgba(mat.get-theme-color($theme, tertiary-fixed-dim), 0.3);
+    background-color: mat.get-theme-color($theme, tertiary-container);
   }
 }
 

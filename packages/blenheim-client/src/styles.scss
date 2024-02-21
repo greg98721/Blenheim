@@ -17,8 +17,8 @@ $theme: matx.define-theme(
   (
     color: (
       theme-type: light,
-      primary: matx.$m3-green-palette,
-      tertiary: matx.$m3-blue-palette,
+      primary: matx.$m3-violet-palette,
+      tertiary: matx.$m3-azure-palette,
     ),
     typography: (
       brand-family: "Mona Sans",
@@ -86,6 +86,26 @@ $quarter-wide: calc($wide-breakpoint / 4);
   font-size: 1rem;
 }
 
+@mixin header-0 {
+  @include var-text(5);
+  color: mat.get-theme-color($theme, primary);
+}
+
+@mixin header-1 {
+  @include var-text(2.5);
+  color: mat.get-theme-color($theme, primary);
+}
+
+@mixin label-2 {
+  @include var-text(2);
+  color: mat.get-theme-color($theme, primary);
+}
+
+@mixin label-3 {
+  @include var-text(1.5);
+  color: mat.get-theme-color($theme, primary);
+}
+
 @mixin table-header-2 {
   @include fixed-text-4;
   color: mat.get-theme-color($theme, on-primary);
@@ -113,17 +133,13 @@ body {
 
 a,
 a:visited {
-  color: mat.get-theme-color($theme, tertiary, 40);
+  color: mat.get-theme-color($theme, tertiary, 70);
   text-decoration: none;
 }
 
 a:hover {
-  color: mat.get-theme-color($theme, tertiary, 70);
+  color: mat.get-theme-color($theme, tertiary, 40);
   text-decoration: underline;
-}
-
-mat-label {
-  color: mat.get-theme-color($theme, tertiary);
 }
 
 .primary-button {
@@ -136,6 +152,30 @@ mat-label {
 
 .tertiary-button {
   @include mat.button-color($theme, $color-variant: tertiary);
+}
+
+.primary-fab {
+  @include mat.fab-color($theme, $color-variant: primary);
+}
+
+.secondary-fab {
+  @include mat.fab-color($theme, $color-variant: secondary);
+}
+
+.tertiary-fab {
+  @include mat.fab-color($theme, $color-variant: tertiary);
+}
+
+.primary-icon {
+  @include mat.icon-color($theme, $color-variant: primary);
+}
+
+.secondary-icon {
+  @include mat.icon-color($theme, $color-variant: secondary);
+}
+
+.tertiary-icon {
+  @include mat.icon-color($theme, $color-variant: tertiary);
 }
 
 .primary-toolbar {

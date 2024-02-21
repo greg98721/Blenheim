@@ -52,8 +52,7 @@
 
 .city-name {
   grid-area: cityname-area;
-  @include text-0;
-  color: mat.get-theme-color($theme, primary-fixed);
+  @include header-0;
 }
 
 .fluff {

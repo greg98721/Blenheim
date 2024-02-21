@@ -17,8 +17,7 @@ $big-wide: calc($wide-breakpoint * 0.28);
 
 .page-header {
   grid-column: span 5;
-  color: mat.get-theme-color($theme, primary-fixed);
-  @include text-0;
+  @include header-0;
 }
 
 .header {

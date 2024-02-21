@@ -13,10 +13,6 @@
   overflow-y: auto;
 }
 
-.menu-button {
-  color: mat.get-theme-color($theme, on-primary);
-}
-
 .toolbarGrid {
   display: grid;
   grid-template-columns: max-content max-content 1fr max-content;
