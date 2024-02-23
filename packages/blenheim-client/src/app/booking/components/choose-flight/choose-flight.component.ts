@@ -1,11 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
+import { Component, EventEmitter, Output, computed, inject, input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 
 import { CityNamePipe } from '../../../shared/pipes/city-name.pipe';
 import { MinutePipe } from '../../../shared/pipes/minute.pipe';
 import { BookingState } from '../../model/booking-state';
 import { AirRoute, Flight, TimetableFlight, minPrice, seatsAvailable } from '@blenheim/model';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { FlightService } from '../../../timetable/services/flight.service';
+import { switchMap, combineLatest } from 'rxjs';
 
 @Component({
   selector: 'app-choose-flight',
@@ -15,27 +18,45 @@ import { AirRoute, Flight, TimetableFlight, minPrice, seatsAvailable } from '@bl
   styleUrl: './choose-flight.component.scss'
 })
 export class ChooseFlightComponent {
+  private _flightService = inject(FlightService);
+  bookingState = input.required<BookingState>();
 
-  route = signal<AirRoute | undefined>(undefined);
-  dayRange = signal<Date[]>([]);
-  nominalDate = signal<number | undefined>(undefined);
-  timetableFlights = signal<{ timetableFlight: TimetableFlight, flights: Flight[] }[]>([]);
-
-  @Input() set bookingState(state: BookingState) {
+  route = computed<AirRoute>(() => {
+    const state = this.bookingState();  // need to assign the value of the signal to a variable to allow the compiler to infer the type
     if (state.kind === 'nominal_date') {
-        this.route.set(state.route);
-        this.dayRange.set(state.dayRange);
-        this.nominalDate.set(state.nominalDate);
-        this.timetableFlights.set(state.timetableFlights);
+      return state.route;
     } else if (state.kind === 'nominal_return_date') {
-        this.route.set(state.returnRoute);
-        this.dayRange.set(state.dayRange);
-        this.nominalDate.set(state.nominalReturnDate);
-        this.timetableFlights.set(state.timetableReturnFlights);
+      return state.returnRoute;
     } else {
-      throw Error('Invalid state for ChooseOriginComponent')
+      throw Error('Invalid state for ChooseFlightComponent')
     }
-  }
+  });
+
+  dayRange = computed<Date[]>(() => {
+    const state = this.bookingState();
+    if (state.kind === 'nominal_date' || state.kind === 'nominal_return_date') {
+      return state.dayRange;
+    } else {
+      throw Error('Invalid state for ChooseFlightComponent')
+    }
+  });
+
+  nominalDate = computed<number>(() => {
+    const state = this.bookingState();
+    if (state.kind === 'nominal_date') {
+      return state.nominalDate;
+    } else if (state.kind === 'nominal_return_date') {
+      return state.nominalReturnDate;
+    } else {
+      throw Error('Invalid state for ChooseFlightComponent')
+    }
+  });
+
+  // see choose-destination.component.ts for an explanation of why we use toObservable and switchMap
+  readonly timetableFlights = toSignal(toObservable(this.route).pipe(
+    switchMap(r => this._flightService.getFlights$(r.origin, r.destination)),
+  ), { initialValue: [] });
+
 
   @Output() flightSelected = new EventEmitter<Flight>();
 

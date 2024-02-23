@@ -6,27 +6,25 @@
       </div>
       <mat-icon class="departs-icon">flight_takeoff</mat-icon>
       <div class="departs-text">
-        Taking off from {{outboundTimetableFlight()?.route?.origin | cityName}} at {{outboundTimetableFlight()?.departs
-        ?? 0 | minute}} {{outboundFlight()?.date | date:'cccc d LLLL'}}
+        Taking off from {{outboundTimetableFlight().route.origin | cityName}} at {{outboundTimetableFlight().departs | minute}} {{outboundFlight().date | date:'cccc d LLLL'}}
       </div>
       <mat-icon class="arrives-icon">flight_land</mat-icon>
       <div class="arrives-text">
-        Arriving {{outboundTimetableFlight()?.route?.destination| cityName}} at {{outboundTimetableFlight()?.arrives ??
-        0 | minute}}
+        Arriving {{outboundTimetableFlight().route.destination| cityName}} at {{outboundTimetableFlight().arrives | minute}}
       </div>
       <div class="fully-flexible" (click)="selectOutboundFareType('full')" matRipple
         [matRippleDisabled]="outboundFullFareState()!='available'"
         [ngClass]="{'booked-out': outboundFullFareState()=='booked out', 'available':outboundFullFareState()=='available', 'selected': outboundFullFareState()=='selected', 'default':outboundFullFareState()=='default',  }">
         <div class="fare-type">Fully Flexible Fare</div>
-        <div class="price">{{outboundFlight()?.fullPrice| currency: 'NZD'}}</div>
-        <div class="available-seats">{{outboundFlight()?.emptyFullPriceSeats}} seats available</div>
+        <div class="price">{{outboundFlight().fullPrice| currency: 'NZD'}}</div>
+        <div class="available-seats">{{outboundFlight().emptyFullPriceSeats}} seats available</div>
       </div>
       <div class="discount" (click)="selectOutboundFareType('discount')" matRipple
         [matRippleDisabled]="outboundDiscountFareState()!='available'"
         [ngClass]="{'booked-out': outboundDiscountFareState()=='booked out', 'available':outboundDiscountFareState()=='available', 'selected': outboundDiscountFareState()=='selected', 'default':outboundDiscountFareState()=='default',  }">
         <div class="fare-type">Discount Fare</div>
-        <div class="price">{{outboundFlight()?.discountPrice| currency: 'NZD'}}</div>
-        <div class="available-seats">{{outboundFlight()?.emptyDiscountSeats}} seats available</div>
+        <div class="price">{{outboundFlight().discountPrice| currency: 'NZD'}}</div>
+        <div class="available-seats">{{outboundFlight().emptyDiscountSeats}} seats available</div>
       </div>
     </div>
     @if (showReturn()) {

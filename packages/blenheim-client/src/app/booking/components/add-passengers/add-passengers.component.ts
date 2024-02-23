@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, Output, computed, inject, signal } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { Component, EventEmitter, Output, computed, effect, inject, input, signal } from '@angular/core';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatRippleModule } from '@angular/material/core';
@@ -20,7 +20,7 @@ type FareState = 'booked out' | 'available' | 'selected' | 'default';
 @Component({
   selector: 'app-add-passengers',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, CityNamePipe, MinutePipe, MatIconModule, MatRippleModule, MatFormFieldModule, MatRadioModule, MatInputModule, MatButtonModule, MatTooltipModule ],
+  imports: [CommonModule, ReactiveFormsModule, CityNamePipe, MinutePipe, MatIconModule, MatRippleModule, MatFormFieldModule, MatRadioModule, MatInputModule, MatButtonModule, MatTooltipModule],
   templateUrl: './add-passengers.component.html',
   styleUrl: './add-passengers.component.scss'
 })
@@ -28,31 +28,77 @@ export class AddPassengersComponent {
 
   private _userService = inject(UserService);
 
-  private _bookingState = signal<BookingState>({ kind: 'undefined' });
+  constructor() {
+    // initialise the fare type button states
+    toObservable(this.bookingState).subscribe((state) => {
+      if (state.kind == 'one_way_flights' || state.kind == 'return_flights') {
+        if (state.outboundFlight.emptyDiscountSeats == 0) {
+          this.outboundFullFareState.set('default');
+          this.outboundDiscountFareState.set('booked out');
+        } else {
+          this.outboundFullFareState.set('selected');
+          this.outboundDiscountFareState.set('available');
+        }
+        if (state.kind == 'one_way_flights') {
+        } else if (state.kind == 'return_flights') {
+          if (state.returnFlight.emptyDiscountSeats == 0) {
+            this.returnFullFareState.set('default');
+            this.returnDiscountFareState.set('booked out');
+          } else {
+            this.returnFullFareState.set('selected');
+            this.returnDiscountFareState.set('available');
+          }
+        }
+      }
+    });
+    this.passengersForm.valueChanges.subscribe((value) => {
+      // calculate the total value of the tickets
+      const state = this.bookingState();
+      const passengers = this.passengersForm?.value?.passengers ?? [];
+      const adultPassengers = passengers.filter(p => p.passengerType == 'adult').length;
+      const childPassengers = passengers.filter(p => p.passengerType == 'child').length;
+      if (state.kind == 'one_way_flights') {
+        const fareType = this.outboundDiscountFareState() == 'selected' ? 'discount' : 'full';
+        const price = calcPrice(fareType, 'adult', this.outboundFlight()) * adultPassengers + calcPrice(fareType, 'child', this.outboundFlight()) * childPassengers;
+        this.totalPrice.set(price);
+      } else if (state.kind == 'return_flights') {
+        const outboundFareType = this.outboundDiscountFareState() == 'selected' ? 'discount' : 'full';
+        const returnFareType = this.returnDiscountFareState() == 'selected' ? 'discount' : 'full';
+        const outboundPrice = calcPrice(outboundFareType, 'adult', this.outboundFlight()) * adultPassengers + calcPrice(outboundFareType, 'child', this.outboundFlight()) * childPassengers;
+        const returnPrice = calcPrice(returnFareType, 'adult', this.returnFlight()) * adultPassengers + calcPrice(returnFareType, 'child', this.returnFlight()) * childPassengers;
+        this.totalPrice.set(outboundPrice + returnPrice);
+      }
 
-  showReturn = computed<boolean>(() => this._bookingState().kind == 'return_flights');
+      // check for child fares
+      this.hasChildFares.set((value.passengers ?? []).filter(p => p.passengerType == 'child').length > 0)
+    });
+  }
+
+  bookingState = input.required<BookingState>();
+
+  showReturn = computed<boolean>(() => this.bookingState().kind === 'return_flights');
 
   // these are used for the flight summary
-  outboundTimetableFlight = computed<TimetableFlight | undefined>(() => {
-    const state = this._bookingState();
+  outboundTimetableFlight = computed<TimetableFlight>(() => {
+    const state = this.bookingState();
     if (state.kind == 'one_way_flights' || state.kind == 'return_flights') {
       return state.outboundTimetableFlight;
     } else {
-      return undefined;
+      throw Error('Invalid state for AddPassengersComponent')
     }
   });
 
-  outboundFlight = computed<Flight | undefined>(() => {
-    const state = this._bookingState();
+  outboundFlight = computed<Flight>(() => {
+    const state = this.bookingState();
     if (state.kind == 'one_way_flights' || state.kind == 'return_flights') {
       return state.outboundFlight;
     } else {
-      return undefined;
+      throw Error('Invalid state for AddPassengersComponent')
     }
   });
 
   returnTimetableFlight = computed<TimetableFlight | undefined>(() => {
-    const state = this._bookingState();
+    const state = this.bookingState();
     if (state.kind == 'return_flights') {
       return state.returnTimetableFlight;
     } else {
@@ -61,7 +107,7 @@ export class AddPassengersComponent {
   });
 
   returnFlight = computed<Flight | undefined>(() => {
-    const state = this._bookingState();
+    const state = this.bookingState();
     if (state.kind == 'return_flights') {
       return state.returnFlight;
     } else {
@@ -69,32 +115,10 @@ export class AddPassengersComponent {
     }
   });
 
-  totalPrice = computed<number>(() => {
-    const trigger = this.formChanged();
-    const state = this._bookingState();
-    const passengers = this.passengersForm?.value?.passengers ?? [];
-    const adultPassengers = passengers.filter(p => p.passengerType == 'adult').length;
-    const childPassengers = passengers.filter(p => p.passengerType == 'child').length;
-    if (state.kind == 'one_way_flights') {
-      const fareType = this.outboundDiscountFareState() == 'selected' ? 'discount' : 'full';
-      return calcPrice(fareType, 'adult', this.outboundFlight()) * adultPassengers + calcPrice(fareType, 'child', this.outboundFlight()) * childPassengers;
-    } else if (state.kind == 'return_flights') {
-      const outboundFareType = this.outboundDiscountFareState() == 'selected' ? 'discount' : 'full';
-      const returnFareType = this.returnDiscountFareState() == 'selected' ? 'discount' : 'full';
-      const outboundPrice = calcPrice(outboundFareType, 'adult', this.outboundFlight()) * adultPassengers + calcPrice(outboundFareType, 'child', this.outboundFlight()) * childPassengers;
-      const returnPrice = calcPrice(returnFareType, 'adult', this.returnFlight()) * adultPassengers + calcPrice(returnFareType, 'child', this.returnFlight()) * childPassengers;
-      return outboundPrice + returnPrice;
-    } else {
-      return 0;
-    }
-  });
+  totalPrice = signal<number>(0);
+  hasChildFares = signal<boolean>(false);
 
-  hasChildFares = computed<boolean>(() => {
-    const trigger = this.formChanged();
-    return (this.passengersForm?.value?.passengers ?? []).filter(p => p.passengerType == 'child').length > 0;
-  });
-
-  // these are used to set the buttons
+  // these are used to set the buttons, they are signals not computed as they can be set by the user
   outboundFullFareState = signal<FareState>('selected');
   returnFullFareState = signal<FareState>('selected');
   outboundDiscountFareState = signal<FareState>('available');
@@ -122,10 +146,8 @@ export class AddPassengersComponent {
     passengers: this._fb.array([this._passengerSubform(this._userService.currentUser()?.firstName ?? '', this._userService.currentUser()?.lastName ?? '')])
   });
 
-  formChanged = toSignal(this.passengersForm.valueChanges);
-
   maxPassengers = computed<number>(() => {
-    const state = this._bookingState();
+    const state = this.bookingState();
     if (state.kind == 'one_way_flights') {
       if (this.outboundDiscountFareState() == 'selected') {
         return this.outboundFlight()?.emptyDiscountSeats ?? 1;
@@ -159,7 +181,7 @@ export class AddPassengersComponent {
     this.passengers.push(this._passengerSubform('', ''));
 
     // check if this removes the option to select a discount fare
-    const state = this._bookingState();
+    const state = this.bookingState();
     if (state.kind == 'one_way_flights' || state.kind == 'return_flights') {
       if (state.outboundFlight.emptyDiscountSeats < this.passengers.controls.length) {
         this.outboundFullFareState.set('default');
@@ -178,7 +200,7 @@ export class AddPassengersComponent {
     this.passengers.removeAt(index);
 
     // check if this adds the option to select a discount fare
-    const state = this._bookingState();
+    const state = this.bookingState();
     if (state.kind == 'one_way_flights' || state.kind == 'return_flights') {
       if (state.outboundFlight.emptyDiscountSeats >= this.passengers.controls.length && this.outboundFullFareState() == 'default') {
         this.outboundFullFareState.set('selected');
@@ -190,31 +212,6 @@ export class AddPassengersComponent {
           this.returnDiscountFareState.set('available');
         }
       }
-    }
-  }
-
-  @Input() set bookingState(state: BookingState) {
-    if (state.kind == 'one_way_flights' || state.kind == 'return_flights') {
-      this._bookingState.set(state);
-      if (state.outboundFlight.emptyDiscountSeats == 0) {
-        this.outboundFullFareState.set('default');
-        this.outboundDiscountFareState.set('booked out');
-      } else {
-        this.outboundFullFareState.set('selected');
-        this.outboundDiscountFareState.set('available');
-      }
-      if (state.kind == 'one_way_flights') {
-      } else if (state.kind == 'return_flights') {
-        if (state.returnFlight.emptyDiscountSeats == 0) {
-          this.returnFullFareState.set('default');
-          this.returnDiscountFareState.set('booked out');
-        } else {
-          this.returnFullFareState.set('selected');
-          this.returnDiscountFareState.set('available');
-        }
-      }
-    } else {
-      throw Error(`Invalid state ${state.kind} for AddPassengersComponent`)
     }
   }
 

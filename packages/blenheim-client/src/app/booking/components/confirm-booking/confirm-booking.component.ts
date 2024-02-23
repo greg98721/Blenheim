@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, computed, signal } from '@angular/core';
+import { Component, EventEmitter, Output, computed, input } from '@angular/core';
 
 import { BookingState } from '../../model/booking-state';
 import { CommonModule } from '@angular/common';
@@ -12,19 +12,10 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrl: './confirm-booking.component.scss'
 })
 export class ConfirmBookingComponent {
-
-  private _bookingState = signal<BookingState>({ kind: 'undefined' });
-
-  @Input() set bookingState(state: BookingState) {
-    if (state.kind == 'one_way_booking_complete' || state.kind == 'return_booking_complete') {
-      this._bookingState.set(state);
-    } else {
-      throw Error(`Invalid state ${state.kind} for ConfirmBookingComponent`)
-    }
-  }
+  bookingState = input.required<BookingState>();
 
   totalPrice = computed<number>(() => {
-    const state = this._bookingState();
+    const state = this.bookingState();  // need to assign the value of the signal to a variable to allow the compiler to infer the type
     if (state.kind == 'one_way_booking_complete') {
       return state.booking.details.tickets.reduce((acc, ticket) => acc + ticket.price, 0);
     } else if (state.kind == 'return_booking_complete') {

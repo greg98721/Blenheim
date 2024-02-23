@@ -8,13 +8,11 @@ export interface UndefinedState {
 
 export interface BookingStart {
   kind: 'start',
-  origins: Airport[]
 }
 
 export interface BookingOrigin {
   kind: 'origin',
   origin: Airport
-  destinationRoutes: AirRoute[]
 }
 
 export interface BookingDestination {
@@ -90,14 +88,14 @@ export interface ReturnBookingComplete {
 /** Defines the state machine in the booking service togeather with all data required at each state */
 export type BookingState = UndefinedState | BookingStart | BookingOrigin | BookingDestination | NominalBookingDate | OutboundFlight | OneWayFlightDetails | OneWayBookingComplete | ReturnFlightRequested | NominalBookingReturnDate | ReturnFlightDetails | ReturnBookingComplete;
 
-export function startBooking(origins: Airport[]): BookingState {
-  return { kind: 'start', origins };
+export function startBooking(): BookingState {
+  return { kind: 'start' };
 }
 
-export function addOrigin(state: BookingState | undefined, origin: Airport, destinationRoutes: AirRoute[]): BookingState {
+export function addOrigin(state: BookingState | undefined, origin: Airport): BookingState {
   // we can start from this state so there could be no previous state
   if (state === undefined || state.kind === 'start') {
-    return { kind: 'origin', origin, destinationRoutes };
+    return { kind: 'origin', origin };
   } else {
     throw new Error(`Cannot create origin state from ${state.kind}`);
   }

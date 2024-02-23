@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
+import { Component, EventEmitter, Output, computed, inject, input } from '@angular/core';
 import { Airport } from '@blenheim/model';
 import { CityNamePipe } from '../../../shared/pipes/city-name.pipe';
 import { BookingState } from '../../model/booking-state';
+import { FlightService } from '../../../timetable/services/flight.service';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-choose-origin',
@@ -12,15 +14,11 @@ import { BookingState } from '../../model/booking-state';
   styleUrl: './choose-origin.component.scss'
 })
 export class ChooseOriginComponent {
-  origins = signal<Airport[]>([]);
 
-  @Input() set bookingState(state: BookingState) {
-    if (state.kind === 'start') {
-      this.origins.set(state.origins);
-    } else {
-      throw Error('Invalid state for ChooseOriginComponent')
-    }
-  }
+  private _flightService = inject(FlightService);
+  bookingState = input.required<BookingState>();
+
+  origins = toSignal(this._flightService.getOrigins$(),{ initialValue: [] });
 
   @Output() originSelected = new EventEmitter<Airport>();
 

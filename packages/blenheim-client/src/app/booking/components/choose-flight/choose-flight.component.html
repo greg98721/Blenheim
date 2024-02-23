@@ -1,39 +1,37 @@
-@if(route() !== undefined) {
-  <div class="layout">
-    <div class="top-left"></div>
-    <div class="headline">Flights from {{route()?.origin | cityName}} to {{route()?.destination | cityName}}</div>
-    <div></div>
-    @for(dr of dayRange(); track dr) {
-      <div class="date-block" [ngClass]="{'selected': nominalDate()===$index}">
-        <div>{{ dr | date:'cccc' }}</div>
-        <div>{{ dr | date:'d LLLL' }}</div>
+<div class="layout">
+  <div class="top-left"></div>
+  <div class="headline">Flights from {{route().origin | cityName}} to {{route().destination | cityName}}</div>
+  <div></div>
+  @for(dr of dayRange(); track dr) {
+    <div class="date-block" [ngClass]="{'selected': nominalDate()===$index}">
+      <div>{{ dr | date:'cccc' }}</div>
+      <div>{{ dr | date:'d LLLL' }}</div>
+    </div>
+  }
+  @for(timetable of timetableFlights(); track timetable.timetableFlight.flightNumber) {
+    <div class="timetable-block">
+      <div class="flight-number">{{timetable.timetableFlight.flightNumber}}</div>
+      <div class="departs"><mat-icon>flight_takeoff</mat-icon>
+        <span class="cdk-visually-hidden">Departs</span>
+        {{timetable.timetableFlight.departs | minute }}
       </div>
-    }
-    @for(timetable of timetableFlights(); track timetable.timetableFlight.flightNumber) {
-      <div class="timetable-block">
-        <div class="flight-number">{{timetable.timetableFlight.flightNumber}}</div>
-        <div class="departs"><mat-icon>flight_takeoff</mat-icon>
-          <span class="cdk-visually-hidden">Departs</span>
-          {{timetable.timetableFlight.departs | minute }}
-        </div>
-        <div class="arrives"><mat-icon>flight_land</mat-icon>
-          <span class="cdk-visually-hidden">Arrives</span>
-          {{timetable.timetableFlight.arrives | minute }}
-        </div>
+      <div class="arrives"><mat-icon>flight_land</mat-icon>
+        <span class="cdk-visually-hidden">Arrives</span>
+        {{timetable.timetableFlight.arrives | minute }}
       </div>
-      @for(flight of timetable.flights; track flight.flightNumber ) {
-        <div class="flight-block" [ngClass]="{'selected': nominalDate()===$index}">
-          @if(flight.flightNumber !== '') { <!--TODO not sure if this is needed -->
-            @if(_seatsAvailable(flight)) {
-              <a (click)="selectFlight(flight)" class="price">{{_minPrice(flight) | currency: 'NZD'}}</a>
-              <div class="seats-available"> {{numberOfCheapestSeats(flight)}} seats at this price</div>
-            }
-            @else {
-              <div class="fully-booked">Fully Booked</div>
-            }
+    </div>
+    @for(flight of timetable.flights; track flight.flightNumber ) {
+      <div class="flight-block" [ngClass]="{'selected': nominalDate()===$index}">
+        @if(flight.flightNumber !== '') { <!--TODO not sure if this is needed -->
+          @if(_seatsAvailable(flight)) {
+            <a (click)="selectFlight(flight)" class="price">{{_minPrice(flight) | currency: 'NZD'}}</a>
+            <div class="seats-available"> {{numberOfCheapestSeats(flight)}} seats at this price</div>
           }
-        </div>
-      }
+          @else {
+            <div class="fully-booked">Fully Booked</div>
+          }
+        }
+      </div>
     }
-  </div>
-}
+  }
+</div>

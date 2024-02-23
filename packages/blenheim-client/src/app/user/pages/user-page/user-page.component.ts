@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, computed, inject, signal } from '@angular/core';
+import { Component, input, computed, inject, signal } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -33,12 +33,8 @@ export class UserPageComponent {
     }
   });
 
-  bookingList = signal<FlightBooking[]>([]);
-
-  // The route to this page includes a resolver that gets the bookings from the server. We use @Input() to pull in that data
-  @Input() set bookings(b: FlightBooking[]) {
-    this.bookingList.set(b);
-  }
+  // The route to this page includes a resolver that gets the bookings from the server. We use input to pull in that data
+  bookings = input.required<FlightBooking[]>();
 
   editTheUser() {
     this._router.navigate(['/user/edit']);

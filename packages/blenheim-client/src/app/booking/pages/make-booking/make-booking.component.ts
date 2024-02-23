@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, input, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { formatISO } from 'date-fns';
 
@@ -44,35 +44,33 @@ export class MakeBookingComponent {
   private _router = inject(Router);
   private _route = inject(ActivatedRoute);
 
-  bookingState = signal<BookingState>({ kind: 'undefined' });
-
+  // bookingState = signal<BookingState>({ kind: 'undefined' });
   /** We can use routing to provide a way of going forwards and backwards through the booking process, include an index in the route into the _bookingStateStack */
-  @Input() set stateIndex(i: number) {
+  stateIndex = input.required<number>();
+  origin = input<Airport>();
+
+  bookingState = computed<BookingState>(() => {
+    const i = this.stateIndex();
     if (i == 0 && this._bookingStateStack.length == 0) {
       // We're starting from scratch
       // if the origin is set in the query params we start from the second step
-      const o = this._route.snapshot.queryParams['origin'];
+      const o = this.origin();
       if (o !== undefined) {
-        const origin = o as Airport;
-        this._flightService.getDestinations$(origin).subscribe(destinationRoutes => {
-          const newState = addOrigin(undefined, origin, destinationRoutes);
-          this._bookingStateStack.push(newState);
-          this._currentStackIndex = 0;
-          this.bookingState.set(this._bookingStateStack[0]);
-        });
+        const newState = addOrigin(undefined, o);
+        this._bookingStateStack.push(newState);
+        this._currentStackIndex = 0;
+        return newState;
       } else {
         // otherwise we need to show the first step
-        this._flightService.getOrigins$().subscribe(origins => {
-          const newState = startBooking(origins);
-          this._bookingStateStack.push(newState);
-          this._currentStackIndex = 0;
-          this.bookingState.set(this._bookingStateStack[0]);
-        });
+        const newState = startBooking();
+        this._bookingStateStack.push(newState);
+        this._currentStackIndex = 0;
+        return newState;
       }
     } else if (i >= 0 && i < this._bookingStateStack.length) {
       // we are moving to a state that already exists - could be at top of the stack or older
       this._currentStackIndex = i;
-      this.bookingState.set(this._currentState());
+      return this._currentState();
     } else if (i >= 0 && i >= this._bookingStateStack.length) {
       // we are moving to a state that doesn't exist yet, we need to navigate to the last state in the stack
       if (this._bookingStateStack.length > 0) {
@@ -81,16 +79,16 @@ export class MakeBookingComponent {
         // if there are no states in the stack we need to start from scratch
         this._router.navigate(['../0'], { relativeTo: this._route });
       }
+      // it does not matter what the return value is here as the router will navigate to the correct state
+      return this._currentState();
     } else {
       throw new Error(`Invalid state index ${i}`);
     }
-  }
+  });
 
   selectOrigin(origin: Airport) {
-    this._flightService.getDestinations$(origin).subscribe(destinationRoutes => {
-      const newState: BookingState = addOrigin((this._currentState()), origin, destinationRoutes);
-      this._updateStateStack(newState);
-    });
+    const newState: BookingState = addOrigin((this._currentState()), origin);
+    this._updateStateStack(newState);
   }
 
   selectDestination(destination: AirRoute) {

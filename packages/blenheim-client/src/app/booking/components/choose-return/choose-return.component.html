@@ -1,6 +1,4 @@
-@if(origin() !== undefined) {
-  <div class="layout">
-    <a (click)="selectOneWay()" class="oneway-option">Book a one way flight</a>
-    <a (click)="selectReturn()" class="return-option">Add a return flight to {{ origin() | cityName }}</a>
-  </div>
-}
+<div class="layout">
+  <a (click)="selectOneWay()" class="oneway-option">Book a one way flight</a>
+  <a (click)="selectReturn()" class="return-option">Add a return flight to {{ origin() | cityName }}</a>
+</div>

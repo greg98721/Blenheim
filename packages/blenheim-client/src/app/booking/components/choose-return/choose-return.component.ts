@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
+import { Component, EventEmitter, Output, computed, input } from '@angular/core';
 import { CityNamePipe } from '../../../shared/pipes/city-name.pipe';
 import { BookingState } from '../../model/booking-state';
 import { Airport } from '@blenheim/model';
@@ -12,16 +12,16 @@ import { Airport } from '@blenheim/model';
   styleUrl: './choose-return.component.scss'
 })
 export class ChooseReturnComponent {
+  bookingState = input.required<BookingState>();
 
-  origin = signal<Airport | undefined>(undefined);
-
-  @Input() set bookingState(state: BookingState) {
+  origin = computed<Airport>(() => {
+    const state = this.bookingState();  // need to assign the value of the signal to a variable to allow the compiler to infer the type
     if (state.kind === 'outbound_flight') {
-      this.origin.set(state.outboundTimetableFlight.route.origin);
+      return state.outboundTimetableFlight.route.origin;
     } else {
       throw Error('Invalid state for ChooseReturnComponent')
     }
-  }
+  });
 
   @Output() oneWaySelected = new EventEmitter();
   selectOneWay() {
