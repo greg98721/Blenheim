@@ -1,14 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output, computed, inject, input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
+import { isSameDay, parseISO } from 'date-fns';
 
 import { CityNamePipe } from '../../../shared/pipes/city-name.pipe';
 import { MinutePipe } from '../../../shared/pipes/minute.pipe';
 import { BookingState } from '../../model/booking-state';
-import { AirRoute, Flight, TimetableFlight, minPrice, seatsAvailable } from '@blenheim/model';
+import { AirRoute, Flight, TimetableFlight, minPrice, seatsAvailable, EMPTY_FLIGHT } from '@blenheim/model';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { FlightService } from '../../../timetable/services/flight.service';
-import { switchMap, combineLatest } from 'rxjs';
+import { switchMap, combineLatest, map } from 'rxjs';
 
 @Component({
   selector: 'app-choose-flight',
@@ -55,6 +56,15 @@ export class ChooseFlightComponent {
   // see choose-destination.component.ts for an explanation of why we use toObservable and switchMap
   readonly timetableFlights = toSignal(toObservable(this.route).pipe(
     switchMap(r => this._flightService.getFlights$(r.origin, r.destination)),
+    map((allFlights) => {
+      const withinRange = allFlights.map(f => {
+        const parsed = f.flights.map(p => ({ date: parseISO(p.date), flight: p }));
+        const filtered = this.dayRange().map(d => parsed.find(p => isSameDay(p.date, d))?.flight ?? EMPTY_FLIGHT);
+        return { timetableFlight: f.timetableFlight, flights: filtered };
+      });
+      const filtered = withinRange.filter(f => f.flights.filter(l => l.flightNumber !== '').length > 0);
+      return filtered.sort((a, b) => (a.timetableFlight.departs - b.timetableFlight.departs));
+    }),
   ), { initialValue: [] });
 
 

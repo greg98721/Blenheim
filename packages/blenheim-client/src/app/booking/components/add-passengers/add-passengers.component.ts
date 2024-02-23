@@ -29,7 +29,7 @@ export class AddPassengersComponent {
   private _userService = inject(UserService);
 
   constructor() {
-    // initialise the fare type button states
+    // initialise the fare type button states - convert to an observable as we cannot set signals within an effect
     toObservable(this.bookingState).subscribe((state) => {
       if (state.kind == 'one_way_flights' || state.kind == 'return_flights') {
         if (state.outboundFlight.emptyDiscountSeats == 0) {
@@ -49,29 +49,35 @@ export class AddPassengersComponent {
             this.returnDiscountFareState.set('available');
           }
         }
+        // we can only initialise it now
+        this.totalPrice.set(this.calcTotalPrice([{ firstName: '', lastName: '', passengerType: 'adult' }]));
       }
     });
     this.passengersForm.valueChanges.subscribe((value) => {
       // calculate the total value of the tickets
-      const state = this.bookingState();
-      const passengers = this.passengersForm?.value?.passengers ?? [];
-      const adultPassengers = passengers.filter(p => p.passengerType == 'adult').length;
-      const childPassengers = passengers.filter(p => p.passengerType == 'child').length;
-      if (state.kind == 'one_way_flights') {
-        const fareType = this.outboundDiscountFareState() == 'selected' ? 'discount' : 'full';
-        const price = calcPrice(fareType, 'adult', this.outboundFlight()) * adultPassengers + calcPrice(fareType, 'child', this.outboundFlight()) * childPassengers;
-        this.totalPrice.set(price);
-      } else if (state.kind == 'return_flights') {
-        const outboundFareType = this.outboundDiscountFareState() == 'selected' ? 'discount' : 'full';
-        const returnFareType = this.returnDiscountFareState() == 'selected' ? 'discount' : 'full';
-        const outboundPrice = calcPrice(outboundFareType, 'adult', this.outboundFlight()) * adultPassengers + calcPrice(outboundFareType, 'child', this.outboundFlight()) * childPassengers;
-        const returnPrice = calcPrice(returnFareType, 'adult', this.returnFlight()) * adultPassengers + calcPrice(returnFareType, 'child', this.returnFlight()) * childPassengers;
-        this.totalPrice.set(outboundPrice + returnPrice);
-      }
+      this.totalPrice.set(this.calcTotalPrice( value.passengers as Passenger[]));
 
       // check for child fares
       this.hasChildFares.set((value.passengers ?? []).filter(p => p.passengerType == 'child').length > 0)
     });
+  }
+
+  calcTotalPrice(passengers: Passenger[]) {
+    const state = this.bookingState();
+    const adultPassengers = passengers.filter(p => p.passengerType == 'adult').length;
+    const childPassengers = passengers.filter(p => p.passengerType == 'child').length;
+    if (state.kind == 'one_way_flights') {
+      const fareType = this.outboundDiscountFareState() == 'selected' ? 'discount' : 'full';
+      return calcPrice(fareType, 'adult', this.outboundFlight()) * adultPassengers + calcPrice(fareType, 'child', this.outboundFlight()) * childPassengers;
+    } else if (state.kind == 'return_flights') {
+      const outboundFareType = this.outboundDiscountFareState() == 'selected' ? 'discount' : 'full';
+      const returnFareType = this.returnDiscountFareState() == 'selected' ? 'discount' : 'full';
+      const outboundPrice = calcPrice(outboundFareType, 'adult', this.outboundFlight()) * adultPassengers + calcPrice(outboundFareType, 'child', this.outboundFlight()) * childPassengers;
+      const returnPrice = calcPrice(returnFareType, 'adult', this.returnFlight()) * adultPassengers + calcPrice(returnFareType, 'child', this.returnFlight()) * childPassengers;
+      return outboundPrice + returnPrice;
+    } else {
+      return 0;
+    }
   }
 
   bookingState = input.required<BookingState>();
