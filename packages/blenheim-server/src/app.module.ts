@@ -29,6 +29,7 @@ import { BookingsService } from './bookings/bookings.service';
       isGlobal: true,
       validationSchema: Joi.object({
         CLIENT_DIST: Joi.string().required(),
+        CLIENT_INDEX_FILE: Joi.string().required(),
         ACCESS_TOKEN_SECRET: Joi.string().required(),
         ACCESS_TOKEN_EXPIRATION: Joi.number().required(),
         REFRESH_TOKEN_SECRET: Joi.string().required(),

@@ -240,16 +240,26 @@ Use the CLI to create the controllers and services. For example `nest g controll
 
 In the root of the server project create a `.env` file containg
 ```
-CLIENT_DIST=../../blenheim-client/dist/blenheim-client
-JWT_SECRET=THIS IS A HIGHLY SECRET KEY THAT SHOULD BE CHANGED
+CLIENT_DIST=/../../blenheim-client/dist/blenheim-client/browser
+CLIENT_INDEX_FILE=blenheim-client/dist/blenheim-client/browser/index.html
+ACCESS_TOKEN_SECRET=THIS IS A HIGHLY SECRET KEY
+ACCESS_TOKEN_EXPIRATION=900
+REFRESH_TOKEN_SECRET=THIS IS AN EVEN MORE SECRET KEY
+REFRESH_TOKEN_EXPIRATION=86400
+HASH_PASSWORD=THIS IS NOT SO SECRET
 ```
 
  We need this so in dev mode we point at the client project dist folder and in production mode we will copy the client dist folder to folder within the server dist folder. The `.env` file will be overwritten as part of the production build process. Add .env to .gitignore file so it is not added to source control
 
 
 # Angular 17
+## Serverside Rendering (SSR)
+We have this turned on to enable the prerendering to work. However we are not doing it as asside from the prerendered pages, the rest of the application is not SSR. This is because the application is a single page application and the server side rendering is only used to speed up the initial load of the application. The rest of the application is then handled by the client side Angular application.
 ## Prerendering (Static Site Generation)
 To speed up the initial load of the application on the browser, we can prerender the application on the server. This will generate a static html file for each route. The server will then serve the static html file instead of the Angular application. The Angular application will then bootstrap on the client and take over the page. This is called static site generation.
+
+In `app.config.server.ts` note the call to `provideClientHydration()`. This allows the client side code to take over the pre-rendered or server rendered code without losing any state. This is important for the user experience. The user should not notice the switch from server to client side rendering.
+
 ### Problem With CLI Generated Code
 The CLI creates two sets of bootstrap files `main.ts` and `main.server.ts`. The `main.ts` is the entry point for the client and the `main.server.ts` is the entry point for the server. They are mostly just wrappers for `app.config.ts` and `app.config.server.ts` respectively. The problem is tthe CLI generated `app.config.server.ts` is wrong.
 
