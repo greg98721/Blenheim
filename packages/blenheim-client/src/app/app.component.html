@@ -24,10 +24,11 @@
     <div class="title">Marlborough <span class="title-air">Air</span></div>
     <div></div>
     @if (loggedIn()) {
-      <button mat-flat-button class="secondary-button" aria-label="View user details"
-        (click)="goToUserDetails()">{{ firstName() }} {{ lastName() }}</button>
+    <div class="userDetails">
+      <mat-icon>person</mat-icon>
+      <div class="logged-in-name">{{ firstName() }} {{ lastName() }}</div></div>
     } @else {
-      <div></div>
+    <div></div>
     }
   </div>
 </mat-toolbar>

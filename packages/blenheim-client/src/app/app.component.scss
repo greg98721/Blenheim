@@ -1,6 +1,6 @@
 @use "../styles.scss" as *;
 @use "@angular/material" as mat;
-@use '@angular/material-experimental' as matx;
+@use "@angular/material-experimental" as matx;
 
 :host {
   display: grid;
@@ -42,12 +42,20 @@
 }
 
 .userDetails {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
   @include fixed-text-3;
-  border: 0.2rem solid mat.get-theme-color($theme, on-primary);
-  padding: 0.1rem 1rem;
-  border-radius: 1rem;
-  margin: 0.2rem 0.5rem;
+  margin-top: 0.5rem;
   @media (max-width: $narrow-breakpoint) {
     display: none;
+  }
+  mat-icon {
+    flex: 0 0 auto;
+    margin-right: 0.5rem;
+  }
+  .logged-in-name {
+    flex: 0 0 auto;
   }
 }
