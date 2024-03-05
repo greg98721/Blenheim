@@ -1,8 +1,7 @@
-import { APP_INITIALIZER, ApplicationConfig, ErrorHandler, importProvidersFrom } from '@angular/core';
+import { APP_INITIALIZER, ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { provideClientHydration } from '@angular/platform-browser';
-import { HTTP_INTERCEPTORS, provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 
 import { routes } from './app.routes';
 import { AppConfigService } from './shared/services/app-config.service';
@@ -27,7 +26,6 @@ export const appConfig: ApplicationConfig = {
       ),
       importProvidersFrom(
         BrowserAnimationsModule,
-        MatSnackBarModule,
       )
     ],
     {

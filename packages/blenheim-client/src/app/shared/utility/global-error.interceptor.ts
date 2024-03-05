@@ -1,5 +1,5 @@
 import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
-import { retry, timer } from 'rxjs';
+import { catchError, retry, timer } from 'rxjs';
 
 /** This interceptor will retry requests that fail due to server errors. */
 export const globalErrorInterceptor: HttpInterceptorFn = (req, next) => {
@@ -7,8 +7,12 @@ export const globalErrorInterceptor: HttpInterceptorFn = (req, next) => {
     retry({
       count: 3,
       delay: (error, retryCount) => shouldRetry(error, retryCount)
-    })
-  );
+    }),
+    catchError((error: HttpErrorResponse) => {
+      console.log(`HTTP Error: ${error.status}`);
+      throw error;
+    }
+  ));
 };
 
 /** Only want to rety requets when we receive a server error. Any other response - the server understood the request and rejected it for a good reason */
