@@ -45,6 +45,17 @@
 
 .edit-button {
   grid-area: edit-fab-area;
+  @media (max-width: $narrow-breakpoint) {
+    display: none;
+  }
+}
+
+.small-edit-button {
+  grid-area: edit-fab-area;
+  display: none;
+  @media (max-width: $narrow-breakpoint) {
+    display: block;
+  }
 }
 
 .user-details {
@@ -91,7 +102,19 @@
 .bookings-fab {
   grid-area: bookings-fab-area;
   button {
-  margin-left: auto;
+    @media (max-width: $narrow-breakpoint) {
+      display: none;
+    }
+  }
+}
+
+.small-bookings-fab {
+  grid-area: bookings-fab-area;
+  button {
+    display: none;
+    @media (max-width: $narrow-breakpoint) {
+      display: block;
+    }
   }
 }
 

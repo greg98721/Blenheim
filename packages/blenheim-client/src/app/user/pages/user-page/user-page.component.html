@@ -7,6 +7,10 @@
     (click)="editTheUser()">
     <mat-icon>edit</mat-icon>
   </button>
+  <button class="small-edit-button tertiary-fab" mat-mini-fab aria-label="Edit the user details" matTooltip="Edit the details"
+    (click)="editTheUser()">
+    <mat-icon>edit</mat-icon>
+  </button>
   <div class="user-details">
     <div class="label">First Name</div>
     <div>{{ currentUser()?.firstName ?? '' }}</div>
@@ -27,51 +31,56 @@
   <div class="booking-title">Bookings</div>
   <div class="bookings">
     @for(booking of bookings(); track booking.bookingReference) {
-      <div class="flight-details-block">
-        @if (booking.kind === 'oneWay') {
-          <div class="flight-item">
-            <div class="flight-details-header">Flight {{booking.details.flightNumber}}</div>
-            <div class="departs-text">
-              Taking off from {{booking.details.origin | cityName}} at {{booking.details.departs | minute}}
-              {{booking.details.date | date:'cccc d LLLL'}}
-            </div>
-            <div class="arrives-text">
-              Arriving {{booking.details.destination| cityName}} at {{booking.details.arrives | minute}}
-            </div>
-          </div>
-        } @else {
-          <div class="flight-item">
-            <div class="flight-details-header">
-              Outbound Flight {{booking.outboundDetails.flightNumber}}
-            </div>
-            <div class="departs-text">
-              Taking off from {{booking.outboundDetails.origin | cityName}} at {{booking.outboundDetails.departs | minute}}
-              {{booking.returnDetails.date | date:'cccc d LLLL'}}
-            </div>
-            <div class="arrives-text">
-              Arriving {{booking.outboundDetails.destination| cityName}} at {{booking.outboundDetails.arrives | minute}}
-            </div>
-            <div class="flight-details-header">
-              Return Flight {{booking.returnDetails.flightNumber}}
-            </div>
-            <div class="departs-text">
-              Taking off from {{booking.returnDetails.origin | cityName}} at {{booking.returnDetails.departs | minute}}
-              {{booking.returnDetails.date | date:'cccc d LLLL'}}
-            </div>
-            <div class="arrives-text">
-              Arriving {{booking.returnDetails.destination| cityName}} at {{booking.returnDetails.arrives | minute}}
-            </div>
-          </div>
-        }
+    <div class="flight-details-block">
+      @if (booking.kind === 'oneWay') {
+      <div class="flight-item">
+        <div class="flight-details-header">Flight {{booking.details.flightNumber}}</div>
+        <div class="departs-text">
+          Taking off from {{booking.details.origin | cityName}} at {{booking.details.departs | minute}}
+          {{booking.details.date | date:'cccc d LLLL'}}
+        </div>
+        <div class="arrives-text">
+          Arriving {{booking.details.destination| cityName}} at {{booking.details.arrives | minute}}
+        </div>
       </div>
+      } @else {
+      <div class="flight-item">
+        <div class="flight-details-header">
+          Outbound Flight {{booking.outboundDetails.flightNumber}}
+        </div>
+        <div class="departs-text">
+          Taking off from {{booking.outboundDetails.origin | cityName}} at {{booking.outboundDetails.departs | minute}}
+          {{booking.returnDetails.date | date:'cccc d LLLL'}}
+        </div>
+        <div class="arrives-text">
+          Arriving {{booking.outboundDetails.destination| cityName}} at {{booking.outboundDetails.arrives | minute}}
+        </div>
+        <div class="flight-details-header">
+          Return Flight {{booking.returnDetails.flightNumber}}
+        </div>
+        <div class="departs-text">
+          Taking off from {{booking.returnDetails.origin | cityName}} at {{booking.returnDetails.departs | minute}}
+          {{booking.returnDetails.date | date:'cccc d LLLL'}}
+        </div>
+        <div class="arrives-text">
+          Arriving {{booking.returnDetails.destination| cityName}} at {{booking.returnDetails.arrives | minute}}
+        </div>
+      </div>
+      }
+    </div>
     }
   </div>
   <div class="bookings-fab">
     <button mat-fab class="edit-button tertiary-fab" aria-label="Add a new booking" matTooltip="Create a new booking"
-    (click)="addBooking()">
-    <mat-icon>plus_one</mat-icon>
-  </button>
-
+      (click)="addBooking()">
+      <mat-icon>plus_one</mat-icon>
+    </button>
+  </div>
+  <div class="small-bookings-fab">
+    <button mat-mini-fab class="edit-button tertiary-fab" aria-label="Add a new booking"
+      matTooltip="Create a new booking" (click)="addBooking()">
+      <mat-icon>plus_one</mat-icon>
+    </button>
   </div>
   }
 
