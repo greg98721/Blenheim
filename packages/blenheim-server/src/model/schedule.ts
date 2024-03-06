@@ -589,7 +589,7 @@ function createFlights(
   const rnd = new PsuedoRandom(timetableFlight.randomSeed);
 
   const createEmptySeatsAndPrice = (dayOfFlight: Date) => {
-    const daysTillFlight = differenceInCalendarDays(start, dayOfFlight);
+    const daysTillFlight = differenceInCalendarDays(dayOfFlight, start);
     let fullBookedPercent: number;
     let percentDiscountSeats: number;
 
