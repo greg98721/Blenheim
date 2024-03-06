@@ -16,10 +16,12 @@
         <mat-icon>airplane_ticket</mat-icon>
         <span>Make a Booking</span>
       </button>
-      <button mat-menu-item (click)="goToUserDetails()">
-        <mat-icon>person_edit</mat-icon>
-        <span>Edit User Details</span>
-      </button>
+      @if (loggedIn()) {
+        <button mat-menu-item (click)="goToUserDetails()">
+          <mat-icon>person_edit</mat-icon>
+          <span>Edit User Details</span>
+        </button>
+      }
     </mat-menu>
     <div class="title">Marlborough <span class="title-air">Air</span></div>
     <div></div>
