@@ -2,11 +2,11 @@
   @if (currentUser() !== undefined) {
   <div class="title">
     User Details
-    <button class="edit-button tertiary-fab" mat-fab aria-label="Edit the user details" matTooltip="Edit the details"
-      (click)="editTheUser()">
-      <mat-icon>edit</mat-icon>
-    </button>
   </div>
+  <button class="edit-button tertiary-fab" mat-fab aria-label="Edit the user details" matTooltip="Edit the details"
+    (click)="editTheUser()">
+    <mat-icon>edit</mat-icon>
+  </button>
   <div class="user-details">
     <div class="label">First Name</div>
     <div>{{ currentUser()?.firstName ?? '' }}</div>
@@ -24,12 +24,7 @@
     <div>{{ currentUser()?.phoneNumber ?? '' }}</div>
   </div>
 
-  <div class="booking-title">Bookings
-    <button mat-fab class="edit-button tertiary-fab" aria-label="Add a new booking" matTooltip="Create a new booking"
-    (click)="addBooking()">
-    <mat-icon>plus_one</mat-icon>
-  </button>
-</div>
+  <div class="booking-title">Bookings</div>
   <div class="bookings">
     @for(booking of bookings(); track booking.bookingReference) {
       <div class="flight-details-block">
@@ -70,6 +65,13 @@
         }
       </div>
     }
+  </div>
+  <div class="bookings-fab">
+    <button mat-fab class="edit-button tertiary-fab" aria-label="Add a new booking" matTooltip="Create a new booking"
+    (click)="addBooking()">
+    <mat-icon>plus_one</mat-icon>
+  </button>
+
   </div>
   }
 

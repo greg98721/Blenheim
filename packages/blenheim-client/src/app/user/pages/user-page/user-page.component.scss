@@ -3,32 +3,35 @@
 
 .layout {
   display: grid;
-  grid-template-rows: 0.3fr max-content max-content 5vw max-content max-content 0.7fr;
-  grid-template-columns: 1fr max-content 1fr;
+  grid-template-rows: 0.3fr max-content max-content 2vw max-content max-content 1vw max-content 0.7fr;
+  grid-template-columns: 1fr max-content 3rem 1fr;
   grid-template-areas:
-    ". . ."
-    ". title-area ."
-    ". details-area ."
-    ". . ."
-    ". booking-title-area ."
-    ". bookings-area ."
-    ". . .";
+    ". . . ."
+    ". title-area edit-fab-area ."
+    ". details-area details-area ."
+    ". . . ."
+    ". booking-title-area . ."
+    ". bookings-area bookings-area ."
+    ". . . ."
+    ". . bookings-fab-area ."
+    ". . . .";
   height: 100%;
   @media (max-width: $narrow-breakpoint) {
     margin: 0.3rem;
-    grid-template-rows: 0.3fr max-content max-content 2.5rem max-content max-content 0.7fr;
-    grid-template-columns: max-content;
+    grid-template-rows: 0.3fr max-content max-content 1rem max-content max-content 0.5vw max-content 0.7fr;
+    grid-template-columns: max-content 3rem;
     grid-template-areas:
-      "."
-      "title-area"
-      "details-area"
-      "."
-      "booking-title-area"
-      "bookings-area"
-      ".";
+      ". ."
+      "title-area edit-fab-area"
+      "details-area details-area"
+      ". ."
+      "booking-title-area ."
+      "bookings-area bookings-area"
+      ". ."
+      ". bookings-fab-area"
+      ". .";
   }
   @media (min-width: $wide-breakpoint) {
-    grid-template-rows: 0.3fr max-content max-content 5rem max-content max-content 0.7fr;
     width: $wide-breakpoint;
     margin-left: auto;
     margin-right: auto;
@@ -41,7 +44,7 @@
 }
 
 .edit-button {
-  margin-left: 2rem;
+  grid-area: edit-fab-area;
 }
 
 .user-details {
@@ -82,6 +85,13 @@
   }
   @media (min-width: $wide-breakpoint) {
     gap: 1rem;
+  }
+}
+
+.bookings-fab {
+  grid-area: bookings-fab-area;
+  button {
+  margin-left: auto;
   }
 }
 
