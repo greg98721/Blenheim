@@ -43,6 +43,9 @@
   @include var-text(12);
   font-weight: 200;
   font-stretch: 125%;
+  @media (max-width: $narrow-breakpoint) {
+    @include var-text(8);
+  }
 }
 
 .air-title {
