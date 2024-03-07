@@ -7,6 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "publish": "ng build -c production --prerender true",
     "serve:ssr:blenheim-client": "node dist/blenheim-client/server/server.mjs"
   },
   "private": true,

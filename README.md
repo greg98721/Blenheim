@@ -301,3 +301,10 @@ Unlike older versions of Angular the interceptors are function based. We can use
 ```
 
 Also the loading overlay in now also implemented as a HTTP interceptor rather than explicitly calling a service.
+
+# Remaining Issues
+
+### Preloading the font file.
+Am getting an error on the browser console. The font file is being preloaded but and is being used as can be seen on the page. However I think this is an error where the SSR is generating the message in error.
+
+``` The resource http://localhost:3000/assets/Mona-Sans.woff2 was preloaded using link preload but not used within a few seconds from the window's load event ```
